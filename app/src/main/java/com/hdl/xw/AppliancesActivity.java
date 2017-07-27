@@ -72,8 +72,6 @@ public class AppliancesActivity extends AppCompatActivity {
             }else{
                 listString.add(appliancesInfos.get(i).getRemarks());
             }
-//            aa += " appliancesInfos"+i+" "+appliancesInfos.get(i).getRemarks();
-//            Log.i("MainApplic","appliancesInfos"+i+" "+appliancesInfos.get(i).getRemarks());
         }
         adapter.notifyDataSetChanged();
 
