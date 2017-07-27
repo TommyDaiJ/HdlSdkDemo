@@ -11,7 +11,7 @@ This demo demonstrates how to use the HDL SDK
 
 1.1 目前仅支持Android开发平台。
 
-1.2 目前支持Android Studio IDE集成，通过依赖 compile ‘com.hdl.lib:hdllib:1.1.1’ 即可成功将HDL SDK集成到项目中。（由于Bintay方面还在审核1.1.1版本，存在依赖不成功的可能，若不成功请依赖1.1.0，但建议依赖最新的版本）。
+1.2 目前支持Android Studio IDE集成，通过依赖 compile ‘com.hdl.lib:hdllib:1.1.2’ 即可成功将HDL SDK集成到项目中。（由于Bintay方面还在审核1.1.1版本，存在依赖不成功的可能，若不成功请依赖1.1.1，但建议依赖最新的版本）。
 
 1.3 Android Studio平台也支持提供arr包依赖方式，此种方式可随时拿到最新的SDK版本。
 
