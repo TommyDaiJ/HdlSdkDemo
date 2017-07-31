@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -11,10 +12,12 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.hdl.libr.hdl_lib.CommandData;
+import com.hdl.libr.hdl_lib.DeviceManager.Bean.AppliancesInfo;
 import com.hdl.libr.hdl_lib.DeviceManager.Bean.DevicesData;
 import com.hdl.libr.hdl_lib.DeviceManager.DeviceManager;
 import com.hdl.libr.hdl_lib.DeviceManager.EventBusEvent.DevicesInfoEvent;
+import com.hdl.libr.hdl_lib.OnDevices.EventBusEvent.OnDeviceDataEvent;
+import com.hdl.libr.hdl_lib.OnDevices.Manager.OnManager;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -28,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     Button btn;
     TextView tv;
     private List<DevicesData> devicesDatas;
+    private List<DevicesData> OndevicesDatas;
     private List<String> listString = new ArrayList<>() ;
     private ArrayAdapter<String> adapter;
 
@@ -59,7 +63,8 @@ public class MainActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CommandData.devicesSearch(MainActivity.this);
+//                CommandData.devicesSearch(MainActivity.this);
+                OnManager.getOnDevicesData("192.168.2.113");//参数填写On设备上分享的ip地址
             }
         });
     }
@@ -86,6 +91,30 @@ public class MainActivity extends AppCompatActivity {
 
         }
         adapter.notifyDataSetChanged();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSowInfoEventMain(OnDeviceDataEvent event){
+        OndevicesDatas = event.getDevicesDataList();
+        for(int i=0;i<OndevicesDatas.size();i++){
+            List<AppliancesInfo> appliancesInfoList = OndevicesDatas.get(i).getAppliancesInfoList();
+            for(int j=0;j<appliancesInfoList.size();j++){
+                Log.i("Ondevice","设备名称："+appliancesInfoList.get(j).getDeviceName()
+                        +"\n子网Id = "+appliancesInfoList.get(j).getDeviceSubnetID()
+                        +"\n 设备Id = "+appliancesInfoList.get(j).getDeviceDeviceID()
+                        +"\n 回路号 =" +appliancesInfoList.get(j).getChannelNum()
+                        +"\n 大类 =" +appliancesInfoList.get(j).getBigType()
+                        +"\n 小类 =" +appliancesInfoList.get(j).getLittleType()
+                        +"\n 操作码 =" +appliancesInfoList.get(j).getCtrlCommand()
+                        +"\n 操作回馈码 =" +appliancesInfoList.get(j).getCtrlBackCommand()
+                        +"\n 状态码 =" +appliancesInfoList.get(j).getStateCommand()
+                        +"\n 状态回馈码 =" +appliancesInfoList.get(j).getStateBackCommand()
+
+                );
+            }
+
+        }
+
     }
 
 
