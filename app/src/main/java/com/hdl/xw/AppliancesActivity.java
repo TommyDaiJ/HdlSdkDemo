@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -37,7 +36,6 @@ public class AppliancesActivity extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.lv);
         appliancesInfos = (List<AppliancesInfo>)getIntent().getSerializableExtra("Appliances");
         CommandData.getAppliancesRemarks(AppliancesActivity.this, appliancesInfos);
-        Log.i("djl","appliancesInfos size = "+appliancesInfos.size());
 
         listString.add("hdl null");
         adapter=new ArrayAdapter<String>(AppliancesActivity.this,android.R.layout.simple_list_item_1,listString);
@@ -72,8 +70,6 @@ public class AppliancesActivity extends AppCompatActivity {
             }else{
                 listString.add(appliancesInfos.get(i).getRemarks());
             }
-//            aa += " appliancesInfos"+i+" "+appliancesInfos.get(i).getRemarks();
-//            Log.i("MainApplic","appliancesInfos"+i+" "+appliancesInfos.get(i).getRemarks());
         }
         adapter.notifyDataSetChanged();
 
