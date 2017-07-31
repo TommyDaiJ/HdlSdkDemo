@@ -18,7 +18,11 @@ This demo demonstrates how to use the HDL SDK
 1.4 支持Eclipse 安卓开发平台，此种方式可提供jar包依赖，由于SDK有依赖其他第三方库，存在此平台支持不理想的情况，建议转到1.2或1.3方式。
 
 ## 2：SDK初始化
-2.1 在需要调用的activity中做初始化操作：`DeviceManager.init(this);`（此操作已经初始化EventBus，具体请查看demo）
+2.1 在build.gradle文件上依赖相应的库
+2.1.1 `compile(name: 'hdl_lib-v1.2.1', ext: 'aar')`此种方式依赖为arr文件依赖，此arr包为HDL Lib的通讯包。可向相关开发人员索取最新arr包，`compile 'com.hdl.lib:hdllib:1.2.0'`此种方式与aar包依赖方式同样效果（详情请看demo）
+2.1.2   `compile 'org.greenrobot:eventbus:3.0.0' ` 这个依赖包为接收HDL Lib的EventBusEvent事件，必须依赖才能接收。（详情请看demo）
+2.1.3  `compile 'com.squareup.okhttp3:okhttp:3.4.1'`这个为接收On设备的okhttp包，非必须依赖，若要集成On设备获取api则必须依赖。
+2.2 在需要调用的activity中做初始化操作：`DeviceManager.init(this);`（此操作已经初始化EventBus，具体请查看demo）
 
 ## 3：搜索设备
 3.1 HDL SDK提供搜索设备的api，等待5秒后返回设备信息。
@@ -119,11 +123,14 @@ This demo demonstrates how to use the HDL SDK
 ### 6.4 逻辑模块控制
 6.4.1调用CommandData.logicCtrl(CtrlActivity.this,appliancesInfo);具体查看demmo
 
-# 7 向往专用接口
+# 7 On设备数据获取
+7.1 调用`OnManager.getOnDevicesData("192.168.2.113");`参数填写On设备上分享的ip地址。
 
-7.1 调用Command.xwSendData(Context context,int subnetID,int deeviceID,int port)  第一个参数：上下文，第二个参数：子网ID , 第三个参数：设备Id,第四个参数端口号
+# 8 向往专用接口
 
-# 8 Demo下载链接 ：
+8.1 调用Command.xwSendData(Context context,int subnetID,int deeviceID,int port)  第一个参数：上下文，第二个参数：子网ID , 第三个参数：设备Id,第四个参数端口号
+
+# 9 Demo下载链接 ：
 [HDL SDK Demo](https://github.com/TommyDaiJ/HdlSdkDemo)
     
     
