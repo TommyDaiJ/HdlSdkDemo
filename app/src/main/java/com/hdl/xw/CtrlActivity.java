@@ -44,7 +44,7 @@ public class CtrlActivity extends AppCompatActivity {
 
         appliancesInfo = (AppliancesInfo) getIntent().getSerializableExtra("light");
 
-//        此方法为获取设备状态，逻辑模块没有这个api，仅支持灯光，窗帘，空调
+
         CommandData.getDeviceState(CtrlActivity.this, appliancesInfo);
 
         lightBtn.setOnClickListener(new View.OnClickListener() {
