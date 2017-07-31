@@ -17,6 +17,8 @@ This demo demonstrates how to use the HDL SDK
 
 1.4 支持Eclipse 安卓开发平台，此种方式可提供jar包依赖，由于SDK有依赖其他第三方库，存在此平台支持不理想的情况，建议转到1.2或1.3方式。
 
+1.5 调试SDK建议使用真机调试，模拟器可能会导致一些不知名的问题。
+
 ## 2：SDK初始化
 2.1 在build.gradle文件上依赖相应的库
 2.1.1 `compile(name: 'hdl_lib-v1.2.1', ext: 'aar')`此种方式依赖为arr文件依赖，此arr包为HDL Lib的通讯包。可向相关开发人员索取最新arr包，`compile 'com.hdl.lib:hdllib:1.2.0'`此种方式与aar包依赖方式同样效果（详情请看demo）
