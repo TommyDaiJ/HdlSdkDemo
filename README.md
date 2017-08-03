@@ -129,7 +129,7 @@ This demo demonstrates how to use the HDL SDK
 
 
 ### 6.4 逻辑模块控制
-6.4.1调用CommandData.logicCtrl(CtrlActivity.this,appliancesInfo);具体查看demmo
+6.4.1调用CommandData.logicCtrl(CtrlActivity.this,appliancesInfo);具体查看demo
 
 # 7 On设备数据获取
 7.1 调用`OnManager.getOnDevicesData("192.168.2.113");`参数填写On设备上分享的ip地址。
