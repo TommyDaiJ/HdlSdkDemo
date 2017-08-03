@@ -136,7 +136,7 @@ This demo demonstrates how to use the HDL SDK
 
 # 8 向往专用接口
 
-8.1 调用Command.xwSendData(Context context,int subnetID,int deeviceID,int port)  第一个参数：上下文，第二个参数：子网ID , 第三个参数：设备Id,第四个参数端口号
+8.1 调用Command.xwSendData(Context context,int subnetID,int deeviceID,int port)  第一个参数：上下文，第二个参数：子网ID , 第三个参数：设备Id,第四个参数：端口号
 
 # 9 Demo下载链接 ：
 [HDL SDK Demo](https://github.com/TommyDaiJ/HdlSdkDemo)
