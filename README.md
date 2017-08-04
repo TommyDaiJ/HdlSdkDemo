@@ -126,14 +126,39 @@
 ### 6.4 逻辑模块控制
 6.4.1调用CommandData.logicCtrl(CtrlActivity.this,appliancesInfo);具体查看demo
 
-# 7 On设备数据获取
-7.1 调用`OnManager.getOnDevicesData("192.168.2.113");`参数填写On设备上分享的ip地址。
+# 7 HDL On软件设备数据获取
+7.1 调用`OnManager.getOnDevicesData("192.168.2.113");`参数填写On设备上分享的ip地址。使用如下方法来接收数据。目前只能接收：调光回路，开关回路，开合帘电机，卷帘电机，窗帘模块，通用空调面板 的数据。接收到这些设备后，均可以用以上控制，获取状态等API加以操作。
 
+	@Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSowInfoEventMain(OnDeviceDataEvent event){
+        OndevicesDatas = event.getDevicesDataList();
+        for(int i=0;i<OndevicesDatas.size();i++){
+            List<AppliancesInfo> appliancesInfoList = OndevicesDatas.get(i).getAppliancesInfoList();
+            for(int j=0;j<appliancesInfoList.size();j++){
+                Log.i("djl","设备名称："+appliancesInfoList.get(j).getDeviceName()
+                        +"\n子网Id = "+appliancesInfoList.get(j).getDeviceSubnetID()
+                        +"\n 设备Id = "+appliancesInfoList.get(j).getDeviceDeviceID()
+                        +"\n 回路号 =" +appliancesInfoList.get(j).getChannelNum()
+                        +"\n 大类 =" +appliancesInfoList.get(j).getBigType()
+                        +"\n 小类 =" +appliancesInfoList.get(j).getLittleType()
+                        +"\n 操作码 =" +appliancesInfoList.get(j).getCtrlCommand()
+                        +"\n 操作回馈码 =" +appliancesInfoList.get(j).getCtrlBackCommand()
+                        +"\n 状态码 =" +appliancesInfoList.get(j).getStateCommand()
+                        +"\n 状态回馈码 =" +appliancesInfoList.get(j).getStateBackCommand()
+
+                );
+            }
+
+        }
+   	 }
+
+
+	
 # 8 向往专用接口
 
 8.1 调用Command.xwSendData(Context context,int subnetID,int deeviceID,int port)  第一个参数：上下文，第二个参数：子网ID , 第三个参数：设备Id,第四个参数：端口号
 
 # 9 Demo下载链接 ：
-[HDL SDK Demo](https://github.com/TommyDaiJ/HdlSdkDemo)
+[HDL Lib SDK Demo](https://github.com/TommyDaiJ/HdlSdkDemo)
     
     
