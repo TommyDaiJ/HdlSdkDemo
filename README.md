@@ -1,9 +1,4 @@
-# HdlSdkDemo
-
-This demo demonstrates how to use the HDL SDK
-
-
-# HDL SDK通讯协议文档
+# HDL Lib SDK通讯协议文档
 
    此SDK仅针对安卓平台进行集成，旨在集成HDL SDK后，可调用相关API，实现HDL设备的搜索、控制、获取当前状态等。在文档最后会提供demo示例，详情请查看demo。以下详细列出HDL SDK集成的相关信息：
    
