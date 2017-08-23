@@ -1,26 +1,33 @@
-# HdlSdkDemo
-
-This demo demonstrates how to use the HDL SDK
-
-
-# HDL SDK通讯协议文档
+# HDL Lib SDK通讯协议文档
 
    此SDK仅针对安卓平台进行集成，旨在集成HDL SDK后，可调用相关API，实现HDL设备的搜索、控制、获取当前状态等。在文档最后会提供demo示例，详情请查看demo。以下详细列出HDL SDK集成的相关信息：
    
 ## 1：平台条件
 
-1.1 目前仅支持Android开发平台。
+1.1 目前仅支持Android开发平台，Android SDK 版本4.2以上。
 
-1.2 目前支持Android Studio IDE集成，通过依赖 compile ‘com.hdl.lib:hdllib:1.1.2’ 即可成功将HDL SDK集成到项目中。（由于Bintay方面还在审核1.1.1版本，存在依赖不成功的可能，若不成功请依赖1.1.1，但建议依赖最新的版本）。
+1.2 目前支持Android Studio IDE集成，通过依赖 compile ‘com.hdl.lib:hdllib:1.2.1’ 即可成功将HDL SDK集成到项目中。（由于Bintay方面还在审核1.1.1版本，存在依赖不成功的可能，若不成功请依赖1.2.0，但建议依赖最新的版本）。
 
 1.3 Android Studio平台也支持提供arr包依赖方式，此种方式可随时拿到最新的SDK版本。
 
 1.4 支持Eclipse 安卓开发平台，此种方式可提供jar包依赖，由于SDK有依赖其他第三方库，存在此平台支持不理想的情况，建议转到1.2或1.3方式。
 
+1.5 调试SDK建议使用真机调试，模拟器可能会导致一些不知名的问题。
+
 ## 2：SDK初始化
-2.1 在需要调用的activity中做初始化操作：`DeviceManager.init(this);`（此操作已经初始化EventBus，具体请查看demo）
+
+2.1 在build.gradle文件上依赖相应的库
+
+2.1.1 `compile(name: 'hdl_lib-v1.2.1', ext: 'aar')`此种方式依赖为aar文件依赖，此aar包为HDL Lib的通讯包。可向相关开发人员索取最新aar包，`compile 'com.hdl.lib:hdllib:1.2.0'`此种方式与aar包依赖方式同样效果（详情请看demo）
+
+2.1.2   `compile 'org.greenrobot:eventbus:3.0.0' ` 这个依赖包为接收HDL Lib的EventBusEvent事件，必须依赖才能接收。（详情请看demo）
+
+2.1.3  `compile 'com.squareup.okhttp3:okhttp:3.4.1'`这个为接收On设备的okhttp包，非必须依赖，若要集成On设备获取api则必须依赖。
+
+2.2 在需要调用的activity中做初始化操作：`DeviceManager.init(this);`（此操作已经初始化EventBus，具体请查看demo）
 
 ## 3：搜索设备
+
 3.1 HDL SDK提供搜索设备的api，等待5秒后返回设备信息。
 
 3.2 调用`CommandData.devicesSearch(MainActivity.this);`
@@ -117,13 +124,41 @@ This demo demonstrates how to use the HDL SDK
 
 
 ### 6.4 逻辑模块控制
-6.4.1调用CommandData.logicCtrl(CtrlActivity.this,appliancesInfo);具体查看demmo
+6.4.1调用CommandData.logicCtrl(CtrlActivity.this,appliancesInfo);具体查看demo
 
-# 7 向往专用接口
+# 7 HDL On软件设备数据获取
+7.1 调用`OnManager.getOnDevicesData("192.168.2.113");`参数填写On设备上分享的ip地址。使用如下方法来接收数据。目前只能接收：调光回路，开关回路，开合帘电机，卷帘电机，窗帘模块，通用空调面板 的数据。接收到这些设备后，均可以用以上控制，获取状态等API加以操作。
 
-7.1 调用Command.xwSendData(Context context,int subnetID,int deeviceID,int port)  第一个参数：上下文，第二个参数：子网ID , 第三个参数：设备Id,第四个参数端口号
+	@Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSowInfoEventMain(OnDeviceDataEvent event){
+        OndevicesDatas = event.getDevicesDataList();
+        for(int i=0;i<OndevicesDatas.size();i++){
+            List<AppliancesInfo> appliancesInfoList = OndevicesDatas.get(i).getAppliancesInfoList();
+            for(int j=0;j<appliancesInfoList.size();j++){
+                Log.i("djl","设备名称："+appliancesInfoList.get(j).getDeviceName()
+                        +"\n子网Id = "+appliancesInfoList.get(j).getDeviceSubnetID()
+                        +"\n 设备Id = "+appliancesInfoList.get(j).getDeviceDeviceID()
+                        +"\n 回路号 =" +appliancesInfoList.get(j).getChannelNum()
+                        +"\n 大类 =" +appliancesInfoList.get(j).getBigType()
+                        +"\n 小类 =" +appliancesInfoList.get(j).getLittleType()
+                        +"\n 操作码 =" +appliancesInfoList.get(j).getCtrlCommand()
+                        +"\n 操作回馈码 =" +appliancesInfoList.get(j).getCtrlBackCommand()
+                        +"\n 状态码 =" +appliancesInfoList.get(j).getStateCommand()
+                        +"\n 状态回馈码 =" +appliancesInfoList.get(j).getStateBackCommand()
 
-# 8 Demo下载链接 ：
-[HDL SDK Demo](https://github.com/TommyDaiJ/HdlSdkDemo)
+                );
+            }
+
+        }
+   	 }
+
+
+	
+# 8 向往专用接口
+
+8.1 调用Command.xwSendData(Context context,int subnetID,int deeviceID,int port)  第一个参数：上下文，第二个参数：子网ID , 第三个参数：设备Id,第四个参数：端口号
+
+# 9 Demo下载链接 ：
+[HDL Lib SDK Demo](https://github.com/TommyDaiJ/HdlSdkDemo)
     
     
