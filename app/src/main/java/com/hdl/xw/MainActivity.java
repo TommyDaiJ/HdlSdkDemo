@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.hdl.libr.hdl_lib.CommandData;
 import com.hdl.libr.hdl_lib.DeviceManager.Bean.AppliancesInfo;
 import com.hdl.libr.hdl_lib.DeviceManager.Bean.DevicesData;
 import com.hdl.libr.hdl_lib.DeviceManager.DeviceManager;
@@ -63,8 +64,7 @@ public class MainActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                CommandData.devicesSearch(MainActivity.this);
-                OnManager.getOnDevicesData("192.168.2.113");//参数填写On设备上分享的ip地址
+                CommandData.devicesSearch(MainActivity.this);
             }
         });
     }
@@ -88,7 +88,6 @@ public class MainActivity extends AppCompatActivity {
             }else{
                 listString.add(devicesDatas.get(i).getRemark());
             }
-
         }
         adapter.notifyDataSetChanged();
     }
