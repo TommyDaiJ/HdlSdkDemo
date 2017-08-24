@@ -138,7 +138,7 @@ sdk可接收设备状态改变的推送，目前支持灯光，窗帘，空调�
 
 ### 7.1 接收灯光的推送
 
-`
+```
 @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLightFeedBackInfoEventMain(LightFeedBackEvent event){
         lightState = event.getLightCtrlBackInfo().getBrightness()==100? 0:100;//如果返回100重置状态为0，反之重置状态100
@@ -146,11 +146,12 @@ sdk可接收设备状态改变的推送，目前支持灯光，窗帘，空调�
         Log.i("ctrlLight",event.getLightCtrlBackInfo().toString());
         lightBtn.setText("当前亮度 = "+event.getLightCtrlBackInfo().getBrightness());
     }
-`
+```
 
 ### 7.2 接收窗帘的推送
 
-`   @Subscribe(threadMode = ThreadMode.MAIN)
+```
+@Subscribe(threadMode = ThreadMode.MAIN)
     public void onCurtainFeedBackInfoEventMain(CurtainFeedBackEvent event){
         int curState = event.getCurtainCtrlBackInfo().getState();
         //窗帘模块：curState:0=停止,1=打开,2=关闭。
@@ -159,11 +160,12 @@ sdk可接收设备状态改变的推送，目前支持灯光，窗帘，空调�
         Toast.makeText(this,"当前窗户状态"+curState,Toast.LENGTH_SHORT).show();
     }
 
-`
+```
 
 ### 7.3 接收空调面板的推送
 
-`
+```
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onAirFeedBackInfoEventMain(AirFeedBackEvent event){
         airState = event.getAirCtrlBackInfo().getIsOn()==1?0:1;
@@ -178,7 +180,7 @@ sdk可接收设备状态改变的推送，目前支持灯光，窗帘，空调�
         }
     }
 
-`
+```
 
 
 
