@@ -24,7 +24,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 public class CtrlActivity extends AppCompatActivity {
 
-    private Button lightBtn,curtainBtn,logicBtn,airBtn;
+    private Button lightBtn,curtainBtn,curtainBtn2,curtainBtn3,curtainBtn4,curtainBtn5,logicBtn,airBtn;
     private AppliancesInfo appliancesInfo;
     private int lightState;
     private int curtainState;
@@ -35,6 +35,10 @@ public class CtrlActivity extends AppCompatActivity {
         setContentView(R.layout.activity_ctrl);
         lightBtn = (Button) findViewById(R.id.ctrlbtn);
         curtainBtn = (Button) findViewById(R.id.curtainbtn);
+        curtainBtn2 = (Button) findViewById(R.id.curtainbtn2);
+        curtainBtn3 = (Button) findViewById(R.id.curtainbtn3);
+        curtainBtn4 = (Button) findViewById(R.id.curtainbtn4);
+        curtainBtn5 = (Button) findViewById(R.id.curtainbtn5);
         logicBtn = (Button) findViewById(R.id.logicbtn);
         airBtn = (Button) findViewById(R.id.airbtn);
 
@@ -44,7 +48,7 @@ public class CtrlActivity extends AppCompatActivity {
 
         appliancesInfo = (AppliancesInfo) getIntent().getSerializableExtra("light");
 
-
+//        此方法为获取设备状态，逻辑模块没有这个api，仅支持灯光，窗帘，空调
         CommandData.getDeviceState(CtrlActivity.this, appliancesInfo);
 
         lightBtn.setOnClickListener(new View.OnClickListener() {
@@ -57,7 +61,36 @@ public class CtrlActivity extends AppCompatActivity {
         curtainBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //窗帘模块第二个参数 为CurtainCtrlParser.curtainOn，CurtainCtrlParser.curtainOff，CurtainCtrlParser.curtainPause其中一个
                 CommandData.curtainCtrl(CtrlActivity.this,appliancesInfo, curtainState);
+            }
+        });
+
+        curtainBtn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CommandData.curtainCtrl(CtrlActivity.this,appliancesInfo, CurtainCtrlParser.curtainOn);
+            }
+        });
+
+        curtainBtn3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CommandData.curtainCtrl(CtrlActivity.this,appliancesInfo, CurtainCtrlParser.curtainOff);
+            }
+        });
+
+        curtainBtn4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CommandData.curtainCtrl(CtrlActivity.this,appliancesInfo, CurtainCtrlParser.curtainPause);
+            }
+        });
+
+        curtainBtn5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CommandData.curtainCtrl(CtrlActivity.this,appliancesInfo, 50);
             }
         });
 
@@ -94,46 +127,32 @@ public class CtrlActivity extends AppCompatActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLightFeedBackInfoEventMain(LightFeedBackEvent event){
         lightState = event.getLightCtrlBackInfo().getBrightness()==100? 0:100;//如果返回100重置状态为0，反之重置状态100
-        Toast.makeText(this,"当前亮度 = "+event.getLightCtrlBackInfo().getBrightness(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this,"当前亮度 = "+event.getLightCtrlBackInfo().getBrightness(),Toast.LENGTH_SHORT).show();
         Log.i("ctrlLight",event.getLightCtrlBackInfo().toString());
         lightBtn.setText("当前亮度 = "+event.getLightCtrlBackInfo().getBrightness());
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onCurtainFeedBackInfoEventMain(CurtainFeedBackEvent event){
-        switch (event.getCurtainCtrlBackInfo().getState()){
-            case CurtainCtrlParser.curtainOff:
-                curtainState = CurtainCtrlParser.curtainOn;
-                curtainBtn.setText("窗帘关");
-                Toast.makeText(this,"当前窗户关", Toast.LENGTH_SHORT).show();
-                break;
-            case CurtainCtrlParser.curtainOn:
-                curtainState = CurtainCtrlParser.curtainOff;
-                curtainBtn.setText("窗帘开");
-                Toast.makeText(this,"当前窗户开", Toast.LENGTH_SHORT).show();
-                break;
-            case CurtainCtrlParser.curtainPause:
-                curtainBtn.setText("窗帘暂停");
-                Toast.makeText(this,"当前窗户暂停", Toast.LENGTH_SHORT).show();
-                break;
-        }
+        int curState = event.getCurtainCtrlBackInfo().getState();
+        //窗帘模块：curState:0=停止,1=打开,2=关闭。
+        //开合帘电机，卷帘电机：curState:1-100开合度。也会返回0，1，2的状态
+        //建议开合帘电机，卷帘电机按停止后再读取当前状态来获取当前状态值
+        Toast.makeText(this,"当前窗户状态"+curState,Toast.LENGTH_SHORT).show();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onAirFeedBackInfoEventMain(AirFeedBackEvent event){
         airState = event.getAirCtrlBackInfo().getIsOn()==1?0:1;
         if(event.getAirCtrlBackInfo().getIsOn()==0){
-            Toast.makeText(this,"空调关", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"空调关",Toast.LENGTH_SHORT).show();
             Log.i("djl","空调关");
             airBtn.setText("空调关");
         }else{
-            Toast.makeText(this,"空调开", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"空调开",Toast.LENGTH_SHORT).show();
             Log.i("djl","空调开");
             airBtn.setText("空调开");
         }
-
-
-
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -147,16 +166,24 @@ public class CtrlActivity extends AppCompatActivity {
                 break;
             case Configuration.CURTAIN_BIG_TYPE:
                 if(appliancesInfo.getChannelNum()==event.getAppliancesInfo().getChannelNum()){
-                    switch ((int)event.getAppliancesInfo().getCurState()){
-                        case CurtainCtrlParser.curtainOff:
-                            curtainBtn.setText("窗帘关");
-                            break;
-                        case CurtainCtrlParser.curtainOn:
-                            curtainBtn.setText("窗帘开");
-                            break;
-                        case CurtainCtrlParser.curtainPause:
-                            curtainBtn.setText("窗帘暂停");
-                            break;
+
+                    //窗帘模块：curState:0=停止,1=打开,2=关闭。
+                    //开合帘电机，卷帘电机：curState:1-100开合度。
+                    int curState = (int)event.getAppliancesInfo().getCurState();
+                    if(event.getAppliancesInfo().getLittleType()==2){//判断是否为窗帘模块，LittleType为2是窗帘模块，否则为开合帘或卷帘电机
+                        switch (curState){
+                            case CurtainCtrlParser.curtainOff:
+                                curtainBtn.setText("窗帘关");
+                                break;
+                            case CurtainCtrlParser.curtainOn:
+                                curtainBtn.setText("窗帘开");
+                                break;
+                            case CurtainCtrlParser.curtainPause:
+                                curtainBtn.setText("窗帘暂停");
+                                break;
+                        }
+                    }else{
+                        curtainBtn5.setText("窗帘开到"+curState+"%");
                     }
                 }
                 break;

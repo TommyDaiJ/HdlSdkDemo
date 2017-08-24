@@ -4,7 +4,7 @@
     android:id="@+id/activity_ctrl"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.hdl.xw.CtrlActivity">
+    tools:context="com.hdl.myhdl_lib.CtrlActivity">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -24,7 +24,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="这个按钮做窗帘的演示"
+            android:text="这个按钮做窗帘模块的演示"
             />
         <Button
             android:id="@+id/curtainbtn"
@@ -32,6 +32,42 @@
             android:layout_height="wrap_content"
             android:text="窗帘已关"
             />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="这个按钮做窗帘电机的演示。开合帘电机，卷帘电机类似"
+            />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/curtainbtn2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="窗帘开"
+                />
+            <Button
+                android:id="@+id/curtainbtn3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="窗帘关"
+                />
+            <Button
+                android:id="@+id/curtainbtn4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="窗帘停"
+                />
+            <Button
+                android:id="@+id/curtainbtn5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="窗帘开到50%"
+                />
+
+        </LinearLayout>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
