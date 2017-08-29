@@ -90,9 +90,14 @@
 
 ### 6.2 窗帘控制
 
-6.2.1 调`CommandData.curtainCtrl(Context context, AppliancesInfo info, int state)`前两个参数为固定参数，跟6.1.1雷同。第三个参数为：`CurtainCtrlParser.curtainPause`（窗帘停）或`CurtainCtrlParser.curtainOn`（窗帘开）或`CurtainCtrlParser.curtainOff`（窗帘关） 中的一个。
+窗帘种类有：窗帘模块，卷帘电机，开合帘电机。
 
-6.2.2 需要接收EventBus的控制返回结果，具体查看demo。仅将`lightCtrlBackInfo`改为`CurtainCtrlBackInfo`
+6.2.1 调`CommandData.curtainCtrl(Context context, AppliancesInfo info, int state)`前两个参数为固定参数，跟6.1.1雷同。第三个参数为：`CurtainCtrlParser.curtainPause`（窗帘停）或`CurtainCtrlParser.curtainOn`（窗帘开）或`CurtainCtrlParser.curtainOff`（窗帘关） 中的一个。
+窗帘模块只能调用这3个参数，卷帘电机和开合帘电机第二个参数可以填0-100数字，代表百分比。
+
+
+
+6.2.3 需要接收EventBus的控制返回结果，具体查看demo。仅将`lightCtrlBackInfo`改为`CurtainCtrlBackInfo`
 
 ### 6.3 空调控制
 
@@ -124,10 +129,65 @@
 
 
 ### 6.4 逻辑模块控制
+
 6.4.1调用CommandData.logicCtrl(CtrlActivity.this,appliancesInfo);具体查看demo
 
-# 7 HDL On软件设备数据获取
-7.1 调用`OnManager.getOnDevicesData("192.168.2.113");`参数填写On设备上分享的ip地址。使用如下方法来接收数据。目前只能接收：调光回路，开关回路，开合帘电机，卷帘电机，窗帘模块，通用空调面板 的数据。接收到这些设备后，均可以用以上控制，获取状态等API加以操作。
+# 7 接收设备状态改变推送
+
+sdk可接收设备状态改变的推送，目前支持灯光，窗帘，空调面板的状态改变推送。在需要接收的界面重写EventBus回调。
+
+### 7.1 接收灯光的推送
+
+```
+@Subscribe(threadMode = ThreadMode.MAIN)
+    public void onLightFeedBackInfoEventMain(LightFeedBackEvent event){
+        lightState = event.getLightCtrlBackInfo().getBrightness()==100? 0:100;//如果返回100重置状态为0，反之重置状态100
+        Toast.makeText(this,"当前亮度 = "+event.getLightCtrlBackInfo().getBrightness(),Toast.LENGTH_SHORT).show();
+        Log.i("ctrlLight",event.getLightCtrlBackInfo().toString());
+        lightBtn.setText("当前亮度 = "+event.getLightCtrlBackInfo().getBrightness());
+    }
+```
+
+### 7.2 接收窗帘的推送
+
+```
+@Subscribe(threadMode = ThreadMode.MAIN)
+    public void onCurtainFeedBackInfoEventMain(CurtainFeedBackEvent event){
+        int curState = event.getCurtainCtrlBackInfo().getState();
+        //窗帘模块：curState:0=停止,1=打开,2=关闭。
+        //开合帘电机，卷帘电机：curState:1-100开合度。也会返回0，1，2的状态
+        //建议开合帘电机，卷帘电机按停止后再读取当前状态来获取当前状态值
+        Toast.makeText(this,"当前窗户状态"+curState,Toast.LENGTH_SHORT).show();
+    }
+
+```
+
+### 7.3 接收空调面板的推送
+
+```
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onAirFeedBackInfoEventMain(AirFeedBackEvent event){
+        airState = event.getAirCtrlBackInfo().getIsOn()==1?0:1;
+        if(event.getAirCtrlBackInfo().getIsOn()==0){
+            Toast.makeText(this,"空调关",Toast.LENGTH_SHORT).show();
+            Log.i("djl","空调关");
+            airBtn.setText("空调关");
+        }else{
+            Toast.makeText(this,"空调开",Toast.LENGTH_SHORT).show();
+            Log.i("djl","空调开");
+            airBtn.setText("空调开");
+        }
+    }
+
+```
+
+
+
+
+# 8 HDL On软件设备数据获取
+
+8.1 调用`OnManager.getOnDevicesData("192.168.2.113");`参数填写On设备上分享的ip地址。使用如下方法来接收数据。目前只能接收：调光回路，开关回路，开合帘电机，卷帘电机，窗帘模块，通用空调面板 的数据。接收到这些设备后，均可以用以上控制，获取状态等API加以操作。
 
 	@Subscribe(threadMode = ThreadMode.MAIN)
     public void onSowInfoEventMain(OnDeviceDataEvent event){
@@ -154,11 +214,11 @@
 
 
 	
-# 8 向往专用接口
+# 9 向往专用接口
 
-8.1 调用Command.xwSendData(Context context,int subnetID,int deeviceID,int port)  第一个参数：上下文，第二个参数：子网ID , 第三个参数：设备Id,第四个参数：端口号
+9.1 调用Command.xwSendData(Context context,int subnetID,int deeviceID,int port)  第一个参数：上下文，第二个参数：子网ID , 第三个参数：设备Id,第四个参数：端口号
 
-# 9 Demo下载链接 ：
+# 10 Demo下载链接 ：
 [HDL Lib SDK Demo](https://github.com/TommyDaiJ/HdlSdkDemo)
     
     
