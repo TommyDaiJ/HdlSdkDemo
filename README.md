@@ -6,7 +6,7 @@
 
 1.1 目前仅支持Android开发平台，Android SDK 版本4.2以上。
 
-1.2 目前支持Android Studio IDE集成，通过依赖 compile ‘com.hdl.lib:hdllib:1.2.1’ 即可成功将HDL SDK集成到项目中。（由于Bintay方面还在审核1.2.1版本，存在依赖不成功的可能，若不成功请依赖1.2.0，但建议依赖最新的版本）。
+1.2 目前支持Android Studio IDE集成，通过依赖 compile ‘com.hdl.lib:hdllib:1.2.5’ 即可成功将HDL SDK集成到项目中。（由于Bintay方面还在审核1.2.5版本，存在依赖不成功的可能，若不成功请依赖1.2.2，但建议依赖最新的版本）。
 
 1.3 Android Studio平台也支持提供arr包依赖方式，此种方式可随时拿到最新的SDK版本。
 
@@ -139,25 +139,47 @@ sdk可接收设备状态改变的推送，目前支持灯光，窗帘，空调�
 ### 7.1 接收灯光的推送
 
 ```
-@Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLightFeedBackInfoEventMain(LightFeedBackEvent event){
-        lightState = event.getLightCtrlBackInfo().getBrightness()==100? 0:100;//如果返回100重置状态为0，反之重置状态100
-        Toast.makeText(this,"当前亮度 = "+event.getLightCtrlBackInfo().getBrightness(),Toast.LENGTH_SHORT).show();
-        Log.i("ctrlLight",event.getLightCtrlBackInfo().toString());
-        lightBtn.setText("当前亮度 = "+event.getLightCtrlBackInfo().getBrightness());
+        /**
+         * 控制回馈与推送都是通过此方法返回。
+         */
+//        此处代码不能识别哪个灯光返回
+        int brightness = event.getLightCtrlBackInfo().getBrightness();
+        lightState = brightness==100? 0:100;//如果返回100重置状态为0，反之重置状态100
+        lightBtn.setText("当前亮度 = "+brightness);
+
+        /*以下为灯光推送示例代码，可以识别哪个继电器，哪个调光灯，哪个回路，也可用作控制回馈。
+        按需求调用*/
+        String remarks = event.getLightCtrlBackInfo().getRemarks();//获取返回的灯光备注。如果每个灯光回路备注都唯一，可以直接通过备注判断
+        String parentRemarks = event.getLightCtrlBackInfo().getParentRemarks();//获取继电器或调光灯备注。这里可以知道是哪个设备返回的
+        int num = event.getLightCtrlBackInfo().getChannelNum();//获取回路号。这里可以获取到这个继电器或调光灯的回路号
+        Toast.makeText(this,parentRemarks+" 的 "+remarks+" 回路号："+num+" 返回"+" 亮度为："+brightness,Toast.LENGTH_SHORT).show();
+
+        /**
+         * 如果备注不能满足需求，则可通过子网id和设备id查找。子网id，设备id共同确定唯一设备。
+         */
+
+
+
     }
 ```
 
 ### 7.2 接收窗帘的推送
 
 ```
-@Subscribe(threadMode = ThreadMode.MAIN)
+   @Subscribe(threadMode = ThreadMode.MAIN)
     public void onCurtainFeedBackInfoEventMain(CurtainFeedBackEvent event){
         int curState = event.getCurtainCtrlBackInfo().getState();
         //窗帘模块：curState:0=停止,1=打开,2=关闭。
         //开合帘电机，卷帘电机：curState:1-100开合度。也会返回0，1，2的状态
         //建议开合帘电机，卷帘电机按停止后再读取当前状态来获取当前状态值
-        Toast.makeText(this,"当前窗户状态"+curState,Toast.LENGTH_SHORT).show();
+
+        String remarks = event.getCurtainCtrlBackInfo().getRemarks();
+        String parentRemarks = event.getCurtainCtrlBackInfo().getParentRemarks();
+        int num = event.getCurtainCtrlBackInfo().getNum();
+        Toast.makeText(this,parentRemarks+" 的 "+remarks+" 回路号："+num+" 返回"+" 状态为："+curState,Toast.LENGTH_SHORT).show();
+
     }
 
 ```
