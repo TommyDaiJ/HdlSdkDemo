@@ -103,12 +103,6 @@
 
 6.3.1调用相关控制空调api即可。
 
-注意！第四个参数为可选参数，若type为airSpeedHigh、airModeRefTem、airModeHeatTem中的一个需要填state参数，范围为0-84，请按实际情况传参数。
-
-
-### 6.4 逻辑模块控制
-
-6.4.1调用CommandData.logicCtrl(CtrlActivity.this,appliancesInfo);具体查看demo
 
 ```
                 CommandData.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.airSwich,AirCtrlParser.airOn);//空调面板开
@@ -129,6 +123,14 @@
 //                CommandData.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.downTem,1);//下降温度 范围0-5
 
 ```
+
+注意！第四个参数为可选参数，若type为airSpeedHigh、airModeRefTem、airModeHeatTem中的一个需要填state参数，范围为0-84，请按实际情况传参数。
+
+
+### 6.4 逻辑模块控制
+
+6.4.1调用CommandData.logicCtrl(CtrlActivity.this,appliancesInfo);具体查看demo
+
 # 7 接收设备状态改变推送
 
 sdk可接收设备状态改变的推送，目前支持灯光，窗帘，空调面板的状态改变推送。在需要接收的界面重写EventBus回调。
