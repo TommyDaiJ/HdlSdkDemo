@@ -6,7 +6,7 @@
 
 1.1 目前仅支持Android开发平台，Android SDK 版本4.2以上。
 
-1.2 目前支持Android Studio IDE集成，通过依赖 compile ‘com.hdl.lib:hdllib:1.2.5’ 即可成功将HDL SDK集成到项目中。（由于Bintay方面还在审核1.2.5版本，存在依赖不成功的可能，若不成功请依赖1.2.2，但建议依赖最新的版本）。
+1.2 目前支持Android Studio IDE集成，通过依赖 compile ‘com.hdl.lib:hdllib:1.2.6’ 即可成功将HDL SDK集成到项目中。（由于Bintay方面还在审核1.2.6版本，存在依赖不成功的可能，若不成功请依赖1.2.5，但建议依赖最新的版本）。
 
 1.3 Android Studio平台也支持提供arr包依赖方式，此种方式可随时拿到最新的SDK版本。
 
@@ -101,30 +101,8 @@
 
 ### 6.3 空调控制
 
-6.3.1调用`CommandData.airCtrl(Context context, AppliancesInfo info, int type,int state)`或`CommandData.airCtrl(Context context, AppliancesInfo info, int type)`第一、二个参数跟6.1.1雷同。第三个参数type为：`AirCtrlParser.airOn`，如图这些参数
+6.3.1调用相关控制空调api即可。
 
-	public class AirCtrlParser {
-    public static final int airOn = 0;
-    public static final int airOff = 1;//空调关
-
-    public static final int refTem = 2;//制冷温度
-
-    public static final int airSpeedAuto = 3;//风速自动
-    public static final int airSpeedHigh = 4;//风速高风
-    public static final int airSpeedMid = 5;//风速中风
-    public static final int airSpeedLow = 6;//风速低风
-
-    public static final int airModeRefTem = 7;//空调模式制冷
-    public static final int airModeHeatTem = 8;//空调模式制热
-    public static final int airModeVen = 9;//空调模式通风
-    public static final int airModeAuto = 10;//空调模式自动
-    public static final int airModeDehum = 11;//空调模式抽湿
-
-    public static final int heatTem = 12;//制热温度
-    public static final int autoTem = 13;//自动温度
-    public static final int upTem = 14;//上升温度
-    public static final int downTem = 15;//下降温度
-    
 注意！第四个参数为可选参数，若type为airSpeedHigh、airModeRefTem、airModeHeatTem中的一个需要填state参数，范围为0-84，请按实际情况传参数。
 
 
@@ -132,6 +110,25 @@
 
 6.4.1调用CommandData.logicCtrl(CtrlActivity.this,appliancesInfo);具体查看demo
 
+```
+                CommandData.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.airSwich,AirCtrlParser.airOn);//空调面板开
+//                CommandData.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.airSwich,AirCtrlParser.airOff);//空调面板关
+//                CommandData.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.refTem,20);//制冷温度 范围0-84
+//                CommandData.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedAuto);//风速自动
+//                CommandData.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedHigh);//风速高风
+//                CommandData.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedMid);//风速中风
+//                CommandData.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedLow);//风速低风
+//                CommandData.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.airMode,AirCtrlParser.airModeRefTem);//空调模式制冷
+//                CommandData.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.airMode,AirCtrlParser.airModeHeatTem);//空调模式制热
+//                CommandData.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.airMode,AirCtrlParser.airModeVen);//空调模式通风
+//                CommandData.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.airMode,AirCtrlParser.airModeAuto);//空调模式自动
+//                CommandData.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.airMode,AirCtrlParser.airModeDehum);//空调模式抽湿
+//                CommandData.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.heatTem,28);//制热温度 范围0-84
+//                CommandData.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.autoTem,25);//自动温度 范围0-84
+//                CommandData.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.upTem,1);//上升温度 范围0-5
+//                CommandData.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.downTem,1);//下降温度 范围0-5
+
+```
 # 7 接收设备状态改变推送
 
 sdk可接收设备状态改变的推送，目前支持灯光，窗帘，空调面板的状态改变推送。在需要接收的界面重写EventBus回调。
