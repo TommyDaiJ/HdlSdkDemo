@@ -124,8 +124,6 @@
 
 ```
 
-注意！第四个参数为可选参数，若type为airSpeedHigh、airModeRefTem、airModeHeatTem中的一个需要填state参数，范围为0-84，请按实际情况传参数。
-
 
 ### 6.4 逻辑模块控制
 
