@@ -18,7 +18,7 @@
 
 2.1 在build.gradle文件上依赖相应的库
 
-2.1.1 `compile(name: 'hdl_lib-v1.2.1', ext: 'aar')`此种方式依赖为aar文件依赖，此aar包为HDL Lib的通讯包。可向相关开发人员索取最新aar包，`compile 'com.hdl.lib:hdllib:1.2.0'`此种方式与aar包依赖方式同样效果（详情请看demo）
+2.1.1 `compile(name: 'hdl_lib-v1.2.7', ext: 'aar')`此种方式依赖为aar文件依赖，此aar包为HDL Lib的通讯包。可向相关开发人员索取最新aar包，`compile 'com.hdl.lib:hdllib:1.2.7'`此种方式与aar包依赖方式同样效果（详情请看demo）
 
 2.1.2   `compile 'org.greenrobot:eventbus:3.0.0' ` 这个依赖包为接收HDL Lib的EventBusEvent事件，必须依赖才能接收。（详情请看demo）
 
