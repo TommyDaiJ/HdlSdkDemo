@@ -310,13 +310,6 @@ sdk可接收设备状态改变的推送，目前支持灯光，窗帘，空调�
    	 }
 
 
-	
-/* 
-# 9 向往专用接口
-
-9.1 调用Command.xwSendData(Context context,int subnetID,int deeviceID,int port)  第一个参数：上下文，第二个参数：子网ID , 第三个参数：设备Id,第四个参数：端口号
-
-*/
 
 # 9 Demo下载链接 ：
 [HDL Lib SDK Demo](https://github.com/TommyDaiJ/HdlSdkDemo)
