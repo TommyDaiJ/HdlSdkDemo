@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.hdl.libr.hdl_lib.Appliances.AirCondition.Parser.AirCtrlParser;
 import com.hdl.libr.hdl_lib.Appliances.Curtain.Parser.CurtainCtrlParser;
@@ -25,6 +26,7 @@ import org.greenrobot.eventbus.ThreadMode;
 public class CtrlActivity extends AppCompatActivity {
 
     private Button lightBtn,curtainBtn,curtainBtn2,curtainBtn3,curtainBtn4,curtainBtn5,logicBtn,airBtn;
+    private TextView lightText,curText1,curText2,airText,logicText;
     private AppliancesInfo appliancesInfo;
     private int lightState;
 
@@ -42,11 +44,82 @@ public class CtrlActivity extends AppCompatActivity {
         logicBtn = (Button) findViewById(R.id.logicbtn);
         airBtn = (Button) findViewById(R.id.airbtn);
 
+        lightText = (TextView) findViewById(R.id.lightText);
+        curText1 = (TextView) findViewById(R.id.curtainText1);
+        curText2 = (TextView) findViewById(R.id.curtainText2);
+        airText = (TextView) findViewById(R.id.airText);
+        logicText = (TextView) findViewById(R.id.logicText);
+
+
         lightState = 100;//初始化灯光亮度100
 
 
 
         appliancesInfo = (AppliancesInfo) getIntent().getSerializableExtra("light");
+
+        switch (appliancesInfo.getBigType()){
+            case Configuration.LIGTH_BIG_TYPE:
+                curtainBtn.setVisibility(View.GONE);
+                curtainBtn2.setVisibility(View.GONE);
+                curtainBtn3.setVisibility(View.GONE);
+                curtainBtn4.setVisibility(View.GONE);
+                curtainBtn5.setVisibility(View.GONE);
+                logicBtn.setVisibility(View.GONE);
+                airBtn.setVisibility(View.GONE);
+
+                curText1.setVisibility(View.GONE);
+                curText2.setVisibility(View.GONE);
+                airText.setVisibility(View.GONE);
+                logicText.setVisibility(View.GONE);
+                break;
+            case Configuration.CURTAIN_BIG_TYPE:
+                lightBtn.setVisibility(View.GONE);
+                logicBtn.setVisibility(View.GONE);
+                airBtn.setVisibility(View.GONE);
+
+                lightText.setVisibility(View.GONE);
+                airText.setVisibility(View.GONE);
+                logicText.setVisibility(View.GONE);
+                if(appliancesInfo.getLittleType()==1){
+                    curText1.setVisibility(View.GONE);
+                    curtainBtn.setVisibility(View.GONE);
+                }else if(appliancesInfo.getLittleType()==2){
+                    curText2.setVisibility(View.GONE);
+                    curtainBtn2.setVisibility(View.GONE);
+                    curtainBtn3.setVisibility(View.GONE);
+                    curtainBtn4.setVisibility(View.GONE);
+                    curtainBtn5.setVisibility(View.GONE);
+                }
+                break;
+            case Configuration.AIR_BIG_TYPE:
+                lightBtn.setVisibility(View.GONE);
+                curtainBtn.setVisibility(View.GONE);
+                curtainBtn2.setVisibility(View.GONE);
+                curtainBtn3.setVisibility(View.GONE);
+                curtainBtn4.setVisibility(View.GONE);
+                curtainBtn5.setVisibility(View.GONE);
+                logicBtn.setVisibility(View.GONE);
+
+                curText1.setVisibility(View.GONE);
+                curText2.setVisibility(View.GONE);
+                lightText.setVisibility(View.GONE);
+                logicText.setVisibility(View.GONE);
+                break;
+            case Configuration.LOGIC_BIG_TYPE:
+                lightBtn.setVisibility(View.GONE);
+                curtainBtn.setVisibility(View.GONE);
+                curtainBtn2.setVisibility(View.GONE);
+                curtainBtn3.setVisibility(View.GONE);
+                curtainBtn4.setVisibility(View.GONE);
+                curtainBtn5.setVisibility(View.GONE);
+                airBtn.setVisibility(View.GONE);
+
+                curText1.setVisibility(View.GONE);
+                curText2.setVisibility(View.GONE);
+                lightText.setVisibility(View.GONE);
+                airText.setVisibility(View.GONE);
+                break;
+        }
 
 //        此方法为获取设备状态，逻辑模块没有这个api，仅支持灯光，窗帘，空调
         CommandData.getDeviceState(CtrlActivity.this, appliancesInfo);
