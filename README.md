@@ -6,7 +6,7 @@
 
 1.1 目前仅支持Android开发平台，Android SDK 版本4.2以上。
 
-1.2 目前支持Android Studio IDE集成，通过依赖 compile ‘com.hdl.lib:hdllib:1.2.8’ 即可成功将HDL SDK集成到项目中。（由于Bintay方面还在审核1.2.8版本，存在依赖不成功的可能，若不成功请依赖1.2.5，但建议依赖最新的版本）。
+1.2 目前支持Android Studio IDE集成，通过依赖 `compile ‘com.hdl.lib:hdllib:1.2.9’ `即可成功将HDL SDK集成到项目中。（由于Bintay方面还在审核1.2.9版本，存在依赖不成功的可能，若不成功请依赖1.2.5，但建议依赖最新的版本）。
 
 1.3 Android Studio平台也支持提供arr包依赖方式，此种方式可随时拿到最新的SDK版本。
 
@@ -18,13 +18,15 @@
 
 2.1 在build.gradle文件上依赖相应的库
 
-2.1.1 `compile(name: 'hdl_lib-v1.2.8', ext: 'aar')`此种方式依赖为aar文件依赖，此aar包为HDL Lib的通讯包。可向相关开发人员索取最新aar包，`compile 'com.hdl.lib:hdllib:1.2.7'`此种方式与aar包依赖方式同样效果（详情请看demo）
+2.1.1 `compile(name: 'hdl_lib-v1.2.9', ext: 'aar')`此种方式依赖为aar文件依赖，此aar包为HDL Lib的通讯包。可向相关开发人员索取最新aar包，`compile 'com.hdl.lib:hdllib:1.2.7'`此种方式与aar包依赖方式同样效果（详情请看demo）
 
 2.1.2   `compile 'org.greenrobot:eventbus:3.0.0' ` 这个依赖包为接收HDL Lib的EventBusEvent事件，必须依赖才能接收。（详情请看demo）
 
 2.1.3  `compile 'com.squareup.okhttp3:okhttp:3.4.1'`这个为接收On设备的okhttp包，非必须依赖，若要集成On设备获取api则必须依赖。
 
 2.2 在需要调用的activity中做初始化操作：`DeviceManager.init(this);`（此操作已经初始化EventBus，具体请查看demo）
+
+2.3 SDK初始化的端口为6000，若有其他程序占用6000端口，则SDK无法初始化，报错。
 
 ## 3：搜索设备
 
