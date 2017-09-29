@@ -26,6 +26,8 @@
 
 2.2 在需要调用的activity中做初始化操作：`DeviceManager.init(this);`（此操作已经初始化EventBus，具体请查看demo）
 
+2.3 SDK初始化的端口为6000，若有其他程序占用6000端口，则SDK无法初始化，报错。
+
 ## 3：搜索设备
 
 3.1 HDL SDK提供搜索设备的api，等待5秒后返回设备信息。
