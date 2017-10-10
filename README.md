@@ -9,6 +9,7 @@
 1.1 目前仅支持Android开发平台，Android SDK 版本4.2以上。
 
 1.2 目前支持Android Studio IDE集成。
+
 `
 dependencies {
     
