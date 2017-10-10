@@ -46,7 +46,9 @@ dependencies {
 2.2 在需要调用的activity中做初始化操作：`DeviceManager.init(this);`（此操作已经初始化EventBus，具体请查看demo）
 
 2.3 SDK初始化的端口为6000，若有其他程序占用6000端口，则SDK无法初始化，报错。
+
 ![Alt text](https://github.com/TommyDaiJ/HdlSdkDemo/blob/master/app/src/main/res/drawable/img1.png)
+
 
 ## Step 3
 
