@@ -62,6 +62,7 @@ dependencies {
 
 2.3 SDK初始化的端口为6000，若有其他程序占用6000端口，则SDK无法初始化，报错。
 
+
 ![Alt text](https://github.com/TommyDaiJ/HdlSdkDemo/blob/master/app/src/main/res/drawable/img1.png)
 
 
