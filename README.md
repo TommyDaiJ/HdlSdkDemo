@@ -18,7 +18,6 @@
 ```
 
 dependencies {
-    
     compile 'com.hdl.lib:hdllib:1.2.13'
 }
 
@@ -39,9 +38,25 @@ dependencies {
 
 ## Step 2：SDK初始化
 
-2.1.1   `compile 'org.greenrobot:eventbus:3.0.0' ` 这个依赖包为接收HDL Lib的EventBusEvent事件，必须依赖才能接收。（详情请看demo）
+2.1.1 这个依赖包为接收HDL Lib的EventBusEvent事件，必须依赖才能接收。（详情请看demo）
 
-2.1.2  `compile 'com.squareup.okhttp3:okhttp:3.4.1'`这个为接收On设备的okhttp包，非必须依赖，若要集成On设备获取api则必须依赖。
+```
+
+dependencies {
+    compile 'org.greenrobot:eventbus:3.0.0'
+}
+
+```
+
+2.1.2 这个为接收On设备的okhttp包，非必须依赖，若要集成On设备获取api则必须依赖。
+
+```
+
+dependencies {
+    compile 'com.squareup.okhttp3:okhttp:3.4.1'
+}
+
+```
 
 2.2 在需要调用的activity中做初始化操作：`DeviceManager.init(this);`（此操作已经初始化EventBus，具体请查看demo）
 
