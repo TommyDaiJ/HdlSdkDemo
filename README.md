@@ -103,7 +103,7 @@ DeviceManager.init(this);
 
 
 ## 4：获取设备信息
-在搜索中获取到信息为设备信息，在demo中的ApplianceActivity显示设备信息。设备信息列表显示的是此设备所有回路设备。
+在搜索中获取到信息为设备信息，在demo中的ApplianceActivity显示设备信息。设备信息列表显示的是此设备所有回路设备。 如果需要确定哪个设备哪个回路，则可通过子网id和设备id，大类，小类，回路号，共同确定唯一性，若有此需求请联系开发人员。 
 
 4.1 ApplianceActivity中必须初始化EventBus（具体请查看demo），调用CommandData.getAppliancesRemarks(AppliancesActivity.this, appliancesInfos);获取到的每个回路的备注。
 
@@ -201,9 +201,7 @@ sdk可接收设备状态改变的推送，目前支持灯光，窗帘，空调�
         int num = event.getLightCtrlBackInfo().getChannelNum();//获取回路号。这里可以获取到这个继电器或调光灯的回路号
         Toast.makeText(this,parentRemarks+" 的 "+remarks+" 回路号："+num+" 返回"+" 亮度为："+brightness,Toast.LENGTH_SHORT).show();
 
-        /**
-         * 如果备注不能满足需求，则可通过子网id和设备id查找。子网id，设备id共同确定唯一设备。
-         */
+        
 
 
 
