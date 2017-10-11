@@ -330,7 +330,11 @@ sdk可接收设备状态改变的推送，目前支持灯光，窗帘，空调�
 
 # 8 HDL On软件设备数据获取
 
-8.1 调用`OnManager.getOnDevicesData("192.168.2.113");`参数填写On设备上分享的ip地址。使用如下方法来接收数据。目前只能接收：调光回路，开关回路，开合帘电机，卷帘电机，窗帘模块，通用空调面板 的数据。接收到这些设备后，均可以用以上控制，获取状态等API加以操作。
+8.1 调用
+```
+OnManager.getOnDevicesData("Your Ip Address");
+```
+参数填写On设备上分享的ip地址。使用如下方法来接收数据。目前只能接收：调光回路，开关回路，开合帘电机，卷帘电机，窗帘模块，通用空调面板 的数据。接收到这些设备后，均可以用以上控制，获取状态等API加以操作。
 
 	@Subscribe(threadMode = ThreadMode.MAIN)
     public void onSowInfoEventMain(OnDeviceDataEvent event){
