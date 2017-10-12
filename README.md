@@ -4,7 +4,7 @@
 
    此SDK仅针对安卓平台进行集成，旨在集成HDL SDK后，可调用相关API，实现HDL设备的搜索、控制、获取当前状态等。在文档最后会提供demo示例，详情请查看demo。以下详细列出HDL SDK集成的相关信息：
    
-# 1 How do I use it?
+#  How do I use it?
 
 ## Step 1
 
@@ -72,9 +72,9 @@ DeviceManager.init(this);
 ![Alt text](https://github.com/TommyDaiJ/HdlSdkDemo/blob/master/app/src/main/res/drawable/img1.png)
 
 
-## Step 3
+## Step 3 调用相关API
 
-## 3：搜索设备
+### 3：搜索设备
 
 3.1 HDL SDK提供搜索设备的api，等待5秒后返回设备信息。
 
@@ -102,7 +102,7 @@ DeviceManager.init(this);
 ```
 
 
-## 4：获取设备信息
+### 4：获取设备信息
 在搜索中获取到信息为设备信息，在demo中的ApplianceActivity显示设备信息。设备信息列表显示的是此设备所有回路设备。 如果需要确定哪个设备哪个回路，则可通过子网id和设备id，大类，小类，回路号，共同确定唯一性，若有此需求请联系开发人员。 
 
 4.1 ApplianceActivity中必须初始化EventBus（具体请查看demo），调用CommandData.getAppliancesRemarks(AppliancesActivity.this, appliancesInfos);获取到的每个回路的备注。
@@ -124,19 +124,19 @@ DeviceManager.init(this);
 
     }
     
-## 5 获取相关设备状态
+### 5 获取相关设备状态
 
 5.1调用CommandData.getDeviceState(CtrlActivity.this,appliancesInfo);两个参数为固定参数。即可获取相关设备对应回路的状态，必须要调用EventBus接收返回信息，具体请查看demo
 
-## 6 控制设备
+### 6 控制设备
 
-### 6.1灯光控制
+#### 6.1灯光控制
 
 6.1.1 调用CommandData.lightCtrl(CtrlActivity.this,appliancesInfo,state);第三个参数为灯光亮度，0代表关，范围在0-100.超过100不做处理。
 
 6.1.2需要接收EventBus的控制返回结果，具体请查看demo。
 
-### 6.2 窗帘控制
+#### 6.2 窗帘控制
 
 窗帘种类有：窗帘模块，卷帘电机，开合帘电机。
 
@@ -147,7 +147,7 @@ DeviceManager.init(this);
 
 6.2.3 需要接收EventBus的控制返回结果，具体查看demo。仅将`lightCtrlBackInfo`改为`CurtainCtrlBackInfo`
 
-### 6.3 空调控制
+#### 6.3 空调控制
 
 6.3.1调用相关控制空调api即可。
 
@@ -173,15 +173,15 @@ DeviceManager.init(this);
 ```
 
 
-### 6.4 逻辑模块控制
+#### 6.4 逻辑模块控制
 
 6.4.1调用CommandData.logicCtrl(CtrlActivity.this,appliancesInfo);具体查看demo
 
-# 7 接收设备状态改变推送
+## 7 接收设备状态改变推送
 
 sdk可接收设备状态改变的推送，目前支持灯光，窗帘，空调面板的状态改变推送。在需要接收的界面重写EventBus回调。
 
-### 7.1 接收灯光的推送
+#### 7.1 接收灯光的推送
 
 ```
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -208,7 +208,7 @@ sdk可接收设备状态改变的推送，目前支持灯光，窗帘，空调�
     }
 ```
 
-### 7.2 接收窗帘的推送
+#### 7.2 接收窗帘的推送
 
 ```
    @Subscribe(threadMode = ThreadMode.MAIN)
@@ -227,7 +227,7 @@ sdk可接收设备状态改变的推送，目前支持灯光，窗帘，空调�
 
 ```
 
-### 7.3 接收空调面板的推送
+#### 7.3 接收空调面板的推送
 
 ```
 
@@ -328,7 +328,7 @@ sdk可接收设备状态改变的推送，目前支持灯光，窗帘，空调�
 
 
 
-# 8 HDL On软件设备数据获取
+## 8 HDL On软件设备数据获取
 
 8.1 调用
 ```
@@ -361,7 +361,7 @@ OnManager.getOnDevicesData("Your Ip Address");
 
 
 
-# 9 Demo下载链接 ：
+## 9 Demo下载链接 ：
 [HDL Lib SDK Demo](https://github.com/TommyDaiJ/HdlSdkDemo)
     
     
