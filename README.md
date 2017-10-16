@@ -85,7 +85,9 @@ DeviceManager.init(Context context);
 
 3.1 HDL SDK提供搜索设备的api，等待5秒后返回设备信息。
 
-3.2 调用`CommandData.devicesSearch(Conetext context);`
+3.2 调用`CommandData.HDLdevicesSearch(Context context);`获取HDL设备数据
+
+3.3 调用`CommandData.HDLscenesSearch(Context context);`获取HDL场景数据
 
 3.3 必须在此activity中实现EventBus的方法，（具体请查看demo）搜索返回：
 
@@ -107,6 +109,27 @@ DeviceManager.init(Context context);
     }
     
 ```
+
+
+```
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onScenesInfoEventMain(SceneInfoEvent event){
+        devicesDatas = event.getDesDataList();
+        tv.setText("size = "+event.getDesDataList().size());
+        listString.clear();
+        for(int i = 0;i<devicesDatas.size();i++){
+            if(TextUtils.isEmpty(devicesDatas.get(i).getRemark())){
+                listString.add("暂无备注");
+            }else{
+                listString.add(devicesDatas.get(i).getRemark());
+            }
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+```
+
 
 
 ### 4：获取设备信息
