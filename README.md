@@ -4,6 +4,13 @@
 
    此SDK仅针对安卓平台进行集成，旨在集成HDL SDK后，可调用相关API，实现HDL设备的搜索、控制、获取当前状态等。在文档最后会提供demo示例，详情请查看demo。以下详细列出HDL SDK集成的相关信息：
    
+   
+# 版本更新
+####v1.2.14
+1：SDK的初始化不再包含EventBus的初始化，厂家根据自身情况在需要接收的界面初始化
+
+2：废弃`CommandData.devicesSearch(Conetext context);`搜索api，增加区分HDL设备和HDL场景api。`CommandData.HDLdevicesSearch(Context context);`和`CommandData.HDLscenesSearch(Context context);`
+   
 #  How do I use it?
 
 ## Step 1
@@ -61,7 +68,7 @@ dependencies {
 2.2 可在LaunchActivity或开启Service初始化：
 
 ```
-DeviceManager.init(this);
+DeviceManager.init(Context context);
 ```
 
 （因不同厂家需要此操作从1.2.14版本后不再初始化EventBus，可自行初始化EventBus具体请查看demo）。因SDK初始化仅仅开启一个线程做接收、发送操作，程序应确保该线程存活。建议使用Service初始化SDK`Context.startService()`，Service不能新开进程初始化SDK，因为SDK使用EventBus通讯，EventBus不支持跨进程通讯。若要使用双进程保活机制，需要注意将SDK初始化放在同一进程这个问题。
@@ -78,7 +85,7 @@ DeviceManager.init(this);
 
 3.1 HDL SDK提供搜索设备的api，等待5秒后返回设备信息。
 
-3.2 调用`CommandData.devicesSearch(MainActivity.this);`
+3.2 调用`CommandData.devicesSearch(Conetext context);`
 
 3.3 必须在此activity中实现EventBus的方法，（具体请查看demo）搜索返回：
 
