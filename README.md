@@ -6,7 +6,7 @@
    
    
 # 版本更新
-####v1.2.14
+#### v1.2.14
 1：SDK的初始化不再包含EventBus的初始化，厂家根据自身情况在需要接收的界面初始化
 
 2：废弃`CommandData.devicesSearch(Conetext context);`搜索api，增加区分HDL设备和HDL场景api。`CommandData.HDLdevicesSearch(Context context);`和`CommandData.HDLscenesSearch(Context context);`
