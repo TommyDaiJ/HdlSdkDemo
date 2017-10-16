@@ -1,35 +1,80 @@
 # HDL Lib SDK通讯协议文档
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-glide--transformations-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1363)
+[![License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
    此SDK仅针对安卓平台进行集成，旨在集成HDL SDK后，可调用相关API，实现HDL设备的搜索、控制、获取当前状态等。在文档最后会提供demo示例，详情请查看demo。以下详细列出HDL SDK集成的相关信息：
    
-## 1：平台条件
+#  How do I use it?
+
+## Step 1
+
+#### Gradle
+
 
 1.1 目前仅支持Android开发平台，Android SDK 版本4.2以上。
 
-1.2 目前支持Android Studio IDE集成，通过依赖 `compile ‘com.hdl.lib:hdllib:1.2.12’ `即可成功将HDL SDK集成到项目中。（由于Bintay方面还在审核1.2.9版本，存在依赖不成功的可能，若不成功请依赖1.2.5，但建议依赖最新的版本）。
+1.2 支持Android Studio IDE集成。
 
-1.3 Android Studio平台也支持提供arr包依赖方式，此种方式可随时拿到最新的SDK版本。
+```
+
+dependencies {
+    compile 'com.hdl.lib:hdllib:1.2.13'
+}
+
+```
+
+1.3 Android Studio平台也支持提供arr包依赖方式，此种方式可随时拿到最新的SDK版本,demo使用此种方式。
+
+```
+dependencies {
+    compile(name: 'hdl_lib-v1.2.13', ext: 'aar')
+}
+
+```
 
 1.4 支持Eclipse 安卓开发平台，此种方式可提供jar包依赖，由于SDK有依赖其他第三方库，存在此平台支持不理想的情况，建议转到1.2或1.3方式。
 
 1.5 调试SDK建议使用真机调试，模拟器可能会导致一些不知名的问题。
 
-## 2：SDK初始化
+## Step 2：SDK初始化
 
-2.1 在build.gradle文件上依赖相应的库
+2.1.1 这个依赖包为接收HDL Lib的EventBusEvent事件，必须依赖才能接收。（详情请看demo）
 
-2.1.1 `compile(name: 'hdl_lib-v1.2.12', ext: 'aar')`此种方式依赖为aar文件依赖，此aar包为HDL Lib的通讯包。可向相关开发人员索取最新aar包，`compile 'com.hdl.lib:hdllib:1.2.12'`此种方式与aar包依赖方式同样效果（详情请看demo）
+```
 
-2.1.2   `compile 'org.greenrobot:eventbus:3.0.0' ` 这个依赖包为接收HDL Lib的EventBusEvent事件，必须依赖才能接收。（详情请看demo）
+dependencies {
+    compile 'org.greenrobot:eventbus:3.0.0'
+}
 
-2.1.3  `compile 'com.squareup.okhttp3:okhttp:3.4.1'`这个为接收On设备的okhttp包，非必须依赖，若要集成On设备获取api则必须依赖。
+```
 
-2.2 在需要调用的activity中做初始化操作：`DeviceManager.init(this);`（此操作已经初始化EventBus，具体请查看demo）
+2.1.2 这个为接收On设备的okhttp包，非必须依赖，若要集成On设备获取api则必须依赖。
+
+```
+
+dependencies {
+    compile 'com.squareup.okhttp3:okhttp:3.4.1'
+}
+
+```
+
+2.2 可在LaunchActivity或开启Service初始化：
+
+```
+DeviceManager.init(this);
+```
+
+（因不同厂家需要此操作从1.2.14版本后不再初始化EventBus，可自行初始化EventBus具体请查看demo）。因SDK初始化仅仅开启一个线程做接收、发送操作，程序应确保该线程存活。建议使用Service初始化SDK`Context.startService()`，Service不能新开进程初始化SDK，因为SDK使用EventBus通讯，EventBus不支持跨进程通讯。若要使用双进程保活机制，需要注意将SDK初始化放在同一进程这个问题。
 
 2.3 SDK初始化的端口为6000，若有其他程序占用6000端口，则SDK无法初始化，报错。
+
+
 ![Alt text](https://github.com/TommyDaiJ/HdlSdkDemo/blob/master/app/src/main/res/drawable/img1.png)
 
-## 3：搜索设备
+
+## Step 3 调用相关API
+
+### 3：搜索设备
 
 3.1 HDL SDK提供搜索设备的api，等待5秒后返回设备信息。
 
@@ -57,8 +102,8 @@
 ```
 
 
-## 4：获取设备信息
-在搜索中获取到信息为设备信息，在demo中的ApplianceActivity显示设备信息。设备信息列表显示的是此设备所有回路设备。
+### 4：获取设备信息
+在搜索中获取到信息为设备信息，在demo中的ApplianceActivity显示设备信息。设备信息列表显示的是此设备所有回路设备。 如果需要确定哪个设备哪个回路，则可通过子网id和设备id，大类，小类，回路号，共同确定唯一性，若有此需求请联系开发人员。 
 
 4.1 ApplianceActivity中必须初始化EventBus（具体请查看demo），调用CommandData.getAppliancesRemarks(AppliancesActivity.this, appliancesInfos);获取到的每个回路的备注。
 
@@ -79,19 +124,19 @@
 
     }
     
-## 5 获取相关设备状态
+### 5 获取相关设备状态
 
 5.1调用CommandData.getDeviceState(CtrlActivity.this,appliancesInfo);两个参数为固定参数。即可获取相关设备对应回路的状态，必须要调用EventBus接收返回信息，具体请查看demo
 
-## 6 控制设备
+### 6 控制设备
 
-### 6.1灯光控制
+#### 6.1灯光控制
 
 6.1.1 调用CommandData.lightCtrl(CtrlActivity.this,appliancesInfo,state);第三个参数为灯光亮度，0代表关，范围在0-100.超过100不做处理。
 
 6.1.2需要接收EventBus的控制返回结果，具体请查看demo。
 
-### 6.2 窗帘控制
+#### 6.2 窗帘控制
 
 窗帘种类有：窗帘模块，卷帘电机，开合帘电机。
 
@@ -102,7 +147,7 @@
 
 6.2.3 需要接收EventBus的控制返回结果，具体查看demo。仅将`lightCtrlBackInfo`改为`CurtainCtrlBackInfo`
 
-### 6.3 空调控制
+#### 6.3 空调控制
 
 6.3.1调用相关控制空调api即可。
 
@@ -128,15 +173,15 @@
 ```
 
 
-### 6.4 逻辑模块控制
+#### 6.4 逻辑模块控制
 
 6.4.1调用CommandData.logicCtrl(CtrlActivity.this,appliancesInfo);具体查看demo
 
-# 7 接收设备状态改变推送
+## 7 接收设备状态改变推送
 
 sdk可接收设备状态改变的推送，目前支持灯光，窗帘，空调面板的状态改变推送。在需要接收的界面重写EventBus回调。
 
-### 7.1 接收灯光的推送
+#### 7.1 接收灯光的推送
 
 ```
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -156,16 +201,14 @@ sdk可接收设备状态改变的推送，目前支持灯光，窗帘，空调�
         int num = event.getLightCtrlBackInfo().getChannelNum();//获取回路号。这里可以获取到这个继电器或调光灯的回路号
         Toast.makeText(this,parentRemarks+" 的 "+remarks+" 回路号："+num+" 返回"+" 亮度为："+brightness,Toast.LENGTH_SHORT).show();
 
-        /**
-         * 如果备注不能满足需求，则可通过子网id和设备id查找。子网id，设备id共同确定唯一设备。
-         */
+        
 
 
 
     }
 ```
 
-### 7.2 接收窗帘的推送
+#### 7.2 接收窗帘的推送
 
 ```
    @Subscribe(threadMode = ThreadMode.MAIN)
@@ -184,7 +227,7 @@ sdk可接收设备状态改变的推送，目前支持灯光，窗帘，空调�
 
 ```
 
-### 7.3 接收空调面板的推送
+#### 7.3 接收空调面板的推送
 
 ```
 
@@ -285,9 +328,13 @@ sdk可接收设备状态改变的推送，目前支持灯光，窗帘，空调�
 
 
 
-# 8 HDL On软件设备数据获取
+## 8 HDL On软件设备数据获取
 
-8.1 调用`OnManager.getOnDevicesData("192.168.2.113");`参数填写On设备上分享的ip地址。使用如下方法来接收数据。目前只能接收：调光回路，开关回路，开合帘电机，卷帘电机，窗帘模块，通用空调面板 的数据。接收到这些设备后，均可以用以上控制，获取状态等API加以操作。
+8.1 调用
+```
+OnManager.getOnDevicesData("Your Ip Address");
+```
+参数填写On设备上分享的ip地址。使用如下方法来接收数据。目前只能接收：调光回路，开关回路，开合帘电机，卷帘电机，窗帘模块，通用空调面板 的数据。接收到这些设备后，均可以用以上控制，获取状态等API加以操作。
 
 	@Subscribe(threadMode = ThreadMode.MAIN)
     public void onSowInfoEventMain(OnDeviceDataEvent event){
@@ -314,7 +361,7 @@ sdk可接收设备状态改变的推送，目前支持灯光，窗帘，空调�
 
 
 
-# 9 Demo下载链接 ：
+## 9 Demo下载链接 ：
 [HDL Lib SDK Demo](https://github.com/TommyDaiJ/HdlSdkDemo)
     
     
