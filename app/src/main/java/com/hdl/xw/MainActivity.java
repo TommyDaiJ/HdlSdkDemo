@@ -17,9 +17,10 @@ import com.hdl.libr.hdl_lib.DeviceManager.Bean.AppliancesInfo;
 import com.hdl.libr.hdl_lib.DeviceManager.Bean.DevicesData;
 import com.hdl.libr.hdl_lib.DeviceManager.DeviceManager;
 import com.hdl.libr.hdl_lib.DeviceManager.EventBusEvent.DevicesInfoEvent;
+import com.hdl.libr.hdl_lib.DeviceManager.EventBusEvent.SceneInfoEvent;
 import com.hdl.libr.hdl_lib.OnDevices.EventBusEvent.OnDeviceDataEvent;
-import com.hdl.libr.hdl_lib.OnDevices.Manager.OnManager;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -29,7 +30,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button btn;
+    Button getDevices,getScenes;
     TextView tv;
     private List<DevicesData> devicesDatas;
     private List<DevicesData> OndevicesDatas;
@@ -42,7 +43,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         DeviceManager.init(this);
-        btn = (Button) findViewById(R.id.btn);
+        if(!EventBus.getDefault().isRegistered(this)){
+            EventBus.getDefault().register(this);
+        }
+        getDevices = (Button) findViewById(R.id.devices);
+        getScenes = (Button) findViewById(R.id.scenes);
         tv= (TextView) findViewById(R.id.tv);
         adapter=new ArrayAdapter<String>(MainActivity.this,android.R.layout.simple_list_item_1,listString);
         ListView listView=(ListView)findViewById(R.id.listView1);
@@ -61,10 +66,17 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        btn.setOnClickListener(new View.OnClickListener() {
+        getDevices.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CommandData.devicesSearch(MainActivity.this);
+                CommandData.HDLdevicesSearch(MainActivity.this);
+            }
+        });
+
+        getScenes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CommandData.HDLscenesSearch(MainActivity.this);
             }
         });
     }
@@ -75,10 +87,26 @@ public class MainActivity extends AppCompatActivity {
         //关闭Socket接收
         super.onDestroy();
         DeviceManager.release();
+        EventBus.getDefault().unregister(this);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDevicesInfoEventMain(DevicesInfoEvent event){
+        devicesDatas = event.getDesDataList();
+        tv.setText("size = "+event.getDesDataList().size());
+        listString.clear();
+        for(int i = 0;i<devicesDatas.size();i++){
+            if(TextUtils.isEmpty(devicesDatas.get(i).getRemark())){
+                listString.add("暂无备注");
+            }else{
+                listString.add(devicesDatas.get(i).getRemark());
+            }
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onScenesInfoEventMain(SceneInfoEvent event){
         devicesDatas = event.getDesDataList();
         tv.setText("size = "+event.getDesDataList().size());
         listString.clear();
