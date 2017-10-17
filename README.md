@@ -8,11 +8,11 @@
 # 版本更新
 
 #### v1.3.0
-1： 增加HDL报警设备收发。可用EventBus或Broadcast接收。
+1: 增加HDL报警设备收发。可用EventBus或Broadcast接收。
 
-2:  搜索api修改为：调用搜索获取HDL设备数据、HDL场景数据api，5秒后回调EventBus数据。
+2: 搜索api修改为：调用搜索获取HDL设备数据、HDL场景数据api，5秒后回调EventBus数据。
 
-3： 去除备注乱码字符。
+3: 去除备注乱码字符。
 
 4： 修复灯光设备备注某些网络获取不到的bug
 
@@ -168,13 +168,13 @@ DeviceManager.init(Context context);
     
 ### 5 获取相关设备状态
 
-5.1调用CommandData.getDeviceState(CtrlActivity.this,appliancesInfo);两个参数为固定参数。即可获取相关设备对应回路的状态，必须要调用EventBus接收返回信息，具体请查看demo
+5.1调用`CommandData.getDeviceState(CtrlActivity.this,appliancesInfo);`两个参数为固定参数。即可获取相关设备对应回路的状态，必须要调用EventBus接收返回信息，具体请查看demo
 
 ### 6 控制设备
 
 #### 6.1灯光控制
 
-6.1.1 调用CommandData.lightCtrl(CtrlActivity.this,appliancesInfo,state);第三个参数为灯光亮度，0代表关，范围在0-100.超过100不做处理。
+6.1.1 调用`CommandData.lightCtrl(CtrlActivity.this,appliancesInfo,state);`第三个参数为灯光亮度，0代表关，范围在0-100.超过100不做处理。
 
 6.1.2需要接收EventBus的控制返回结果，具体请查看demo。
 
@@ -403,7 +403,6 @@ public class HDLBroacastRv extends BroadcastReceiver {
 
 ## 9 HDL On软件设备数据获取
 
-9.1 调用
 ```
 OnManager.getOnDevicesData("Your Ip Address");
 ```
