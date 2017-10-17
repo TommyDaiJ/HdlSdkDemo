@@ -355,12 +355,21 @@ sdk可接收设备状态改变的推送，目前支持灯光，窗帘，空调�
 
 ```
 
+## 8 接收HDL设备警报消息
+
+```
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onWarningEventMain(WarningInfoEvent event){
+        String warningType = event.getWaringType();
+        Toast.makeText(MainActivity.this,warningType,Toast.LENGTH_SHORT).show();
+    }
+    
+```
 
 
+## 9 HDL On软件设备数据获取
 
-## 8 HDL On软件设备数据获取
-
-8.1 调用
+9.1 调用
 ```
 OnManager.getOnDevicesData("Your Ip Address");
 ```
@@ -391,7 +400,6 @@ OnManager.getOnDevicesData("Your Ip Address");
 
 
 
-## 9 Demo下载链接 ：
-[HDL Lib SDK Demo](https://github.com/TommyDaiJ/HdlSdkDemo)
+
     
     
