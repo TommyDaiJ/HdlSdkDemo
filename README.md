@@ -14,9 +14,9 @@
 
 3: 去除备注乱码字符。
 
-4： 修复灯光设备备注某些网络获取不到的bug
+4：修复灯光设备备注某些网络获取不到的bug
 
-5： v1.3.0上传至Bintay，可不适用aar包依赖
+5：v1.3.0上传至Bintay，可不适用aar包依赖
 
 #### v1.2.14
 1：SDK的初始化不再包含EventBus的初始化，厂家根据自身情况在需要接收的界面初始化
@@ -37,7 +37,7 @@
 ```
 
 dependencies {
-    compile 'com.hdl.lib:hdllib:1.2.13'
+    compile 'com.hdl.lib:hdllib:1.3.0'
 }
 
 ```
@@ -46,7 +46,7 @@ dependencies {
 
 ```
 dependencies {
-    compile(name: 'hdl_lib-v1.2.13', ext: 'aar')
+    compile(name: 'hdl_lib-v1.3.0', ext: 'aar')
 }
 
 ```
