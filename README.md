@@ -6,6 +6,18 @@
    
    
 # 版本更新
+
+#### v1.3.0
+1： 增加HDL报警设备收发。可用EventBus或Broadcast接收。
+
+2:  搜索api修改为：调用搜索获取HDL设备数据、HDL场景数据api，5秒后回调EventBus数据。
+
+3： 去除备注乱码字符。
+
+4： 修复灯光设备备注某些网络获取不到的bug
+
+5： v1.3.0上传至Bintay，可不适用aar包依赖
+
 #### v1.2.14
 1：SDK的初始化不再包含EventBus的初始化，厂家根据自身情况在需要接收的界面初始化
 
@@ -364,6 +376,28 @@ sdk可接收设备状态改变的推送，目前支持灯光，窗帘，空调�
         Toast.makeText(MainActivity.this,warningType,Toast.LENGTH_SHORT).show();
     }
     
+```
+
+静态注册接收消息，可根据自身情况选择
+
+```
+        <receiver
+            android:name=".HDLBroacastRv">
+            <intent-filter>
+                <action android:name="com.hdl.action.WARNING"/>
+            </intent-filter>
+        </receiver>
+```
+
+```
+public class HDLBroacastRv extends BroadcastReceiver {
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        String warningType = intent.getStringExtra("HdlWarning");
+        Toast.makeText(context,warningType,Toast.LENGTH_SHORT).show();
+    }
+}
 ```
 
 
