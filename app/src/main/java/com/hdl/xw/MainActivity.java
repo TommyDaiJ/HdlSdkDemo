@@ -1,5 +1,6 @@
 package com.hdl.xw;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -36,13 +37,14 @@ public class MainActivity extends AppCompatActivity {
     private List<DevicesData> OndevicesDatas;
     private List<String> listString = new ArrayList<>() ;
     private ArrayAdapter<String> adapter;
+    private ProgressDialog proDia;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        DeviceManager.init(this);
+        DeviceManager.init(getApplicationContext());
         if(!EventBus.getDefault().isRegistered(this)){
             EventBus.getDefault().register(this);
         }
@@ -51,6 +53,10 @@ public class MainActivity extends AppCompatActivity {
         tv= (TextView) findViewById(R.id.tv);
         adapter=new ArrayAdapter<String>(MainActivity.this,android.R.layout.simple_list_item_1,listString);
         ListView listView=(ListView)findViewById(R.id.listView1);
+        proDia=new ProgressDialog(MainActivity.this);
+        proDia.setTitle("正在获取数据...");//SDK获取设备、场景数据，搜索5秒后回调数据
+        proDia.setMessage("请耐心等待");
+        proDia.onStart();
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -70,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 CommandData.HDLdevicesSearch(MainActivity.this);
+                proDia.show();
             }
         });
 
@@ -77,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 CommandData.HDLscenesSearch(MainActivity.this);
+                proDia.show();
             }
         });
     }
@@ -92,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDevicesInfoEventMain(DevicesInfoEvent event){
+        proDia.dismiss();
         devicesDatas = event.getDesDataList();
         tv.setText("size = "+event.getDesDataList().size());
         listString.clear();
@@ -107,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onScenesInfoEventMain(SceneInfoEvent event){
+        proDia.dismiss();
         devicesDatas = event.getDesDataList();
         tv.setText("size = "+event.getDesDataList().size());
         listString.clear();

@@ -2,11 +2,11 @@ package com.hdl.xw;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.hdl.libr.hdl_lib.Appliances.AirCondition.Parser.AirCtrlParser;
 import com.hdl.libr.hdl_lib.Appliances.Curtain.Parser.CurtainCtrlParser;
 import com.hdl.libr.hdl_lib.CommandData;
@@ -16,6 +16,7 @@ import com.hdl.libr.hdl_lib.DeviceManager.EventBusEvent.AirFeedBackEvent;
 import com.hdl.libr.hdl_lib.DeviceManager.EventBusEvent.CurtainFeedBackEvent;
 import com.hdl.libr.hdl_lib.DeviceManager.EventBusEvent.DeviceStateEvent;
 import com.hdl.libr.hdl_lib.DeviceManager.EventBusEvent.LightFeedBackEvent;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -467,7 +468,7 @@ public class CtrlActivity extends AppCompatActivity {
     }
 
 
-    private void ToastUtil(String text){
+    public void ToastUtil(String text){
         Toast.makeText(CtrlActivity.this,text,Toast.LENGTH_SHORT).show();
     }
 
