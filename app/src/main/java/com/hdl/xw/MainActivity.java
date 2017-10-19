@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hdl.libr.hdl_lib.CommandData;
 import com.hdl.libr.hdl_lib.DeviceManager.Bean.AppliancesInfo;
@@ -19,6 +20,7 @@ import com.hdl.libr.hdl_lib.DeviceManager.Bean.DevicesData;
 import com.hdl.libr.hdl_lib.DeviceManager.DeviceManager;
 import com.hdl.libr.hdl_lib.DeviceManager.EventBusEvent.DevicesInfoEvent;
 import com.hdl.libr.hdl_lib.DeviceManager.EventBusEvent.SceneInfoEvent;
+import com.hdl.libr.hdl_lib.DeviceManager.EventBusEvent.WarningInfoEvent;
 import com.hdl.libr.hdl_lib.OnDevices.EventBusEvent.OnDeviceDataEvent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -154,6 +156,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onWarningEventMain(WarningInfoEvent event){
+        String warningType = event.getWarningType();
+        Toast.makeText(MainActivity.this,warningType,Toast.LENGTH_SHORT).show();
+    }
 
 }
