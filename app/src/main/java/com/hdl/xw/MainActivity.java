@@ -14,14 +14,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hdl.libr.hdl_lib.CommandData;
-import com.hdl.libr.hdl_lib.DeviceManager.Bean.AppliancesInfo;
-import com.hdl.libr.hdl_lib.DeviceManager.Bean.DevicesData;
-import com.hdl.libr.hdl_lib.DeviceManager.DeviceManager;
-import com.hdl.libr.hdl_lib.DeviceManager.EventBusEvent.DevicesInfoEvent;
-import com.hdl.libr.hdl_lib.DeviceManager.EventBusEvent.SceneInfoEvent;
-import com.hdl.libr.hdl_lib.DeviceManager.EventBusEvent.WarningInfoEvent;
-import com.hdl.libr.hdl_lib.OnDevices.EventBusEvent.OnDeviceDataEvent;
+
+import com.hdl.libr.hdl_lib.HDLCommand;
+import com.hdl.libr.hdl_lib.HDLDeviceManager.Bean.AppliancesInfo;
+import com.hdl.libr.hdl_lib.HDLDeviceManager.Bean.DevicesData;
+import com.hdl.libr.hdl_lib.HDLDeviceManager.EventBusEvent.DevicesInfoEvent;
+import com.hdl.libr.hdl_lib.HDLDeviceManager.EventBusEvent.SceneInfoEvent;
+import com.hdl.libr.hdl_lib.HDLDeviceManager.EventBusEvent.WarningInfoEvent;
+import com.hdl.libr.hdl_lib.HDLDeviceManager.HDLDeviceManager;
+import com.hdl.libr.hdl_lib.HDLOnDevices.EventBusEvent.OnDeviceDataEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        DeviceManager.init(getApplicationContext());
+        HDLDeviceManager.init(getApplicationContext());
         if(!EventBus.getDefault().isRegistered(this)){
             EventBus.getDefault().register(this);
         }
@@ -77,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         getDevices.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CommandData.HDLdevicesSearch(MainActivity.this);
+                HDLCommand.HDLdevicesSearch(MainActivity.this);
                 proDia.show();
             }
         });
@@ -85,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         getScenes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CommandData.HDLscenesSearch(MainActivity.this);
+                HDLCommand.HDLscenesSearch(MainActivity.this);
                 proDia.show();
             }
         });
@@ -96,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         //关闭Socket接收
         super.onDestroy();
-        DeviceManager.release();
+        HDLDeviceManager.release();
         EventBus.getDefault().unregister(this);
     }
 
@@ -117,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onScenesInfoEventMain(SceneInfoEvent event){
+    public void onSceneInfoEventMain(SceneInfoEvent event){
         proDia.dismiss();
         devicesDatas = event.getDesDataList();
         tv.setText("size = "+event.getDesDataList().size());
@@ -138,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
         for(int i=0;i<OndevicesDatas.size();i++){
             List<AppliancesInfo> appliancesInfoList = OndevicesDatas.get(i).getAppliancesInfoList();
             for(int j=0;j<appliancesInfoList.size();j++){
-                Log.i("Ondevice","设备名称："+appliancesInfoList.get(j).getDeviceName()
+                Log.i("djl","设备名称："+appliancesInfoList.get(j).getDeviceName()
                         +"\n子网Id = "+appliancesInfoList.get(j).getDeviceSubnetID()
                         +"\n 设备Id = "+appliancesInfoList.get(j).getDeviceDeviceID()
                         +"\n 回路号 =" +appliancesInfoList.get(j).getChannelNum()
@@ -161,5 +162,6 @@ public class MainActivity extends AppCompatActivity {
         String warningType = event.getWarningType();
         Toast.makeText(MainActivity.this,warningType,Toast.LENGTH_SHORT).show();
     }
+
 
 }

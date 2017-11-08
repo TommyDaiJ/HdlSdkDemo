@@ -7,21 +7,19 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hdl.libr.hdl_lib.Appliances.AirCondition.Parser.AirCtrlParser;
-import com.hdl.libr.hdl_lib.Appliances.Curtain.Parser.CurtainCtrlParser;
-import com.hdl.libr.hdl_lib.CommandData;
 import com.hdl.libr.hdl_lib.Config.Configuration;
-import com.hdl.libr.hdl_lib.DeviceManager.Bean.AppliancesInfo;
-import com.hdl.libr.hdl_lib.DeviceManager.EventBusEvent.AirFeedBackEvent;
-import com.hdl.libr.hdl_lib.DeviceManager.EventBusEvent.CurtainFeedBackEvent;
-import com.hdl.libr.hdl_lib.DeviceManager.EventBusEvent.DeviceStateEvent;
-import com.hdl.libr.hdl_lib.DeviceManager.EventBusEvent.LightFeedBackEvent;
+import com.hdl.libr.hdl_lib.HDLAppliances.HDLAirCondition.Parser.AirCtrlParser;
+import com.hdl.libr.hdl_lib.HDLAppliances.HDLCurtain.Parser.CurtainCtrlParser;
+import com.hdl.libr.hdl_lib.HDLCommand;
+import com.hdl.libr.hdl_lib.HDLDeviceManager.Bean.AppliancesInfo;
+import com.hdl.libr.hdl_lib.HDLDeviceManager.EventBusEvent.AirFeedBackEvent;
+import com.hdl.libr.hdl_lib.HDLDeviceManager.EventBusEvent.CurtainFeedBackEvent;
+import com.hdl.libr.hdl_lib.HDLDeviceManager.EventBusEvent.DeviceStateEvent;
+import com.hdl.libr.hdl_lib.HDLDeviceManager.EventBusEvent.LightFeedBackEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
-
 
 
 public class CtrlActivity extends AppCompatActivity {
@@ -56,7 +54,7 @@ public class CtrlActivity extends AppCompatActivity {
 
 
 
-        appliancesInfo = (AppliancesInfo) getIntent().getSerializableExtra("light");
+        appliancesInfo = (AppliancesInfo) getIntent().getSerializableExtra("hdl");
 
         switch (appliancesInfo.getBigType()){
             case Configuration.LIGTH_BIG_TYPE:
@@ -123,12 +121,12 @@ public class CtrlActivity extends AppCompatActivity {
         }
 
 //        此方法为获取设备状态，逻辑模块没有这个api，仅支持灯光，窗帘，空调
-        CommandData.getDeviceState(CtrlActivity.this, appliancesInfo);
+        HDLCommand.getDeviceState(CtrlActivity.this, appliancesInfo);
 
         lightBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CommandData.lightCtrl(CtrlActivity.this,appliancesInfo,lightState);
+                HDLCommand.lightCtrl(CtrlActivity.this,appliancesInfo,lightState);
             }
         });
 
@@ -136,64 +134,64 @@ public class CtrlActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //窗帘模块第二个参数 为CurtainCtrlParser.curtainOn，CurtainCtrlParser.curtainOff，CurtainCtrlParser.curtainPause其中一个
-                CommandData.curtainCtrl(CtrlActivity.this,appliancesInfo, CurtainCtrlParser.curtainOn);
+                HDLCommand.curtainCtrl(CtrlActivity.this,appliancesInfo, CurtainCtrlParser.curtainOn);
             }
         });
 
         curtainBtn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CommandData.curtainCtrl(CtrlActivity.this,appliancesInfo, CurtainCtrlParser.curtainOn);
+                HDLCommand.curtainCtrl(CtrlActivity.this,appliancesInfo, CurtainCtrlParser.curtainOn);
             }
         });
 
         curtainBtn3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CommandData.curtainCtrl(CtrlActivity.this,appliancesInfo, CurtainCtrlParser.curtainOff);
+                HDLCommand.curtainCtrl(CtrlActivity.this,appliancesInfo, CurtainCtrlParser.curtainOff);
             }
         });
 
         curtainBtn4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CommandData.curtainCtrl(CtrlActivity.this,appliancesInfo, CurtainCtrlParser.curtainPause);
+                HDLCommand.curtainCtrl(CtrlActivity.this,appliancesInfo, CurtainCtrlParser.curtainPause);
             }
         });
 
         curtainBtn5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CommandData.curtainCtrl(CtrlActivity.this,appliancesInfo, 50);
+                HDLCommand.curtainCtrl(CtrlActivity.this,appliancesInfo, 50);
             }
         });
 
         airBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CommandData.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.airSwich,AirCtrlParser.airOn);//空调面板开
-//                CommandData.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.airSwich,AirCtrlParser.airOff);//空调面板关
-//                CommandData.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.refTem,20);//制冷温度 范围0-84
-//                CommandData.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedAuto);//风速自动
-//                CommandData.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedHigh);//风速高风
-//                CommandData.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedMid);//风速中风
-//                CommandData.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedLow);//风速低风
-//                CommandData.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.airMode,AirCtrlParser.airModeRefTem);//空调模式制冷
-//                CommandData.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.airMode,AirCtrlParser.airModeHeatTem);//空调模式制热
-//                CommandData.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.airMode,AirCtrlParser.airModeVen);//空调模式通风
-//                CommandData.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.airMode,AirCtrlParser.airModeAuto);//空调模式自动
-//                CommandData.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.airMode,AirCtrlParser.airModeDehum);//空调模式抽湿
-//                CommandData.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.heatTem,28);//制热温度 范围0-84
-//                CommandData.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.autoTem,25);//自动温度 范围0-84
-//                CommandData.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.upTem,1);//上升温度 范围0-5
-//                CommandData.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.downTem,1);//下降温度 范围0-5
+                HDLCommand.airCtrl(CtrlActivity.this,appliancesInfo, AirCtrlParser.airSwich,AirCtrlParser.airOn);//空调面板开
+//                HDLCommand.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.airSwich,AirCtrlParser.airOff);//空调面板关
+//                HDLCommand.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.refTem,20);//制冷温度 范围0-84
+//                HDLCommand.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedAuto);//风速自动
+//                HDLCommand.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedHigh);//风速高风
+//                HDLCommand.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedMid);//风速中风
+//                HDLCommand.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedLow);//风速低风
+//                HDLCommand.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.airMode,AirCtrlParser.airModeRefTem);//空调模式制冷
+//                HDLCommand.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.airMode,AirCtrlParser.airModeHeatTem);//空调模式制热
+//                HDLCommand.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.airMode,AirCtrlParser.airModeVen);//空调模式通风
+//                HDLCommand.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.airMode,AirCtrlParser.airModeAuto);//空调模式自动
+//                HDLCommand.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.airMode,AirCtrlParser.airModeDehum);//空调模式抽湿
+//                HDLCommand.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.heatTem,28);//制热温度 范围0-84
+//                HDLCommand.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.autoTem,25);//自动温度 范围0-84
+//                HDLCommand.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.upTem,1);//上升温度 范围0-5
+//                HDLCommand.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.downTem,1);//下降温度 范围0-5
             }
         });
 
         logicBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CommandData.logicCtrl(CtrlActivity.this,appliancesInfo);
+                HDLCommand.logicCtrl(CtrlActivity.this,appliancesInfo);
             }
         });
     }

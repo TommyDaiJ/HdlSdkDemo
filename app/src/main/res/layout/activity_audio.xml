@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_audio"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.hdl.xw.AudioActivity">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <Button
+                android:id="@+id/get"
+                android:text="获取音乐列表"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <Button
+                android:id="@+id/playpause"
+                android:text="播放/暂停"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <Button
+                android:id="@+id/playstop"
+                android:text="播放/停止"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <Button
+                android:id="@+id/pre"
+                android:text="上一首"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <Button
+                android:id="@+id/next"
+                android:text="下一首"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="播放模式:"
+                />
+            <Button
+                android:id="@+id/audiomode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <Button
+                android:id="@+id/volmin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="音量设置：0"
+                />
+            <Button
+                android:id="@+id/volmid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="音量设置：40"
+                />
+            <Button
+                android:id="@+id/volmax"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="音量设置：79"
+                />
+        </LinearLayout>
+        <TextView
+            android:id="@+id/curSongName"
+            android:text="暂无歌曲信息"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/curSongInfo"
+            android:text="暂无歌曲信息"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <ListView
+            android:id="@+id/audiolist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </ListView>
+    </LinearLayout>
+
+
+
+
+</RelativeLayout>
