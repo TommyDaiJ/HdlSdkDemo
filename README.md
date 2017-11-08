@@ -10,7 +10,7 @@
 #### v1.4.1
 1:更新api相关名称：CommandData更改为HDLCommand，DeviceManager更改为HDLDeviceManager。由于包名的更改，将会导致已集成旧版的项目导包报错，建议直接复制demo导包内容，以及相应修改CommandData、DeviceManager为HDLCommand、HDLDeviceManager。
 
-2：增加音乐协议。功能包括：搜索音乐列表、点播、上一首、下一首、播放/暂停、播放/停止、音量设置、播放模式切换。
+2:增加音乐协议。功能包括：搜索音乐列表、点播、上一首、下一首、播放/暂停、播放/停止、音量设置、播放模式切换。
 
 
 #### v1.3.1
