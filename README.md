@@ -7,10 +7,17 @@
    
 # 版本更新
 
+#### v1.4.2
+1:舍弃所有api都需要Context参数，仅保留HDLDeviceManager.init(Context context);具体可查看Demo
+
+2：音乐协议相关api名称修改：舍弃音乐协议多api并存，修改为统一使用HDLaudioCtrl(AppliancesInfo info,int type)、HDLaudioCtrl(AppliancesInfo info,int type,int value)、HDLaudioCtrl(AppliancesInfo info,int type,int value1,int value2)。具体使用查看第8点或查看Demo。
+
+3：基础设备协议api名称修改：HDLCommand.lightCtrl、HDLCommand.curtainCtrl、HDLCommand.airCtrl、HDLCommand.logicCtrl 修改为：HDLCommand.HDLlightCtrl、HDLCommand.HDLcurtainCtrl、HDLCommand.HDLairCtrl、 HDLCommand.HDLlogicCtrl；
+
 #### v1.4.1
 1:更新api相关名称：CommandData更改为HDLCommand，DeviceManager更改为HDLDeviceManager。由于包名的更改，将会导致已集成旧版的项目导包报错，建议直接复制demo导包内容，以及相应修改CommandData、DeviceManager为HDLCommand、HDLDeviceManager。
 
-2：增加音乐协议。功能包括：搜索音乐列表、点播、上一首、下一首、播放/暂停、播放/停止、音量设置、播放模式切换。
+2:增加音乐协议。功能包括：搜索音乐列表、点播、上一首、下一首、播放/暂停、播放/停止、音量设置、播放模式切换。
 
 
 #### v1.3.1
@@ -46,10 +53,12 @@
 ```
 
 dependencies {
-    compile 'com.hdl.lib:hdllib:1.4.1'
+    compile 'com.hdl.lib:hdllib:1.4.2'
 }
 
 ```
+
+目前1.4.2版本已提交审核，若依赖失败，可先取Demo引用aar的方式。
 
 
 1.3 支持Eclipse 安卓开发平台，此种方式可提供jar包依赖，由于SDK有依赖其他第三方库，存在此平台支持不理想的情况，建议转到1.2或1.3方式。
@@ -98,9 +107,9 @@ HDLDeviceManager.init(Context context);
 
 3.1 HDL SDK提供搜索设备的api，等待5秒后返回设备信息。
 
-3.2 调用`HDLCommand.HDLdevicesSearch(Context context);`获取HDL设备数据
+3.2 调用`HDLCommand.HDLdevicesSearch();`获取HDL设备数据
 
-3.3 调用`HDLCommand.HDLscenesSearch(Context context);`获取HDL场景数据
+3.3 调用`HDLCommand.HDLscenesSearch();`获取HDL场景数据
 
 3.3 必须在此activity中实现EventBus的方法，（具体请查看demo）搜索返回：
 
@@ -169,13 +178,13 @@ HDLDeviceManager.init(Context context);
 
 ### 5 获取相关设备状态
 
-5.1调用`HDLCommand.getDeviceState(CtrlActivity.this,appliancesInfo);`两个参数为固定参数。即可获取相关设备对应回路的状态，必须要调用EventBus接收返回信息，具体请查看demo
+5.1调用`HDLCommand.HDLgetDeviceState(appliancesInfo);`两个参数为固定参数。即可获取相关设备对应回路的状态，必须要调用EventBus接收返回信息，具体请查看demo
 
 ### 6 控制设备
 
 #### 6.1灯光控制
 
-6.1.1 调用`HDLCommand.lightCtrl(CtrlActivity.this,appliancesInfo,state);`第三个参数为灯光亮度，0代表关，范围在0-100.超过100不做处理。
+6.1.1 调用`HDLCommand.HDLlightCtrl(CtrlActivity.this,appliancesInfo,state);`第三个参数为灯光亮度，0代表关，范围在0-100.超过100不做处理。
 
 6.1.2需要接收EventBus的控制返回结果，具体请查看demo。
 
@@ -183,7 +192,7 @@ HDLDeviceManager.init(Context context);
 
 窗帘种类有：窗帘模块，卷帘电机，开合帘电机。
 
-6.2.1 调`HDLCommand.curtainCtrl(Context context, AppliancesInfo info, int state)`前两个参数为固定参数，跟6.1.1雷同。第三个参数为：`CurtainCtrlParser.curtainPause`（窗帘停）或`CurtainCtrlParser.curtainOn`（窗帘开）或`CurtainCtrlParser.curtainOff`（窗帘关） 中的一个。
+6.2.1 调`HDLCommand.HDLcurtainCtrl( AppliancesInfo info, int state)`前两个参数为固定参数，跟6.1.1雷同。第三个参数为：`CurtainCtrlParser.HDLcurtainPause`（窗帘停）或`CurtainCtrlParser.HDLcurtainOn`（窗帘开）或`CurtainCtrlParser.HDLcurtainOff`（窗帘关） 中的一个。
 窗帘模块只能调用这3个参数，卷帘电机和开合帘电机第二个参数可以填0-100数字，代表百分比。
 
 
@@ -196,29 +205,29 @@ HDLDeviceManager.init(Context context);
 
 
 ```
-                HDLCommand.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.airSwich,AirCtrlParser.airOn);//空调面板开
-//                HDLCommand.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.airSwich,AirCtrlParser.airOff);//空调面板关
-//                HDLCommand.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.refTem,20);//制冷温度 范围0-84
-//                HDLCommand.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedAuto);//风速自动
-//                HDLCommand.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedHigh);//风速高风
-//                HDLCommand.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedMid);//风速中风
-//                HDLCommand.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedLow);//风速低风
-//                HDLCommand.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.airMode,AirCtrlParser.airModeRefTem);//空调模式制冷
-//                HDLCommand.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.airMode,AirCtrlParser.airModeHeatTem);//空调模式制热
-//                HDLCommand.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.airMode,AirCtrlParser.airModeVen);//空调模式通风
-//                HDLCommand.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.airMode,AirCtrlParser.airModeAuto);//空调模式自动
-//                HDLCommand.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.airMode,AirCtrlParser.airModeDehum);//空调模式抽湿
-//                HDLCommand.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.heatTem,28);//制热温度 范围0-84
-//                HDLCommand.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.autoTem,25);//自动温度 范围0-84
-//                HDLCommand.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.upTem,1);//上升温度 范围0-5
-//                HDLCommand.airCtrl(CtrlActivity.this,appliancesInfo,AirCtrlParser.downTem,1);//下降温度 范围0-5
+                                               HDLCommand.HDLairCtrl(appliancesInfo, AirCtrlParser.airSwich,AirCtrlParser.airOn);//空调面板开
+//                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.airSwich,AirCtrlParser.airOff);//空调面板关
+//                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.refTem,20);//制冷温度 范围0-84
+//                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedAuto);//风速自动
+//                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedHigh);//风速高风
+//                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedMid);//风速中风
+//                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedLow);//风速低风
+//                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.airMode,AirCtrlParser.airModeRefTem);//空调模式制冷
+//                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.airMode,AirCtrlParser.airModeHeatTem);//空调模式制热
+//                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.airMode,AirCtrlParser.airModeVen);//空调模式通风
+//                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.airMode,AirCtrlParser.airModeAuto);//空调模式自动
+//                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.airMode,AirCtrlParser.airModeDehum);//空调模式抽湿
+//                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.heatTem,28);//制热温度 范围0-84
+//                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.autoTem,25);//自动温度 范围0-84
+//                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.upTem,1);//上升温度 范围0-5
+//                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.downTem,1);//下降温度 范围0-5
 
 ```
 
 
 #### 6.4 逻辑模块控制
 
-6.4.1调用HDLCommand.logicCtrl(CtrlActivity.this,appliancesInfo);具体查看demo
+6.4.1调用HDLCommand.HDLlogicCtrl(appliancesInfo);具体查看demo
 
 ## 7 接收设备状态改变推送
 
@@ -372,151 +381,167 @@ sdk可接收设备状态改变的推送，目前支持灯光，窗帘，空调�
 相关的调用api:(具体查看demo)
 
 ```
-
-        getBtn.setOnClickListener(new View.OnClickListener() {
+        HDLCommand.HDLaudioCtrl(appliancesInfo,HDLAudio.GET_AUDIO_CURRRENT_INFO);//获取当前音乐信息。返回当前歌曲、列表等所有信息。获取音乐信息当前音乐会停止播放
+        HDLCommand.HDLaudioCtrl(appliancesInfo,HDLAudio.GET_AUDIO_MODE);//获取当前音乐播放模式。仅返回单曲播放等播放模式。
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View view) {
-                HDLCommand.getAudioList(AudioActivity.this,appliancesInfo);
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                HDLCommand.HDLaudioCtrl(appliancesInfo,HDLAudio.SET_CHOOSE_PLAY_SONG,curListNum,position);
             }
         });
 
         playPauseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HDLCommand.setAudioPlayPause(AudioActivity.this,appliancesInfo);
+                HDLCommand.HDLaudioCtrl(appliancesInfo,HDLAudio.SET_AUDIO_PLAYPAUSE);
             }
         });
 
         playStopBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HDLCommand.setAudioPlayStop(AudioActivity.this,appliancesInfo);
+                HDLCommand.HDLaudioCtrl(appliancesInfo,HDLAudio.SET_AUDIO_PLAYSTOP);
             }
         });
 
-        preBtn.setOnClickListener(new View.OnClickListener() {
+        preSongBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HDLCommand.setPreSong(AudioActivity.this,appliancesInfo);
+                HDLCommand.HDLaudioCtrl(appliancesInfo,HDLAudio.SET_PRE_SONG);
             }
         });
 
-        nextBtn.setOnClickListener(new View.OnClickListener() {
+        nextSongBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HDLCommand.setNextSong(AudioActivity.this,appliancesInfo);
+                HDLCommand.HDLaudioCtrl(appliancesInfo,HDLAudio.SET_NEXT_SONG);
             }
         });
 
         modeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HDLCommand.setAudioModeUp(AudioActivity.this,appliancesInfo);
+                HDLCommand.HDLaudioCtrl(appliancesInfo,HDLAudio.SET_AUDIO_MODE_UP);//播放模式+
+//                HDLCommand.HDLaudioCtrl(AudioActivity.this,appliancesInfo,HDLAudio.SET_AUDIO_MODE_DOWN);//播放模式-
             }
         });
 
         volMinBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HDLCommand.setAudioVol(AudioActivity.this,appliancesInfo,0);
+                HDLCommand.HDLaudioCtrl(appliancesInfo,HDLAudio.SET_AUDIO_VOL,0);//音量最小：0。小于0，SDK不处理
             }
         });
 
         volMidBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HDLCommand.setAudioVol(AudioActivity.this,appliancesInfo,40);
+                HDLCommand.HDLaudioCtrl(appliancesInfo,HDLAudio.SET_AUDIO_VOL,40);
             }
         });
 
         volMaxBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HDLCommand.setAudioVol(AudioActivity.this,appliancesInfo,79);
+                HDLCommand.HDLaudioCtrl(appliancesInfo,HDLAudio.SET_AUDIO_VOL,79);//音量最大：79。超过79，SDK不处理
+            }
+        });
+
+        nextListBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                HDLCommand.HDLaudioCtrl(appliancesInfo,HDLAudio.SET_NEXT_LIST);//获取下一列表，当前音乐会停止播放
+            }
+        });
+
+        preListBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                HDLCommand.HDLaudioCtrl(appliancesInfo,HDLAudio.SET_PRE_LIST);//获取上一列表，当前音乐会停止播放
             }
         });
 ```
 
 
 ```
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onAudioEventMain(HDLAudioInfoEvent event){
+        if(event.getAppliancesInfo().getDeviceSubnetID() == appliancesInfo.getDeviceSubnetID()
+                && event.getAppliancesInfo().getDeviceDeviceID() == appliancesInfo.getDeviceDeviceID()
+                ){
+            switch (event.getType()){
+                case HDLAudio.CALLBACK_SONG_NAME_LIST:
+                    listString.clear();
+                    for(int i=0;i<event.getSongNameList().size();i++){
+                        listString.add(event.getSongNameList().get(i));
+                    }
 
-        switch (event.getType()){
-            case HDLAudio.SONG_NAME_LIST:
-                listString.clear();
-//                listString = event.getSongNameList();
-                for(int i=0;i<event.getSongNameList().size();i++){
-                    listString.add(event.getSongNameList().get(i));
-                }
+                    adapter.notifyDataSetChanged();
+                    break;
+                case HDLAudio.CALLBACK_CURRENT_VOLUME:
+                    Log.i("djl","当前音量值："+event.getAudioInfoInt());
+                    break;
+                case HDLAudio.CALLBACK_AUDIO_LIST_NUM:
+                    int[] listNum = event.getAudioListInfo();
+                    curListNum = listNum[0];
+                    Log.i("djl","当前列表号："+listNum[0]+" 当前共有列表数："+listNum[1]);
+                    break;
+                case HDLAudio.CALLBACK_CURRENT_LIST_NAME:
+                    Log.i("djl","当前列表名："+event.getAudioInfoStr());
+                    break;
+                case HDLAudio.CALLBACK_CURRENT_SONG_NUM:
+                    int[] songNum = event.getAudioListInfo();
+                    Log.i("djl","当前歌曲号："+songNum[0]+" 当前共有歌曲数："+songNum[1]);
+                    break;
+                case HDLAudio.CALLBACK_CURRENT_SONG_NAME:
+                    Log.i("djl","当前歌曲名："+event.getAudioInfoStr());
+                    curSongNameTv.setText("当前歌曲名："+event.getAudioInfoStr());
+                    break;
+                case HDLAudio.CALLBACK_CURRENT_SONG_INFO:
+                    int[] songInfo = event.getAudioListInfo();
+                    //songInfo[0],songInfo[1]获得的值为秒，如songInfo[0]=250，即歌曲总时长为250秒。songInfo[2]获得的值为：1、2、3。1：停止，2：播放，3：暂停。
+                    String curStatus ;
+                    switch (songInfo[2]){
+                        case 1:
+                            curStatus = "停止";
+                            break;
+                        case 2:
+                            curStatus = "播放";
+                            break;
+                        case 3:
+                            curStatus = "暂停";
+                            break;
+                        default:
+                            curStatus = "未知";
+                            break;
+                    }
+                    Log.i("djl","当前歌曲总时长："+songInfo[0]+"秒 ，当前歌曲已播放时长："+songInfo[1]+"秒， 当前歌曲状态："+curStatus);
+                    curSongInfoTv.setText("当前歌曲总时长："+songInfo[0]+"秒 ，当前歌曲已播放时长："+songInfo[1]+"秒， 当前歌曲状态："+curStatus);
+                    break;
+                case HDLAudio.CALLBACK_CURRENT_MODE:
+                    String curMode ;
+                    switch (event.getAudioInfoInt()){
+                        case 1:
+                            curMode = "单曲播放";
+                            break;
+                        case 2:
+                            curMode = "单曲循环";
+                            break;
+                        case 3:
+                            curMode = "连续播放";
+                            break;
+                        case 4:
+                            curMode = "连播循环";
+                            break;
+                        default:
+                            curMode = "未知";
+                            break;
 
-                adapter.notifyDataSetChanged();
-                break;
-            case HDLAudio.CURRENT_VOLUME:
-                Log.i("hdl","当前音量值："+event.getAudioInfoInt());
-                break;
-            case HDLAudio.AUDIO_LIST_NUM:
-                int[] ListNum = event.getAudioListInfo();
-                Log.i("hdl","当前列表号："+ListNum[0]+" 当前共有列表数："+ListNum[1]);
-                break;
-            case HDLAudio.CURRENT_LIST_NAME:
-                Log.i("hdl","当前列表名："+event.getAudioInfoStr());
-                break;
-            case HDLAudio.CURRENT_SONG_NUM:
-                int[] songNum = event.getAudioListInfo();
-                Log.i("hdl","当前歌曲号："+songNum[0]+" 当前共有歌曲数："+songNum[1]);
-                break;
-            case HDLAudio.CURRENT_SONG_NAME:
-                curSongNameTv.setText("当前歌曲名："+event.getAudioInfoStr());
-                break;
-            case HDLAudio.CURRENT_SONG_Info:
-                int[] songInfo = event.getAudioListInfo();
-                //songInfo[0],songInfo[1]获得的值为秒，如songInfo[0]=250，即歌曲总时长为250秒。songInfo[2]获得的值为：1、2、3。1：停止，2：播放，3：暂停。
-                String curStatus ;
-                switch (songInfo[2]){
-                    case 1:
-                        curStatus = "停止";
-                        break;
-                    case 2:
-                        curStatus = "播放";
-                        break;
-                    case 3:
-                        curStatus = "暂停";
-                        break;
-                    default:
-                        curStatus = "未知";
-                        break;
-                }
-                curSongInfoTv.setText("当前歌曲总时长："+songInfo[0]+"秒 ，当前歌曲已播放时长："+songInfo[1]+"秒， 当前歌曲状态："+curStatus);
-                break;
-            case HDLAudio.CURRENT_MODE:
-                String curMode ;
-                switch (event.getAudioInfoInt()){
-                    case 1:
-                        curMode = "单曲播放";
-                        break;
-                    case 2:
-                        curMode = "单曲循环";
-                        break;
-                    case 3:
-                        curMode = "连续播放";
-                        break;
-                    case 4:
-                        curMode = "连播循环";
-                        break;
-                    default:
-                        curMode = "未知";
-                        break;
-
-                }
-                modeBtn.setText(curMode);
-                break;
-            default:
-                break;
+                    }
+                    modeBtn.setText(curMode);
+                    break;
+                default:
+                    break;
+            }
         }
-
-    }
-}
 ```
 
 

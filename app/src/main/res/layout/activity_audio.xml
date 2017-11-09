@@ -16,11 +16,6 @@
             android:orientation="horizontal"
             >
             <Button
-                android:id="@+id/get"
-                android:text="获取音乐列表"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <Button
                 android:id="@+id/playpause"
                 android:text="播放/暂停"
                 android:layout_width="wrap_content"
@@ -81,6 +76,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="音量设置：79"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <Button
+                android:id="@+id/prelist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="上一列表"
+                />
+            <Button
+                android:id="@+id/nextlist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="下一列表"
                 />
         </LinearLayout>
         <TextView

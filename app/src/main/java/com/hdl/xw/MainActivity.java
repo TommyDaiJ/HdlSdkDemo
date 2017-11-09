@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         getDevices.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                HDLCommand.HDLdevicesSearch(MainActivity.this);
+                HDLCommand.HDLdevicesSearch();
                 proDia.show();
             }
         });
@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         getScenes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HDLCommand.HDLscenesSearch(MainActivity.this);
+                HDLCommand.HDLscenesSearch();
                 proDia.show();
             }
         });
