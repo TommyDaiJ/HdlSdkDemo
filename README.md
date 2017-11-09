@@ -10,7 +10,7 @@
 #### v1.4.2
 1:舍弃所有api都需要Context参数，仅保留HDLDeviceManager.init(Context context);具体可查看Demo
 
-2：音乐协议相关api名称修改：舍弃音乐协议多api并存，修改为统一使用HDLaudioCtrl(AppliancesInfo info,int type)、HDLaudioCtrl(AppliancesInfo info,int type,int value)、HDLaudioCtrl(AppliancesInfo info,int type,int value1,int value2)。具体使用查看第8点或查看Demo。
+2：音乐协议相关api名称修改：舍弃音乐协议多api并存，修改为统一使用HDLaudioCtrl(AppliancesInfo info,int type)、HDLaudioCtrl(AppliancesInfo info,int type,int value)、HDLaudioCtrl(AppliancesInfo info,int type,int value1,int value2)。增加获取下一列表、上一列表api。具体使用查看第8点或查看Demo。
 
 3：基础设备协议api名称修改：HDLCommand.lightCtrl、HDLCommand.curtainCtrl、HDLCommand.airCtrl、HDLCommand.logicCtrl 修改为：HDLCommand.HDLlightCtrl、HDLCommand.HDLcurtainCtrl、HDLCommand.HDLairCtrl、 HDLCommand.HDLlogicCtrl；
 
