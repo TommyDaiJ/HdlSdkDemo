@@ -29,7 +29,6 @@ public class AppliancesActivity extends AppCompatActivity {
 
         listView = (ListView) findViewById(R.id.lv);
         appliancesInfos = (List<AppliancesInfo>)getIntent().getSerializableExtra("Appliances");
-//        HDLCommand.getAppliancesRemarks(AppliancesActivity.this, appliancesInfos);
 
         for(int i =0 ;i<appliancesInfos.size();i++){
             if(TextUtils.isEmpty(appliancesInfos.get(i).getRemarks())){
