@@ -15,7 +15,7 @@
 #### v1.4.2
 1:舍弃所有api都需要Context参数，仅保留HDLDeviceManager.init(Context context);具体可查看Demo
 
-2：音乐协议相关api名称修改：舍弃音乐协议多api并存，修改为统一使用HDLaudioCtrl(AppliancesInfo info,int type)、HDLaudioCtrl(AppliancesInfo info,int type,int value)、HDLaudioCtrl(AppliancesInfo info,int type,int value1,int value2)。具体使用查看第8点或查看Demo。
+2：音乐协议相关api名称修改：舍弃音乐协议多api并存，修改为统一使用HDLaudioCtrl(AppliancesInfo info,int type)、HDLaudioCtrl(AppliancesInfo info,int type,int value)、HDLaudioCtrl(AppliancesInfo info,int type,int value1,int value2)。增加获取下一列表、上一列表api。具体使用查看第8点或查看Demo。
 
 3：基础设备协议api名称修改：HDLCommand.lightCtrl、HDLCommand.curtainCtrl、HDLCommand.airCtrl、HDLCommand.logicCtrl 修改为：HDLCommand.HDLlightCtrl、HDLCommand.HDLcurtainCtrl、HDLCommand.HDLairCtrl、 HDLCommand.HDLlogicCtrl；
 
@@ -37,7 +37,6 @@
 
 4：修复灯光设备备注某些网络获取不到的bug
 
-5：v1.3.0上传至Bintay，可不用aar包依赖
 
 #### v1.2.14
 1：SDK的初始化不再包含EventBus的初始化，厂家根据自身情况在需要接收的界面初始化
