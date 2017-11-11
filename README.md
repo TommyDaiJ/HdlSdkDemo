@@ -7,6 +7,11 @@
    
 # 版本更新
 
+#### v1.4.3
+1:舍弃HDLCommand.getAppliancesRemarks(AppliancesInfo appliancesInfos)获取备注api。设备备注SDK自行获取，第三方只需读取即可。v1.4.1版本Demo已不再使用此api,此版本将去除此api。
+
+2：优化搜索机制，修复在设备模块多的情况下可能搜不完全的Bug。
+
 #### v1.4.2
 1:舍弃所有api都需要Context参数，仅保留HDLDeviceManager.init(Context context);具体可查看Demo
 

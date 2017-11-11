@@ -26,14 +26,11 @@ public class AppliancesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_appliances);
-//        if(!EventBus.getDefault().isRegistered(this)){
-//            EventBus.getDefault().register(this);
-//        }
+
         listView = (ListView) findViewById(R.id.lv);
         appliancesInfos = (List<AppliancesInfo>)getIntent().getSerializableExtra("Appliances");
 //        HDLCommand.getAppliancesRemarks(AppliancesActivity.this, appliancesInfos);
 
-//        listString.add("hdl null");
         for(int i =0 ;i<appliancesInfos.size();i++){
             if(TextUtils.isEmpty(appliancesInfos.get(i).getRemarks())){
                 listString.add("暂无备注");
