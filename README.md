@@ -7,6 +7,9 @@
    
 # 版本更新
 
+#### v1.4.4
+1:修复由于背景音乐模块无备注返回，而导致无法返回数据的bug。
+
 #### v1.4.3
 1:舍弃HDLCommand.getAppliancesRemarks(AppliancesInfo appliancesInfos)获取备注api。设备备注SDK自行获取，第三方只需读取即可。v1.4.1版本Demo已不再使用此api,此版本将去除此api。
 
