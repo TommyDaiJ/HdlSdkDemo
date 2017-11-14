@@ -57,12 +57,12 @@
 ```
 
 dependencies {
-    compile 'com.hdl.lib:hdllib:1.4.2'
+    compile 'com.hdl.lib:hdllib:1.4.3'
 }
 
 ```
 
-目前1.4.2版本已提交审核，若依赖失败，可先取Demo引用aar的方式。
+目前1.4.3版本已提交审核，若依赖失败，可先取Demo引用aar的方式。
 
 
 1.3 支持Eclipse 安卓开发平台，此种方式可提供jar包依赖，由于SDK有依赖其他第三方库，存在此平台支持不理想的情况，建议转到1.2或1.3方式。
