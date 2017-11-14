@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.hdl.libr.hdl_lib.Config.Configuration;
 import com.hdl.libr.hdl_lib.HDLDeviceManager.Bean.AppliancesInfo;
 
 import org.greenrobot.eventbus.EventBus;
@@ -44,7 +45,8 @@ public class AppliancesActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent();
-                if(appliancesInfos.get(position).getBigType()== 9){
+                if(appliancesInfos.get(position).getBigType()== Configuration.AUDIO_BIG_TYPE){
+                    //大类是音乐类则跳转到Audioactivity
                     intent.setClass(AppliancesActivity.this, AudioActivity.class);
                 }else{
                     intent.setClass(AppliancesActivity.this, CtrlActivity.class);

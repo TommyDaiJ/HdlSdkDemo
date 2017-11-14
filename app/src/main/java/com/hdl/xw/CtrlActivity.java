@@ -120,7 +120,7 @@ public class CtrlActivity extends AppCompatActivity {
                 break;
         }
 
-//        此方法为获取设备状态，逻辑模块没有这个api，仅支持灯光，窗帘，空调
+//        此方法为获取设备状态，逻辑模块、背景音乐模块没有这个api，仅支持灯光，窗帘，空调
         HDLCommand.HDLgetDeviceState(appliancesInfo);
 
         lightBtn.setOnClickListener(new View.OnClickListener() {

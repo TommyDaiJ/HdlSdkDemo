@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
     public void onSceneInfoEventMain(SceneInfoEvent event){
         proDia.dismiss();
         devicesDatas = event.getDesDataList();
-        tv.setText("size = "+event.getDesDataList().size());
+        tv.setText("总共模块数 ： "+event.getDesDataList().size());
         listString.clear();
         for(int i = 0;i<devicesDatas.size();i++){
             if(TextUtils.isEmpty(devicesDatas.get(i).getRemark())){
