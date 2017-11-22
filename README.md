@@ -99,12 +99,13 @@ dependencies {
 HDLDeviceManager.init(Context context);
 ```
 
-（因不同厂家需要此操作从1.2.14版本后不再初始化EventBus，可自行初始化EventBus具体请查看demo）。因SDK初始化仅仅开启一个线程做接收、发送操作，程序应确保该线程存活。建议使用Service初始化SDK`Context.startService()`，Service不能新开进程初始化SDK，因为SDK使用EventBus通讯，EventBus不支持跨进程通讯。若要使用双进程保活机制，需要注意将SDK初始化放在同一进程这个问题。
+（因不同厂家需要此操作从1.2.14版本后不再初始化EventBus，可自行初始化EventBus具体请查看demo）。因SDK初始化仅仅开启一个线程做接收、发送操作，程序应确保该线程存活。建议使用Service初始化SDK`Context.startService()`，Service不能新开进程初始化SDK，因为SDK使用EventBus通讯，EventBus不支持跨进程通讯。若要使用双进程保活机制，需要注意将SDK初始化放在同一进程这个问题。目前SDK必须与HDL设备在同一网段下（同一局域网），若有多个网段下的HDL设备，则厂家必须根据判断切换Wifi后重新初始化SDK。
 
 2.3 SDK初始化的端口为6000，若有其他程序占用6000端口，则SDK无法初始化，报错。
 
 
 ![Alt text](https://github.com/TommyDaiJ/HdlSdkDemo/blob/master/app/src/main/res/drawable/img1.png)
+
 
 
 ## Step 3 调用相关API
