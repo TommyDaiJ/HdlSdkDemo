@@ -7,6 +7,12 @@
    
 # 版本更新
 
+#### v1.4.5
+1:增加判断背景音乐回复数据是否为当前所需数据，修复因此导致当前列表歌曲数获取有误Bug
+
+#### v1.4.4
+1:修复由于音乐备注没有返回，导致SDK不回复数据
+
 #### v1.4.3
 1:舍弃HDLCommand.getAppliancesRemarks(AppliancesInfo appliancesInfos)获取备注api。设备备注SDK自行获取，第三方只需读取即可。v1.4.1版本Demo已不再使用此api,此版本将去除此api。
 
@@ -57,12 +63,12 @@
 ```
 
 dependencies {
-    compile 'com.hdl.lib:hdllib:1.4.3'
+    compile 'com.hdl.lib:hdllib:1.4.5'
 }
 
 ```
 
-目前1.4.3版本已提交审核，若依赖失败，可先取Demo引用aar的方式。
+目前1.4.5版本已提交审核，若依赖失败，可先取Demo引用aar的方式。
 
 
 1.3 支持Eclipse 安卓开发平台，此种方式可提供jar包依赖，由于SDK有依赖其他第三方库，存在此平台支持不理想的情况，建议转到1.2或1.3方式。
@@ -182,13 +188,13 @@ HDLDeviceManager.init(Context context);
 
 ### 5 获取相关设备状态
 
-5.1调用`HDLCommand.HDLgetDeviceState(appliancesInfo);`两个参数为固定参数。即可获取相关设备对应回路的状态，必须要调用EventBus接收返回信息，具体请查看demo
+5.1调用`HDLCommand.HDLgetDeviceState(appliancesInfo);`参数为固定参数。即可获取相关设备对应回路的状态，必须要调用EventBus接收返回信息，具体请查看demo
 
 ### 6 控制设备
 
 #### 6.1灯光控制
 
-6.1.1 调用`HDLCommand.HDLlightCtrl(CtrlActivity.this,appliancesInfo,state);`第三个参数为灯光亮度，0代表关，范围在0-100.超过100不做处理。
+6.1.1 调用`HDLCommand.HDLlightCtrl(appliancesInfo,state);`第三个参数为灯光亮度，0代表关，范围在0-100.超过100不做处理。
 
 6.1.2需要接收EventBus的控制返回结果，具体请查看demo。
 
@@ -209,7 +215,7 @@ HDLDeviceManager.init(Context context);
 
 
 ```
-                                               HDLCommand.HDLairCtrl(appliancesInfo, AirCtrlParser.airSwich,AirCtrlParser.airOn);//空调面板开
+                  HDLCommand.HDLairCtrl(appliancesInfo, AirCtrlParser.airSwich,AirCtrlParser.airOn);//空调面板开
 //                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.airSwich,AirCtrlParser.airOff);//空调面板关
 //                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.refTem,20);//制冷温度 范围0-84
 //                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedAuto);//风速自动
