@@ -29,7 +29,6 @@ public class CtrlActivity extends AppCompatActivity {
     private AppliancesInfo appliancesInfo;
     private int lightState;
 
-    private int airState;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,13 +48,11 @@ public class CtrlActivity extends AppCompatActivity {
         airText = (TextView) findViewById(R.id.airText);
         logicText = (TextView) findViewById(R.id.logicText);
 
-
         lightState = 100;//初始化灯光亮度100
-
-
 
         appliancesInfo = (AppliancesInfo) getIntent().getSerializableExtra("hdl");
 
+        //此处判断什么设备，并将其他设备控件隐藏
         switch (appliancesInfo.getBigType()){
             case Configuration.LIGTH_BIG_TYPE:
                 curtainBtn.setVisibility(View.GONE);
@@ -228,7 +225,7 @@ public class CtrlActivity extends AppCompatActivity {
         int num = event.getLightCtrlBackInfo().getChannelNum();//获取回路号。这里可以获取到这个继电器或调光灯的回路号
         ToastUtil(parentRemarks+" 的 "+remarks+" 回路号："+num+" 返回"+" 亮度为："+brightness);
         /**
-         * 如果备注不能满足需求，则可通过子网id和设备id查找。子网id，设备id共同确定唯一设备。
+         * 如果备注不能满足需求，则可通过子网id、设备id，大类，小类，回路号查找。此信息共同确定唯一设备。具体可询问开发人员
          */
 
 

@@ -55,7 +55,7 @@ public class AudioActivity extends AppCompatActivity {
         adapter=new ArrayAdapter<String>(AudioActivity.this,android.R.layout.simple_list_item_1,listString);
         listView.setAdapter(adapter);
         HDLCommand.HDLaudioCtrl(appliancesInfo,HDLAudio.GET_AUDIO_CURRRENT_INFO);//获取当前音乐信息。返回当前歌曲、列表等所有信息。获取音乐信息当前音乐会停止播放
-        HDLCommand.HDLaudioCtrl(appliancesInfo,HDLAudio.GET_AUDIO_MODE);//获取当前音乐播放模式。仅返回单曲播放等播放模式。
+        HDLCommand.HDLaudioCtrl(appliancesInfo,HDLAudio.GET_AUDIO_MODE);//获取当前音乐播放模式。仅返回：单曲播放、单曲循环、连续播放、连播循环
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
@@ -116,7 +116,7 @@ public class AudioActivity extends AppCompatActivity {
         volMaxBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HDLCommand.HDLaudioCtrl(appliancesInfo,HDLAudio.SET_AUDIO_VOL,79);//音量最大：79。超过79，SDK不处理
+                HDLCommand.HDLaudioCtrl(appliancesInfo,HDLAudio.SET_AUDIO_VOL,79);//音量最大：79。超过79，SDK不处理。
             }
         });
 

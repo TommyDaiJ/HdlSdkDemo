@@ -27,6 +27,7 @@
         <activity android:name=".AppliancesActivity" />
         <activity android:name=".CtrlActivity" />
 
+        <!--此广播为全局接收HDL警报信息，如有需要可用-->
         <receiver android:name=".HDLBroacastRv">
             <intent-filter>
                 <action android:name="com.hdl.action.WARNING" />

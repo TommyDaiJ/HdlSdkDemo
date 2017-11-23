@@ -12,9 +12,6 @@ import android.widget.ListView;
 import com.hdl.libr.hdl_lib.Config.Configuration;
 import com.hdl.libr.hdl_lib.HDLDeviceManager.Bean.AppliancesInfo;
 
-import org.greenrobot.eventbus.EventBus;
-
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,24 +43,18 @@ public class AppliancesActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent();
                 if(appliancesInfos.get(position).getBigType()== Configuration.AUDIO_BIG_TYPE){
-                    //大类是音乐类则跳转到Audioactivity
+                    //大类是音乐类则跳转到AudioActivity
                     intent.setClass(AppliancesActivity.this, AudioActivity.class);
                 }else{
                     intent.setClass(AppliancesActivity.this, CtrlActivity.class);
                 }
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("hdl", (Serializable)appliancesInfos.get(position));
+                bundle.putSerializable("hdl", appliancesInfos.get(position));
                 intent.putExtras(bundle);
                 AppliancesActivity.this.startActivity(intent);
             }
         });
 
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
     }
 
 }
