@@ -7,12 +7,6 @@
    
 # 版本更新
 
-#### v1.4.5
-1:增加判断背景音乐回复数据是否为当前所需数据，修复因此导致当前列表歌曲数获取有误Bug
-
-#### v1.4.4
-1:修复由于背景音乐模块无备注返回，而导致无法返回数据的bug。
-
 #### v1.4.3
 1:舍弃HDLCommand.getAppliancesRemarks(AppliancesInfo appliancesInfos)获取备注api。设备备注SDK自行获取，第三方只需读取即可。v1.4.1版本Demo已不再使用此api,此版本将去除此api。
 
@@ -63,12 +57,12 @@
 ```
 
 dependencies {
-    compile 'com.hdl.lib:hdllib:1.4.5'
+    compile 'com.hdl.lib:hdllib:1.4.3'
 }
 
 ```
 
-由于v1.4.5版本还在Bintray审核中，若依赖不成功，可先取demo的aar依赖方式。
+目前1.4.3版本已提交审核，若依赖失败，可先取Demo引用aar的方式。
 
 
 1.3 支持Eclipse 安卓开发平台，此种方式可提供jar包依赖，由于SDK有依赖其他第三方库，存在此平台支持不理想的情况，建议转到1.2或1.3方式。
@@ -103,13 +97,12 @@ dependencies {
 HDLDeviceManager.init(Context context);
 ```
 
-（因不同厂家需要此操作从1.2.14版本后不再初始化EventBus，可自行初始化EventBus具体请查看demo）。因SDK初始化仅仅开启一个线程做接收、发送操作，程序应确保该线程存活。建议使用Service初始化SDK`Context.startService()`，Service不能新开进程初始化SDK，因为SDK使用EventBus通讯，EventBus不支持跨进程通讯。若要使用双进程保活机制，需要注意将SDK初始化放在同一进程这个问题。目前SDK必须与HDL设备在同一网段下（同一局域网），若有多个网段下的HDL设备，则厂家必须根据判断切换Wifi后重新初始化SDK。
+（因不同厂家需要此操作从1.2.14版本后不再初始化EventBus，可自行初始化EventBus具体请查看demo）。因SDK初始化仅仅开启一个线程做接收、发送操作，程序应确保该线程存活。建议使用Service初始化SDK`Context.startService()`，Service不能新开进程初始化SDK，因为SDK使用EventBus通讯，EventBus不支持跨进程通讯。若要使用双进程保活机制，需要注意将SDK初始化放在同一进程这个问题。
 
 2.3 SDK初始化的端口为6000，若有其他程序占用6000端口，则SDK无法初始化，报错。
 
 
 ![Alt text](https://github.com/TommyDaiJ/HdlSdkDemo/blob/master/app/src/main/res/drawable/img1.png)
-
 
 
 ## Step 3 调用相关API
