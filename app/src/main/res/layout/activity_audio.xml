@@ -16,6 +16,11 @@
             android:orientation="horizontal"
             >
             <Button
+                android:id="@+id/current"
+                android:text="获取当前歌曲信息"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <Button
                 android:id="@+id/playpause"
                 android:text="播放/暂停"
                 android:layout_width="wrap_content"

@@ -23,19 +23,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AudioActivity extends AppCompatActivity {
-    private Button playPauseBtn,playStopBtn,preSongBtn,nextSongBtn,volMinBtn,volMidBtn,volMaxBtn,modeBtn,nextListBtn,preListBtn;
+    private Button getCurSongInfoBtn,playPauseBtn,playStopBtn,preSongBtn,nextSongBtn,volMinBtn,volMidBtn,volMaxBtn,modeBtn,nextListBtn,preListBtn;
     private AppliancesInfo appliancesInfo;
     private List<String> listString = new ArrayList<>() ;
     private ArrayAdapter<String> adapter;
     private ListView listView;
     private TextView curSongInfoTv,curSongNameTv;
     private int curListNum ;//由于不同厂商需求，必须自行记录当前的列表号
+    private boolean isInit ;//记录是否初始化
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_audio);
         curSongNameTv = (TextView) findViewById(R.id.curSongName);
         curSongInfoTv = (TextView) findViewById(R.id.curSongInfo);
+        getCurSongInfoBtn = (Button) findViewById(R.id.current);
         playPauseBtn = (Button) findViewById(R.id.playpause);
         playStopBtn = (Button) findViewById(R.id.playstop);
         preSongBtn = (Button) findViewById(R.id.pre);
@@ -47,6 +49,7 @@ public class AudioActivity extends AppCompatActivity {
         nextListBtn = (Button) findViewById(R.id.nextlist);
         preListBtn = (Button) findViewById(R.id.prelist);
         listView=(ListView)findViewById(R.id.audiolist);
+        isInit = true;
         listString.add("这个列表显示歌曲");
         appliancesInfo = (AppliancesInfo) getIntent().getSerializableExtra("hdl");
         if(!EventBus.getDefault().isRegistered(this)){
@@ -54,12 +57,19 @@ public class AudioActivity extends AppCompatActivity {
         }
         adapter=new ArrayAdapter<String>(AudioActivity.this,android.R.layout.simple_list_item_1,listString);
         listView.setAdapter(adapter);
-        HDLCommand.HDLaudioCtrl(appliancesInfo,HDLAudio.GET_AUDIO_CURRRENT_INFO);//获取当前音乐信息。返回当前歌曲、列表等所有信息。获取音乐信息当前音乐会停止播放
-        HDLCommand.HDLaudioCtrl(appliancesInfo,HDLAudio.GET_AUDIO_MODE);//获取当前音乐播放模式。仅返回：单曲播放、单曲循环、连续播放、连播循环
+        HDLCommand.HDLaudioCtrl(appliancesInfo,HDLAudio.GET_AUDIO_CURRRENT_INFO);//获取当前音乐信息。返回当前歌曲、所有信息。
+        HDLCommand.HDLaudioCtrl(appliancesInfo,HDLAudio.GET_AUDIO_MODE);//获取当前音乐播放模式。仅返回单曲播放等播放模式。
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 HDLCommand.HDLaudioCtrl(appliancesInfo,HDLAudio.SET_CHOOSE_PLAY_SONG,curListNum,position);
+            }
+        });
+
+        getCurSongInfoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                HDLCommand.HDLaudioCtrl(appliancesInfo,HDLAudio.GET_AUDIO_CURRRENT_INFO);
             }
         });
 
@@ -116,7 +126,7 @@ public class AudioActivity extends AppCompatActivity {
         volMaxBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HDLCommand.HDLaudioCtrl(appliancesInfo,HDLAudio.SET_AUDIO_VOL,79);//音量最大：79。超过79，SDK不处理。
+                HDLCommand.HDLaudioCtrl(appliancesInfo,HDLAudio.SET_AUDIO_VOL,79);//音量最大：79。超过79，SDK不处理
             }
         });
 
@@ -143,6 +153,7 @@ public class AudioActivity extends AppCompatActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onAudioEventMain(HDLAudioInfoEvent event){
+        //判断是否为本音乐模块的子网号，设备号
         if(event.getAppliancesInfo().getDeviceSubnetID() == appliancesInfo.getDeviceSubnetID()
                 && event.getAppliancesInfo().getDeviceDeviceID() == appliancesInfo.getDeviceDeviceID()
                 ){
@@ -152,7 +163,6 @@ public class AudioActivity extends AppCompatActivity {
                     for(int i=0;i<event.getSongNameList().size();i++){
                         listString.add(event.getSongNameList().get(i));
                     }
-
                     adapter.notifyDataSetChanged();
                     break;
                 case HDLAudio.CALLBACK_CURRENT_VOLUME:
@@ -162,6 +172,10 @@ public class AudioActivity extends AppCompatActivity {
                     int[] listNum = event.getAudioListInfo();
                     curListNum = listNum[0];
                     Log.i("djl","当前列表号："+listNum[0]+" 当前共有列表数："+listNum[1]);
+                    if(isInit){
+                        isInit = false;//此操作为仅初始化才请求获取当前音乐列表，厂商可以自行决定何时获取音乐列表
+                        HDLCommand.HDLaudioCtrl(appliancesInfo,HDLAudio.GET_AUDIO_LIST,curListNum);//获取当前播放列表，此方法如果在歌曲播放状态时调用则会导致歌曲停止播放，硬件设计如此
+                    }
                     break;
                 case HDLAudio.CALLBACK_CURRENT_LIST_NAME:
                     Log.i("djl","当前列表名："+event.getAudioInfoStr());
