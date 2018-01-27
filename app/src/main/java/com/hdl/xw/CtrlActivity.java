@@ -33,6 +33,9 @@ public class CtrlActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ctrl);
+        if(!EventBus.getDefault().isRegistered(this)){
+            EventBus.getDefault().register(this);
+        }
         lightBtn = (Button) findViewById(R.id.ctrlbtn);
         curtainBtn = (Button) findViewById(R.id.curtainbtn);
         curtainBtn2 = (Button) findViewById(R.id.curtainbtn2);
@@ -193,14 +196,7 @@ public class CtrlActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        //初始化EventBus
-        if(!EventBus.getDefault().isRegistered(this)){
-            EventBus.getDefault().register(this);
-        }
-    }
+
 
     @Override
     protected void onDestroy() {
