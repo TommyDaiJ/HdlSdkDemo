@@ -28,8 +28,8 @@ public class CtrlActivity extends AppCompatActivity {
     private TextView lightText,curText1,curText2,airText,logicText;
     private AppliancesInfo appliancesInfo;
     private int lightState;
-
-
+    private int curtainState;
+    private int airState;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +52,10 @@ public class CtrlActivity extends AppCompatActivity {
         airText = (TextView) findViewById(R.id.airText);
         logicText = (TextView) findViewById(R.id.logicText);
 
+
         lightState = 100;//初始化灯光亮度100
+        curtainState = CurtainCtrlParser.curtainOn;
+        airState = AirCtrlParser.airOn;
 
         appliancesInfo = (AppliancesInfo) getIntent().getSerializableExtra("hdl");
 
@@ -128,6 +131,11 @@ public class CtrlActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 HDLCommand.HDLlightCtrl(appliancesInfo,lightState);
+                if(lightState==100){
+                    lightState = 0;
+                }else{
+                    lightState = 100;
+                }
             }
         });
 
@@ -135,7 +143,13 @@ public class CtrlActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //窗帘模块第二个参数 为CurtainCtrlParser.curtainOn，CurtainCtrlParser.curtainOff，CurtainCtrlParser.curtainPause其中一个
-                HDLCommand.HDLcurtainCtrl(appliancesInfo, CurtainCtrlParser.curtainOn);
+                HDLCommand.HDLcurtainCtrl(appliancesInfo, curtainState);
+                if(curtainState  == CurtainCtrlParser.curtainOn){
+                    curtainState = CurtainCtrlParser.curtainOff;
+                }else{
+                    curtainState = CurtainCtrlParser.curtainOn;
+                }
+
             }
         });
 
@@ -170,7 +184,7 @@ public class CtrlActivity extends AppCompatActivity {
         airBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HDLCommand.HDLairCtrl(appliancesInfo, AirCtrlParser.airSwich,AirCtrlParser.airOn);//空调面板开
+                HDLCommand.HDLairCtrl(appliancesInfo, AirCtrlParser.airSwich,airState);//空调面板开
 //                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.airSwich,AirCtrlParser.airOff);//空调面板关
 //                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.refTem,20);//制冷温度 范围0-84
 //                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedAuto);//风速自动
@@ -186,6 +200,12 @@ public class CtrlActivity extends AppCompatActivity {
 //                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.autoTem,25);//自动温度 范围0-84
 //                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.upTem,1);//上升温度 范围0-5
 //                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.downTem,1);//下降温度 范围0-5
+
+                if(airState==AirCtrlParser.airOn){
+                    airState = AirCtrlParser.airOff;
+                }else{
+                    airState = AirCtrlParser.airOn;
+                }
             }
         });
 
@@ -214,7 +234,6 @@ public class CtrlActivity extends AppCompatActivity {
         int brightness = event.getLightCtrlBackInfo().getBrightness();
         lightState = brightness==100? 0:100;//如果返回100重置状态为0，反之重置状态100
         lightBtn.setText("当前亮度 = "+brightness);
-
         /*以下为灯光推送示例代码，可以识别哪个继电器，哪个调光灯，哪个回路，也可用作控制回馈。
         按需求调用*/
         String remarks = event.getLightCtrlBackInfo().getRemarks();//获取返回的灯光备注。如果每个灯光回路备注都唯一，可以直接通过备注判断
@@ -222,10 +241,8 @@ public class CtrlActivity extends AppCompatActivity {
         int num = event.getLightCtrlBackInfo().getChannelNum();//获取回路号。这里可以获取到这个继电器或调光灯的回路号
         ToastUtil(parentRemarks+" 的 "+remarks+" 回路号："+num+" 返回"+" 亮度为："+brightness);
         /**
-         * 如果备注不能满足需求，则可通过子网id、设备id，大类，小类，回路号查找。此信息共同确定唯一设备。具体可询问开发人员
+         * 如果备注不能满足需求，则可通过子网id和设备id查找。子网id，设备id共同确定唯一设备。
          */
-
-
 
     }
 
@@ -240,7 +257,17 @@ public class CtrlActivity extends AppCompatActivity {
         String parentRemarks = event.getCurtainCtrlBackInfo().getParentRemarks();
         int num = event.getCurtainCtrlBackInfo().getNum();
         ToastUtil(parentRemarks+" 的 "+remarks+" 回路号："+num+" 返回"+" 状态为："+curState);
-
+        switch (curState){
+            case 2:
+                curtainBtn.setText("窗帘关");
+                break;
+            case 1:
+                curtainBtn.setText("窗帘开");
+                break;
+            case 0:
+                curtainBtn.setText("窗帘暂停");
+                break;
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

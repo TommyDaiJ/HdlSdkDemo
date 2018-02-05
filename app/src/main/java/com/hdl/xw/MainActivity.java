@@ -10,10 +10,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 
 import com.hdl.libr.hdl_lib.HDLCommand;
 import com.hdl.libr.hdl_lib.HDLDeviceManager.Bean.AppliancesInfo;
@@ -23,6 +23,7 @@ import com.hdl.libr.hdl_lib.HDLDeviceManager.EventBusEvent.SceneInfoEvent;
 import com.hdl.libr.hdl_lib.HDLDeviceManager.EventBusEvent.WarningInfoEvent;
 import com.hdl.libr.hdl_lib.HDLDeviceManager.HDLDeviceManager;
 import com.hdl.libr.hdl_lib.HDLOnDevices.EventBusEvent.OnDeviceDataEvent;
+import com.hdl.libr.hdl_lib.HDLRCU.Manager.HDLRcuCommand;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -34,8 +35,9 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button getDevices,getScenes;
-    TextView tv;
+    private Button getDevices,getScenes,testRCU;
+    private EditText editText;
+    private TextView tv;
     private List<DevicesData> devicesDatas;
     private List<DevicesData> OndevicesDatas;
     private List<String> listString = new ArrayList<>() ;
@@ -53,7 +55,10 @@ public class MainActivity extends AppCompatActivity {
         }
         getDevices = (Button) findViewById(R.id.devices);
         getScenes = (Button) findViewById(R.id.scenes);
+        testRCU = (Button)findViewById(R.id.test);
         tv= (TextView) findViewById(R.id.tv);
+        editText = (EditText) findViewById(R.id.edt);
+
         adapter=new ArrayAdapter<String>(MainActivity.this,android.R.layout.simple_list_item_1,listString);
         ListView listView=(ListView)findViewById(R.id.listView1);
         proDia=new ProgressDialog(MainActivity.this);
@@ -88,6 +93,22 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 HDLCommand.HDLscenesSearch();
                 proDia.show();
+            }
+        });
+
+        testRCU.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String ip = editText.getText().toString().trim();
+                byte[] addBytes = new byte[6];
+                addBytes[0] = 1;
+                addBytes[1] = 2;
+                String[] ipArr = ip.split("\\.");
+                addBytes[2] = (byte) Integer.parseInt(ipArr[0]);
+                addBytes[3] = (byte) Integer.parseInt(ipArr[1]);
+                addBytes[4] = (byte) Integer.parseInt(ipArr[2]);
+                addBytes[5] = (byte) Integer.parseInt(ipArr[3]);
+                HDLRcuCommand.cusSendCommand(0xE506,254,101,addBytes,6008);
             }
         });
     }
