@@ -29,6 +29,7 @@ public class CtrlActivity extends AppCompatActivity {
     private AppliancesInfo appliancesInfo;
     private int lightState;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
