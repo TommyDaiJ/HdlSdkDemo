@@ -6,6 +6,9 @@
    
    
 # 版本更新
+#### v1.5.2.2
+1:修复多次控制灯光出现的崩溃。提供方法判断设备类型。详情查看demo CtrlActivity。
+
 #### v1.5.1
 1:SDK 集成了HDL RCU协议，第三无需改动目前的接口即可控制、接收RCU相关命令。
 
@@ -68,7 +71,7 @@
 ```
 
 dependencies {
-    compile 'com.hdl.lib:hdllib:1.5.1'
+    compile 'com.hdl.lib:hdllib:1.5.2.2'
 }
 
 ```
