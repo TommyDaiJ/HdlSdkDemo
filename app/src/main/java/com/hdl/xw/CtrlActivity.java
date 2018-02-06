@@ -60,8 +60,23 @@ public class CtrlActivity extends AppCompatActivity {
         appliancesInfo = (AppliancesInfo) getIntent().getSerializableExtra("hdl");
 
         //此处判断什么设备，并将其他设备控件隐藏
-        switch (appliancesInfo.getBigType()){
-            case Configuration.LIGTH_BIG_TYPE:
+        //1：调光回路（灯） 2：开关回路（灯） 3：混合调光类 （灯） 4：混合开关类（灯）
+        // 5：开合帘电机（窗帘）6：卷帘电机（窗帘） 7：窗帘模块 （窗帘）8：HVAC 模块(空调)
+        // 9：通用空调面板(空调) 10：背景音乐模块（音乐） 11：第三方背景音乐模块（音乐）
+        // 12：逻辑模块（场景） 13：全局逻辑模块（场景）
+
+        //1、2、3、4 为灯
+        //5、6、7 为窗帘
+        //8、9 为空调
+        //10、11 为音乐
+        //12、13 为场景
+
+
+        switch (appliancesInfo.getDeviceType()){
+            case 1:
+            case 2:
+            case 3:
+            case 4:
                 curtainBtn.setVisibility(View.GONE);
                 curtainBtn2.setVisibility(View.GONE);
                 curtainBtn3.setVisibility(View.GONE);
@@ -75,7 +90,9 @@ public class CtrlActivity extends AppCompatActivity {
                 airText.setVisibility(View.GONE);
                 logicText.setVisibility(View.GONE);
                 break;
-            case Configuration.CURTAIN_BIG_TYPE:
+            case 5:
+            case 6:
+            case 7:
                 lightBtn.setVisibility(View.GONE);
                 logicBtn.setVisibility(View.GONE);
                 airBtn.setVisibility(View.GONE);
@@ -83,10 +100,10 @@ public class CtrlActivity extends AppCompatActivity {
                 lightText.setVisibility(View.GONE);
                 airText.setVisibility(View.GONE);
                 logicText.setVisibility(View.GONE);
-                if(appliancesInfo.getLittleType()==1){
+                if(appliancesInfo.getDeviceType()==5){
                     curText1.setVisibility(View.GONE);
                     curtainBtn.setVisibility(View.GONE);
-                }else if(appliancesInfo.getLittleType()==2){
+                }else if(appliancesInfo.getDeviceType()==6){
                     curText2.setVisibility(View.GONE);
                     curtainBtn2.setVisibility(View.GONE);
                     curtainBtn3.setVisibility(View.GONE);
@@ -94,7 +111,8 @@ public class CtrlActivity extends AppCompatActivity {
                     curtainBtn5.setVisibility(View.GONE);
                 }
                 break;
-            case Configuration.AIR_BIG_TYPE:
+            case 8:
+            case 9:
                 lightBtn.setVisibility(View.GONE);
                 curtainBtn.setVisibility(View.GONE);
                 curtainBtn2.setVisibility(View.GONE);
@@ -108,7 +126,8 @@ public class CtrlActivity extends AppCompatActivity {
                 lightText.setVisibility(View.GONE);
                 logicText.setVisibility(View.GONE);
                 break;
-            case Configuration.LOGIC_BIG_TYPE:
+            case 12:
+            case 13:
                 lightBtn.setVisibility(View.GONE);
                 curtainBtn.setVisibility(View.GONE);
                 curtainBtn2.setVisibility(View.GONE);

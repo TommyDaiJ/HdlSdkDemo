@@ -36,7 +36,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private Button getDevices,getScenes,testRCU;
-    private EditText editText;
+    private EditText sdkEdt,rcuEdt;
     private TextView tv;
     private List<DevicesData> devicesDatas;
     private List<DevicesData> OndevicesDatas;
@@ -57,7 +57,8 @@ public class MainActivity extends AppCompatActivity {
         getScenes = (Button) findViewById(R.id.scenes);
         testRCU = (Button)findViewById(R.id.test);
         tv= (TextView) findViewById(R.id.tv);
-        editText = (EditText) findViewById(R.id.edt);
+        sdkEdt = (EditText) findViewById(R.id.sdkEdt);
+        rcuEdt = (EditText) findViewById(R.id.rcuEdt);
 
         adapter=new ArrayAdapter<String>(MainActivity.this,android.R.layout.simple_list_item_1,listString);
         ListView listView=(ListView)findViewById(R.id.listView1);
@@ -99,16 +100,10 @@ public class MainActivity extends AppCompatActivity {
         testRCU.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String ip = editText.getText().toString().trim();
-                byte[] addBytes = new byte[6];
-                addBytes[0] = 1;
-                addBytes[1] = 2;
-                String[] ipArr = ip.split("\\.");
-                addBytes[2] = (byte) Integer.parseInt(ipArr[0]);
-                addBytes[3] = (byte) Integer.parseInt(ipArr[1]);
-                addBytes[4] = (byte) Integer.parseInt(ipArr[2]);
-                addBytes[5] = (byte) Integer.parseInt(ipArr[3]);
-                HDLRcuCommand.cusSendCommand(0xE506,254,101,addBytes,6008);
+                String sdkip = sdkEdt.getText().toString().trim();
+                String rcuip = rcuEdt.getText().toString().trim();
+
+                HDLRcuCommand.sendChangeRcuCommand(sdkip,rcuip);
             }
         });
     }
