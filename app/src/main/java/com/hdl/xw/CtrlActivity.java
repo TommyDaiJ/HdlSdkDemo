@@ -392,135 +392,135 @@ public class CtrlActivity extends AppCompatActivity {
         if(event.getAppliancesInfo().getDeviceSubnetID() == appliancesInfo.getDeviceSubnetID()
                 && event.getAppliancesInfo().getDeviceDeviceID() == appliancesInfo.getDeviceDeviceID()
                 ){
+            //这个返回的信息是当前状态的
+            switch (event.getAppliancesInfo().getDeviceType()){
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                    if(appliancesInfo.getChannelNum()==event.getAppliancesInfo().getChannelNum()){
+                        lightBtn.setText("亮度 = "+event.getAppliancesInfo().getCurState());
+                    }
+                    break;
+                case 5:
+                case 6:
+                case 7:
+                    if(appliancesInfo.getChannelNum()==event.getAppliancesInfo().getChannelNum()){
 
-        }
-        //这个返回的信息是当前状态的
-        switch (event.getAppliancesInfo().getDeviceType()){
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-                if(appliancesInfo.getChannelNum()==event.getAppliancesInfo().getChannelNum()){
-                    lightBtn.setText("亮度 = "+event.getAppliancesInfo().getCurState());
-                }
-                break;
-            case 5:
-            case 6:
-            case 7:
-                if(appliancesInfo.getChannelNum()==event.getAppliancesInfo().getChannelNum()){
+                        //窗帘模块：curState:0=停止,1=打开,2=关闭。
+                        //开合帘电机，卷帘电机：curState:1-100开合度。
+                        int curState = (int)event.getAppliancesInfo().getCurState();
+                        if(event.getAppliancesInfo().getLittleType()==2){//判断是否为窗帘模块，LittleType为2是窗帘模块，否则为开合帘或卷帘电机
+                            switch (curState){
+                                case CurtainCtrlParser.curtainOff:
+                                    curtainBtn.setText("窗帘关");
+                                    break;
+                                case CurtainCtrlParser.curtainOn:
+                                    curtainBtn.setText("窗帘开");
+                                    break;
+                                case CurtainCtrlParser.curtainPause:
+                                    curtainBtn.setText("窗帘暂停");
+                                    break;
+                            }
+                        }else{
+                            curtainBtn5.setText("窗帘开到"+curState+"%");
+                        }
+                    }
+                    break;
+                case 8:
+                case 9:
+                    if(appliancesInfo.getChannelNum()==event.getAppliancesInfo().getChannelNum()){
+                        byte[] curState = event.getAppliancesInfo().getArrCurState();
+                        switch (curState[0]& 0xFF){
+                            case AirCtrlParser.airSwich:
+                                switch (curState[1]& 0xFF){
+                                    case AirCtrlParser.airOff:
+                                        airBtn.setText("空调关");
+                                        ToastUtil("空调关");
+                                        break;
+                                    case AirCtrlParser.airOn:
+                                        airBtn.setText("空调开");
+                                        ToastUtil("空调开");
+                                        break;
+                                    default:
+                                        break;
+                                }
 
-                    //窗帘模块：curState:0=停止,1=打开,2=关闭。
-                    //开合帘电机，卷帘电机：curState:1-100开合度。
-                    int curState = (int)event.getAppliancesInfo().getCurState();
-                    if(event.getAppliancesInfo().getLittleType()==2){//判断是否为窗帘模块，LittleType为2是窗帘模块，否则为开合帘或卷帘电机
-                        switch (curState){
-                            case CurtainCtrlParser.curtainOff:
-                                curtainBtn.setText("窗帘关");
                                 break;
-                            case CurtainCtrlParser.curtainOn:
-                                curtainBtn.setText("窗帘开");
+                            case AirCtrlParser.refTem:
+                                airBtn.setText("空调制冷，温度为："+(curState[1]& 0xFF));
+                                ToastUtil("空调制冷，温度为："+(curState[1]& 0xFF));
                                 break;
-                            case CurtainCtrlParser.curtainPause:
-                                curtainBtn.setText("窗帘暂停");
+                            case AirCtrlParser.airSpeed :
+                                switch (curState[1]& 0xFF){
+                                    case AirCtrlParser.airSpeedAuto:
+                                        airBtn.setText("空调风速，风速模式为：airSpeedAuto自动风速");
+                                        ToastUtil("空调风速，风速模式为：airSpeedAuto自动风速");
+                                        break;
+                                    case AirCtrlParser.airSpeedHigh:
+                                        airBtn.setText("空调风速，风速模式为：airSpeedHigh风速高");
+                                        ToastUtil("空调风速，风速模式为：airSpeedHigh风速高");
+                                        break;
+                                    case AirCtrlParser.airSpeedMid:
+                                        airBtn.setText("空调风速，风速模式为：airSpeedMid风速中");
+                                        ToastUtil("空调风速，风速模式为：airSpeedMid风速中");
+                                        break;
+                                    case AirCtrlParser.airSpeedLow:
+                                        airBtn.setText("空调风速，风速模式为：airSpeedLow风速低");
+                                        ToastUtil("空调风速，风速模式为：airSpeedLow风速低");
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                break;
+                            case AirCtrlParser.airMode:
+                                switch (curState[1]& 0xFF){
+                                    case AirCtrlParser.airModeRefTem:
+                                        airBtn.setText("空调模式，模式为：制冷");
+                                        ToastUtil("空调模式，模式为：制冷");
+                                        break;
+                                    case AirCtrlParser.airModeHeatTem:
+                                        airBtn.setText("空调模式，模式为：制热");
+                                        ToastUtil("空调模式，模式为：制热");
+                                        break;
+                                    case AirCtrlParser.airModeVen:
+                                        airBtn.setText("空调模式，模式为：通风");
+                                        ToastUtil("空调模式，模式为：通风");
+                                        break;
+                                    case AirCtrlParser.airModeAuto:
+                                        airBtn.setText("空调模式，模式为：自动");
+                                        ToastUtil("空调模式，模式为：自动");
+                                        break;
+                                    case AirCtrlParser.airModeDehum:
+                                        airBtn.setText("空调模式，模式为：抽湿");
+                                        ToastUtil("空调模式，模式为：抽湿");
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                break;
+                            case AirCtrlParser.heatTem:
+                                airBtn.setText("空调制热，制热温度为"+(curState[1]& 0xFF));
+                                ToastUtil("空调制热，制热温度为"+(curState[1]& 0xFF));
+                                break;
+                            case AirCtrlParser.autoTem:
+                                airBtn.setText("空调自动，自动温度为"+(curState[1]& 0xFF));
+                                ToastUtil("空调自动，自动温度为"+(curState[1]& 0xFF));
+                                break;
+                            case AirCtrlParser.upTem:
+                                airBtn.setText("空调调温，上升温度："+(curState[1]& 0xFF));
+                                ToastUtil("空调调温，上升温度："+(curState[1]& 0xFF));
+                                break;
+                            case AirCtrlParser.downTem:
+                                airBtn.setText("空调调温，下降温度："+(curState[1]& 0xFF));
+                                ToastUtil("空调调温，下降温度："+(curState[1]& 0xFF));
                                 break;
                         }
-                    }else{
-                        curtainBtn5.setText("窗帘开到"+curState+"%");
                     }
-                }
-                break;
-            case 8:
-            case 9:
-                if(appliancesInfo.getChannelNum()==event.getAppliancesInfo().getChannelNum()){
-                    byte[] curState = event.getAppliancesInfo().getArrCurState();
-                    switch (curState[0]& 0xFF){
-                        case AirCtrlParser.airSwich:
-                            switch (curState[1]& 0xFF){
-                                case AirCtrlParser.airOff:
-                                    airBtn.setText("空调关");
-                                    ToastUtil("空调关");
-                                    break;
-                                case AirCtrlParser.airOn:
-                                    airBtn.setText("空调开");
-                                    ToastUtil("空调开");
-                                    break;
-                                default:
-                                    break;
-                            }
-
-                            break;
-                        case AirCtrlParser.refTem:
-                            airBtn.setText("空调制冷，温度为："+(curState[1]& 0xFF));
-                            ToastUtil("空调制冷，温度为："+(curState[1]& 0xFF));
-                            break;
-                        case AirCtrlParser.airSpeed :
-                            switch (curState[1]& 0xFF){
-                                case AirCtrlParser.airSpeedAuto:
-                                    airBtn.setText("空调风速，风速模式为：airSpeedAuto自动风速");
-                                    ToastUtil("空调风速，风速模式为：airSpeedAuto自动风速");
-                                    break;
-                                case AirCtrlParser.airSpeedHigh:
-                                    airBtn.setText("空调风速，风速模式为：airSpeedHigh风速高");
-                                    ToastUtil("空调风速，风速模式为：airSpeedHigh风速高");
-                                    break;
-                                case AirCtrlParser.airSpeedMid:
-                                    airBtn.setText("空调风速，风速模式为：airSpeedMid风速中");
-                                    ToastUtil("空调风速，风速模式为：airSpeedMid风速中");
-                                    break;
-                                case AirCtrlParser.airSpeedLow:
-                                    airBtn.setText("空调风速，风速模式为：airSpeedLow风速低");
-                                    ToastUtil("空调风速，风速模式为：airSpeedLow风速低");
-                                    break;
-                                default:
-                                    break;
-                            }
-                            break;
-                        case AirCtrlParser.airMode:
-                            switch (curState[1]& 0xFF){
-                                case AirCtrlParser.airModeRefTem:
-                                    airBtn.setText("空调模式，模式为：制冷");
-                                    ToastUtil("空调模式，模式为：制冷");
-                                    break;
-                                case AirCtrlParser.airModeHeatTem:
-                                    airBtn.setText("空调模式，模式为：制热");
-                                    ToastUtil("空调模式，模式为：制热");
-                                    break;
-                                case AirCtrlParser.airModeVen:
-                                    airBtn.setText("空调模式，模式为：通风");
-                                    ToastUtil("空调模式，模式为：通风");
-                                    break;
-                                case AirCtrlParser.airModeAuto:
-                                    airBtn.setText("空调模式，模式为：自动");
-                                    ToastUtil("空调模式，模式为：自动");
-                                    break;
-                                case AirCtrlParser.airModeDehum:
-                                    airBtn.setText("空调模式，模式为：抽湿");
-                                    ToastUtil("空调模式，模式为：抽湿");
-                                    break;
-                                default:
-                                    break;
-                            }
-                            break;
-                        case AirCtrlParser.heatTem:
-                            airBtn.setText("空调制热，制热温度为"+(curState[1]& 0xFF));
-                            ToastUtil("空调制热，制热温度为"+(curState[1]& 0xFF));
-                            break;
-                        case AirCtrlParser.autoTem:
-                            airBtn.setText("空调自动，自动温度为"+(curState[1]& 0xFF));
-                            ToastUtil("空调自动，自动温度为"+(curState[1]& 0xFF));
-                            break;
-                        case AirCtrlParser.upTem:
-                            airBtn.setText("空调调温，上升温度："+(curState[1]& 0xFF));
-                            ToastUtil("空调调温，上升温度："+(curState[1]& 0xFF));
-                            break;
-                        case AirCtrlParser.downTem:
-                            airBtn.setText("空调调温，下降温度："+(curState[1]& 0xFF));
-                            ToastUtil("空调调温，下降温度："+(curState[1]& 0xFF));
-                            break;
-                    }
-                }
-                break;
+                    break;
+            }
         }
+
 
     }
 
