@@ -7,7 +7,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hdl.libr.hdl_lib.Config.Configuration;
 import com.hdl.libr.hdl_lib.HDLAppliances.HDLAirCondition.Parser.AirCtrlParser;
 import com.hdl.libr.hdl_lib.HDLAppliances.HDLCurtain.Parser.CurtainCtrlParser;
 import com.hdl.libr.hdl_lib.HDLCommand;
@@ -384,13 +383,18 @@ public class CtrlActivity extends AppCompatActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDeviceStateEventMain(DeviceStateEvent event){
         //这个返回的信息是当前状态的
-        switch (event.getAppliancesInfo().getBigType()){
-            case Configuration.LIGTH_BIG_TYPE:
+        switch (event.getAppliancesInfo().getDeviceType()){
+            case 1:
+            case 2:
+            case 3:
+            case 4:
                 if(appliancesInfo.getChannelNum()==event.getAppliancesInfo().getChannelNum()){
                     lightBtn.setText("亮度 = "+event.getAppliancesInfo().getCurState());
                 }
                 break;
-            case Configuration.CURTAIN_BIG_TYPE:
+            case 5:
+            case 6:
+            case 7:
                 if(appliancesInfo.getChannelNum()==event.getAppliancesInfo().getChannelNum()){
 
                     //窗帘模块：curState:0=停止,1=打开,2=关闭。
@@ -413,7 +417,8 @@ public class CtrlActivity extends AppCompatActivity {
                     }
                 }
                 break;
-            case Configuration.AIR_BIG_TYPE:
+            case 8:
+            case 9:
                 byte[] curState = event.getAppliancesInfo().getArrCurState();
                 switch (curState[0]& 0xFF){
                     case AirCtrlParser.airSwich:
