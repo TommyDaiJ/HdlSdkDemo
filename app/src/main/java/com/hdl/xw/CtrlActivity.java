@@ -2,6 +2,7 @@ package com.hdl.xw;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -197,7 +198,7 @@ public class CtrlActivity extends AppCompatActivity {
         airBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HDLCommand.HDLairCtrl(appliancesInfo, AirCtrlParser.airSwich,airState);//空调面板开
+//                HDLCommand.HDLairCtrl(appliancesInfo, AirCtrlParser.airSwich,airState);//空调面板开
 //                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.airSwich,AirCtrlParser.airOff);//空调面板关
 //                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.refTem,20);//制冷温度 范围0-84
 //                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedAuto);//风速自动
@@ -212,7 +213,7 @@ public class CtrlActivity extends AppCompatActivity {
 //                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.heatTem,28);//制热温度 范围0-84
 //                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.autoTem,25);//自动温度 范围0-84
 //                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.upTem,1);//上升温度 范围0-5
-//                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.downTem,1);//下降温度 范围0-5
+                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.downTem,1);//下降温度 范围0-5
 
                 if(airState==AirCtrlParser.airOn){
                     airState = AirCtrlParser.airOff;
@@ -266,6 +267,7 @@ public class CtrlActivity extends AppCompatActivity {
                 && event.getCurtainCtrlBackInfo().getAppliancesInfo().getDeviceDeviceID() == appliancesInfo.getDeviceDeviceID()
                 && event.getCurtainCtrlBackInfo().getNum() == appliancesInfo.getChannelNum()
                 ){
+
             int curState = event.getCurtainCtrlBackInfo().getState();
             //窗帘模块：curState:0=停止,1=打开,2=关闭。
             //开合帘电机，卷帘电机：curState:1-100开合度。也会返回0，1，2的状态
@@ -278,12 +280,15 @@ public class CtrlActivity extends AppCompatActivity {
             switch (curState){
                 case 2:
                     curtainBtn.setText("窗帘关");
+                    Log.i("djl","窗帘控制 ：窗帘关"+"  回路号："+num);
                     break;
                 case 1:
                     curtainBtn.setText("窗帘开");
+                    Log.i("djl","窗帘控制 ：窗帘开"+"  回路号："+num);
                     break;
                 case 0:
                     curtainBtn.setText("窗帘暂停");
+                    Log.i("djl","窗帘控制 ：窗帘暂停"+"  回路号："+num);
                     break;
             }
         }
@@ -410,16 +415,20 @@ public class CtrlActivity extends AppCompatActivity {
                         //窗帘模块：curState:0=停止,1=打开,2=关闭。
                         //开合帘电机，卷帘电机：curState:1-100开合度。
                         int curState = (int)event.getAppliancesInfo().getCurState();
-                        if(event.getAppliancesInfo().getLittleType()==2){//判断是否为窗帘模块，LittleType为2是窗帘模块，否则为开合帘或卷帘电机
+
+                        if(event.getAppliancesInfo().getDeviceType()==7){//判断是否为窗帘模块,否则为开合帘或卷帘电机
                             switch (curState){
                                 case CurtainCtrlParser.curtainOff:
                                     curtainBtn.setText("窗帘关");
+                                    Log.i("djl","窗帘状态 ：窗帘关"+"  回路号："+event.getAppliancesInfo().getChannelNum());
                                     break;
                                 case CurtainCtrlParser.curtainOn:
                                     curtainBtn.setText("窗帘开");
+                                    Log.i("djl","窗帘状态 ：窗帘开"+"  回路号："+event.getAppliancesInfo().getChannelNum());
                                     break;
                                 case CurtainCtrlParser.curtainPause:
                                     curtainBtn.setText("窗帘暂停");
+                                    Log.i("djl","窗帘状态 ：窗帘暂停"+"  回路号："+event.getAppliancesInfo().getChannelNum());
                                     break;
                             }
                         }else{
