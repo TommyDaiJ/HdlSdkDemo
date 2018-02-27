@@ -198,9 +198,9 @@ public class CtrlActivity extends AppCompatActivity {
         airBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                HDLCommand.HDLairCtrl(appliancesInfo, AirCtrlParser.airSwich,airState);//空调面板开
+                HDLCommand.HDLairCtrl(appliancesInfo, AirCtrlParser.airSwich,airState);//空调面板开
 //                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.airSwich,AirCtrlParser.airOff);//空调面板关
-//                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.refTem,20);//制冷温度 范围0-84
+
 //                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedAuto);//风速自动
 //                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedHigh);//风速高风
 //                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedMid);//风速中风
@@ -210,10 +210,12 @@ public class CtrlActivity extends AppCompatActivity {
 //                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.airMode,AirCtrlParser.airModeVen);//空调模式通风
 //                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.airMode,AirCtrlParser.airModeAuto);//空调模式自动
 //                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.airMode,AirCtrlParser.airModeDehum);//空调模式抽湿
+//                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.refTem,20);//制冷温度 范围0-84
+//                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.dehumTem,20);//抽湿温度 范围0-84
 //                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.heatTem,28);//制热温度 范围0-84
 //                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.autoTem,25);//自动温度 范围0-84
 //                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.upTem,1);//上升温度 范围0-5
-                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.downTem,1);//下降温度 范围0-5
+//                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.downTem,1);//下降温度 范围0-5
 
                 if(airState==AirCtrlParser.airOn){
                     airState = AirCtrlParser.airOff;
@@ -507,6 +509,10 @@ public class CtrlActivity extends AppCompatActivity {
                                     default:
                                         break;
                                 }
+                                break;
+                            case AirCtrlParser.dehumTem:
+                                airBtn.setText("空调抽湿，抽湿温度为"+(curState[1]& 0xFF));
+                                ToastUtil("空调抽湿，抽湿温度为"+(curState[1]& 0xFF));
                                 break;
                             case AirCtrlParser.heatTem:
                                 airBtn.setText("空调制热，制热温度为"+(curState[1]& 0xFF));

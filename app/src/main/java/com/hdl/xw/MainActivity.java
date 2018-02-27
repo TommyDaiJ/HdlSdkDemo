@@ -102,8 +102,12 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String sdkip = sdkEdt.getText().toString().trim();
                 String rcuip = rcuEdt.getText().toString().trim();
+                if(!sdkip.isEmpty() && !rcuip.isEmpty()){
+                    HDLRcuCommand.sendChangeRcuCommand(sdkip,rcuip);
+                }else{
+                    Toast.makeText(MainActivity.this,"请输入ip地址",Toast.LENGTH_SHORT).show();
+                }
 
-                HDLRcuCommand.sendChangeRcuCommand(sdkip,rcuip);
             }
         });
     }
@@ -178,6 +182,7 @@ public class MainActivity extends AppCompatActivity {
         String warningType = event.getWarningType();
         Toast.makeText(MainActivity.this,warningType,Toast.LENGTH_SHORT).show();
     }
+
 
 
 }
