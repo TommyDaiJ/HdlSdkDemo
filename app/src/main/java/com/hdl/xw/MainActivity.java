@@ -19,6 +19,7 @@ import com.hdl.libr.hdl_lib.HDLCommand;
 import com.hdl.libr.hdl_lib.HDLDeviceManager.Bean.AppliancesInfo;
 import com.hdl.libr.hdl_lib.HDLDeviceManager.Bean.DevicesData;
 import com.hdl.libr.hdl_lib.HDLDeviceManager.EventBusEvent.DevicesInfoEvent;
+import com.hdl.libr.hdl_lib.HDLDeviceManager.EventBusEvent.RCUSaveEvent;
 import com.hdl.libr.hdl_lib.HDLDeviceManager.EventBusEvent.SceneInfoEvent;
 import com.hdl.libr.hdl_lib.HDLDeviceManager.EventBusEvent.WarningInfoEvent;
 import com.hdl.libr.hdl_lib.HDLDeviceManager.HDLDeviceManager;
@@ -59,6 +60,9 @@ public class MainActivity extends AppCompatActivity {
         tv= (TextView) findViewById(R.id.tv);
         sdkEdt = (EditText) findViewById(R.id.sdkEdt);
         rcuEdt = (EditText) findViewById(R.id.rcuEdt);
+
+//        getDevices.setVisibility(View.GONE);
+//        getScenes.setVisibility(View.GONE);
 
         adapter=new ArrayAdapter<String>(MainActivity.this,android.R.layout.simple_list_item_1,listString);
         ListView listView=(ListView)findViewById(R.id.listView1);
@@ -181,6 +185,12 @@ public class MainActivity extends AppCompatActivity {
     public void onWarningEventMain(WarningInfoEvent event){
         String warningType = event.getWarningType();
         Toast.makeText(MainActivity.this,warningType,Toast.LENGTH_SHORT).show();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onRCUSaveEventMain(RCUSaveEvent event){
+        String rcuMsg = event.getMsg();
+        Toast.makeText(MainActivity.this,rcuMsg,Toast.LENGTH_SHORT).show();
     }
 
 
