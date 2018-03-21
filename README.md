@@ -175,7 +175,8 @@ HDLDeviceManager.init(Context context);
 ### 4：获取设备信息
 在搜索中获取到信息为设备信息，在demo中的ApplianceActivity显示设备信息。设备信息列表显示的是此设备所有回路设备。 如果需要确定哪个设备哪个回路，则可通过子网id和设备id，大类，小类，回路号，共同确定唯一性，若有此需求请联系开发人员。
 
-4.1 ApplianceActivity中必须初始化EventBus（具体请查看demo），调用HDLCommand.getAppliancesRemarks(AppliancesActivity.this, appliancesInfos);获取到的每个回路的备注。
+4.1 ApplianceActivity中必须初始化EventBus（具体请查看demo），调用
+`HDLCommand.getAppliancesRemarks(AppliancesActivity.this, appliancesInfos);`获取到的每个回路的备注。
 
 4.2 接收备注回调，调用EventBus的返回
 
@@ -193,6 +194,26 @@ HDLDeviceManager.init(Context context);
         adapter.notifyDataSetChanged();
 
     }
+
+4.3 获取设备类型
+通过 `appliancesInfo.getDeviceType()` 可获取到设备类型。具体参数如下
+
+```
+//1：调光回路（灯） 2：开关回路（灯） 3：混合调光类 （灯） 4：混合开关类（灯）
+// 5：开合帘电机（窗帘）6：卷帘电机（窗帘） 7：窗帘模块 （窗帘）8：HVAC 模块(空调)
+// 9：通用空调面板(空调) 10：背景音乐模块（音乐） 11：第三方背景音乐模块（音乐）
+/ 12：逻辑模块（场景） 13：全局逻辑模块（场景）
+
+// 可以直接总结为：
+//1、2、3、4 为灯
+//5、6、7 为窗帘
+//8、9 为空调
+//10、11 为音乐
+//12、13 为场景
+
+appliancesInfo.getDeviceType()
+
+```
 
 ### 5 获取相关设备状态
 
