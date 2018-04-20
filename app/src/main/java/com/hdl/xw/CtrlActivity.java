@@ -100,15 +100,17 @@ public class CtrlActivity extends AppCompatActivity {
                 lightText.setVisibility(View.GONE);
                 airText.setVisibility(View.GONE);
                 logicText.setVisibility(View.GONE);
-                if(appliancesInfo.getDeviceType()==5){
-                    curText1.setVisibility(View.GONE);
-                    curtainBtn.setVisibility(View.GONE);
-                }else if(appliancesInfo.getDeviceType()==6){
+                if(appliancesInfo.getDeviceType()==7){
+                    //窗帘模块
                     curText2.setVisibility(View.GONE);
                     curtainBtn2.setVisibility(View.GONE);
                     curtainBtn3.setVisibility(View.GONE);
                     curtainBtn4.setVisibility(View.GONE);
                     curtainBtn5.setVisibility(View.GONE);
+                }else {
+                    //开合帘、卷帘
+                    curText1.setVisibility(View.GONE);
+                    curtainBtn.setVisibility(View.GONE);
                 }
                 break;
             case 8:
@@ -150,6 +152,7 @@ public class CtrlActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 HDLCommand.HDLlightCtrl(appliancesInfo,lightState);
+//                HDLCommand.HDLlightCtrl(appliancesInfo,50);
             }
         });
 
@@ -200,7 +203,6 @@ public class CtrlActivity extends AppCompatActivity {
             public void onClick(View view) {
                 HDLCommand.HDLairCtrl(appliancesInfo, AirCtrlParser.airSwich,airState);//空调面板开
 //                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.airSwich,AirCtrlParser.airOff);//空调面板关
-
 //                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedAuto);//风速自动
 //                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedHigh);//风速高风
 //                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedMid);//风速中风
@@ -210,14 +212,14 @@ public class CtrlActivity extends AppCompatActivity {
 //                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.airMode,AirCtrlParser.airModeVen);//空调模式通风
 //                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.airMode,AirCtrlParser.airModeAuto);//空调模式自动
 //                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.airMode,AirCtrlParser.airModeDehum);//空调模式抽湿
-//                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.refTem,20);//制冷温度 范围0-84
-//                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.dehumTem,20);//抽湿温度 范围0-84
 //                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.heatTem,28);//制热温度 范围0-84
 //                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.autoTem,25);//自动温度 范围0-84
+//                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.refTem,20);//制冷温度 范围0-84
+//                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.dehumTem,20);//抽湿温度 范围0-84
 //                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.upTem,1);//上升温度 范围0-5
 //                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.downTem,1);//下降温度 范围0-5
 
-                if(airState==AirCtrlParser.airOn){
+                if(airState == AirCtrlParser.airOn){
                     airState = AirCtrlParser.airOff;
                 }else{
                     airState = AirCtrlParser.airOn;
@@ -258,16 +260,13 @@ public class CtrlActivity extends AppCompatActivity {
             int num = event.getLightCtrlBackInfo().getChannelNum();//获取回路号。这里可以获取到这个继电器或调光灯的回路号
             ToastUtil(parentRemarks+" 的 "+remarks+" 回路号："+num+" 返回"+" 亮度为："+brightness);
         }
-
-
-
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onCurtainFeedBackInfoEventMain(CurtainFeedBackEvent event){
         if(event.getCurtainCtrlBackInfo().getAppliancesInfo().getDeviceSubnetID() == appliancesInfo.getDeviceSubnetID()
                 && event.getCurtainCtrlBackInfo().getAppliancesInfo().getDeviceDeviceID() == appliancesInfo.getDeviceDeviceID()
-                && event.getCurtainCtrlBackInfo().getNum() == appliancesInfo.getChannelNum()
+//                && event.getCurtainCtrlBackInfo().getNum() == appliancesInfo.getChannelNum()
                 ){
 
             int curState = event.getCurtainCtrlBackInfo().getState();
@@ -278,21 +277,29 @@ public class CtrlActivity extends AppCompatActivity {
             String remarks = event.getCurtainCtrlBackInfo().getRemarks();
             String parentRemarks = event.getCurtainCtrlBackInfo().getParentRemarks();
             int num = event.getCurtainCtrlBackInfo().getNum();
-            ToastUtil(parentRemarks+" 的 "+remarks+" 回路号："+num+" 返回"+" 状态为："+curState);
-            switch (curState){
-                case 2:
-                    curtainBtn.setText("窗帘关");
-                    Log.i("djl","窗帘控制 ：窗帘关"+"  回路号："+num);
-                    break;
-                case 1:
-                    curtainBtn.setText("窗帘开");
-                    Log.i("djl","窗帘控制 ：窗帘开"+"  回路号："+num);
-                    break;
-                case 0:
-                    curtainBtn.setText("窗帘暂停");
-                    Log.i("djl","窗帘控制 ：窗帘暂停"+"  回路号："+num);
-                    break;
+//            ToastUtil(parentRemarks+" 的 "+remarks+" 回路号："+num+" 返回"+" 状态为："+curState);
+            Log.i("djl",parentRemarks+" 的 "+remarks+" 回路号："+num+" 返回"+" 状态为："+curState);
+            if(event.getCurtainCtrlBackInfo().getAppliancesInfo().getDeviceType() == 7){
+                //判断是否为窗帘模块
+                switch (curState){
+                    case 2:
+                        curtainBtn.setText("窗帘关");
+                        Log.i("djl","窗帘控制 ：窗帘关"+"  回路号："+num);
+                        break;
+                    case 1:
+                        curtainBtn.setText("窗帘开");
+                        Log.i("djl","窗帘控制 ：窗帘开"+"  回路号："+num);
+                        break;
+                    case 0:
+                        curtainBtn.setText("窗帘暂停");
+                        Log.i("djl","窗帘控制 ：窗帘暂停"+"  回路号："+num);
+                        break;
+                }
+            }else{
+                //开合帘或卷帘 显示百分比
+                curtainBtn5.setText("窗帘开到"+curState+"%");
             }
+
         }
 
     }
@@ -310,10 +317,12 @@ public class CtrlActivity extends AppCompatActivity {
                         case AirCtrlParser.airOff:
                             airBtn.setText("空调关");
                             ToastUtil("空调关");
+                            Log.i("djl","空调关");
                             break;
                         case AirCtrlParser.airOn:
                             airBtn.setText("空调开");
                             ToastUtil("空调开");
+                            Log.i("djl","空调开");
                             break;
                         default:
                             break;
@@ -323,24 +332,29 @@ public class CtrlActivity extends AppCompatActivity {
                 case AirCtrlParser.refTem:
                     airBtn.setText("空调制冷，温度为："+(curState[1]& 0xFF));
                     ToastUtil("空调制冷，温度为："+(curState[1]& 0xFF));
+                    Log.i("djl","空调制冷，温度为："+(curState[1]& 0xFF));
                     break;
                 case AirCtrlParser.airSpeed :
                     switch (curState[1]& 0xFF){
                         case AirCtrlParser.airSpeedAuto:
                             airBtn.setText("空调风速，风速模式为：airSpeedAuto自动风速");
                             ToastUtil("空调风速，风速模式为：airSpeedAuto自动风速");
+//                            Log.i("djl","空调风速，风速模式为：airSpeedAuto自动风速");
                             break;
                         case AirCtrlParser.airSpeedHigh:
                             airBtn.setText("空调风速，风速模式为：airSpeedHigh风速高");
                             ToastUtil("空调风速，风速模式为：airSpeedHigh风速高");
+                            Log.i("djl","空调风速，风速模式为：airSpeedHigh风速高");
                             break;
                         case AirCtrlParser.airSpeedMid:
                             airBtn.setText("空调风速，风速模式为：airSpeedMid风速中");
                             ToastUtil("空调风速，风速模式为：airSpeedMid风速中");
+                            Log.i("djl","空调风速，风速模式为：airSpeedMid风速中");
                             break;
                         case AirCtrlParser.airSpeedLow:
                             airBtn.setText("空调风速，风速模式为：airSpeedLow风速低");
                             ToastUtil("空调风速，风速模式为：airSpeedLow风速低");
+                            Log.i("djl","空调风速，风速模式为：airSpeedLow风速低");
                             break;
                         default:
                             break;
@@ -351,22 +365,27 @@ public class CtrlActivity extends AppCompatActivity {
                         case AirCtrlParser.airModeRefTem:
                             airBtn.setText("空调模式，模式为：制冷");
                             ToastUtil("空调模式，模式为：制冷");
+                            Log.i("djl","空调模式，模式为：制冷");
                             break;
                         case AirCtrlParser.airModeHeatTem:
                             airBtn.setText("空调模式，模式为：制热");
                             ToastUtil("空调模式，模式为：制热");
+                            Log.i("djl","空调模式，模式为：制热");
                             break;
                         case AirCtrlParser.airModeVen:
                             airBtn.setText("空调模式，模式为：通风");
                             ToastUtil("空调模式，模式为：通风");
+                            Log.i("djl","空调模式，模式为：通风");
                             break;
                         case AirCtrlParser.airModeAuto:
                             airBtn.setText("空调模式，模式为：自动");
                             ToastUtil("空调模式，模式为：自动");
+                            Log.i("djl","空调模式，模式为：自动");
                             break;
                         case AirCtrlParser.airModeDehum:
                             airBtn.setText("空调模式，模式为：抽湿");
                             ToastUtil("空调模式，模式为：抽湿");
+                            Log.i("djl","空调模式，模式为：抽湿");
                             break;
                         default:
                             break;
@@ -375,18 +394,27 @@ public class CtrlActivity extends AppCompatActivity {
                 case AirCtrlParser.heatTem:
                     airBtn.setText("空调制热，制热温度为"+(curState[1]& 0xFF));
                     ToastUtil("空调制热，制热温度为"+(curState[1]& 0xFF));
+                    Log.i("djl","空调制热，制热温度为"+(curState[1]& 0xFF));
                     break;
                 case AirCtrlParser.autoTem:
                     airBtn.setText("空调自动，自动温度为"+(curState[1]& 0xFF));
                     ToastUtil("空调自动，自动温度为"+(curState[1]& 0xFF));
+                    Log.i("djl","空调自动，自动温度为"+(curState[1]& 0xFF));
+                    break;
+                case AirCtrlParser.dehumTem:
+                    airBtn.setText("空调抽湿，抽湿温度为"+(curState[1]& 0xFF));
+                    ToastUtil("空调抽湿，抽湿温度为"+(curState[1]& 0xFF));
+                    Log.i("djl","空调抽湿，抽湿温度为"+(curState[1]& 0xFF));
                     break;
                 case AirCtrlParser.upTem:
                     airBtn.setText("空调调温，上升温度："+(curState[1]& 0xFF));
                     ToastUtil("空调调温，上升温度："+(curState[1]& 0xFF));
+                    Log.i("djl","空调调温，上升温度："+(curState[1]& 0xFF));
                     break;
                 case AirCtrlParser.downTem:
                     airBtn.setText("空调调温，下降温度："+(curState[1]& 0xFF));
                     ToastUtil("空调调温，下降温度："+(curState[1]& 0xFF));
+                    Log.i("djl","空调调温，下降温度："+(curState[1]& 0xFF));
                     break;
             }
         }
@@ -448,10 +476,12 @@ public class CtrlActivity extends AppCompatActivity {
                                     case AirCtrlParser.airOff:
                                         airBtn.setText("空调关");
                                         ToastUtil("空调关");
+                                        Log.i("djl","空调关");
                                         break;
                                     case AirCtrlParser.airOn:
                                         airBtn.setText("空调开");
                                         ToastUtil("空调开");
+                                        Log.i("djl","空调开");
                                         break;
                                     default:
                                         break;
@@ -461,24 +491,29 @@ public class CtrlActivity extends AppCompatActivity {
                             case AirCtrlParser.refTem:
                                 airBtn.setText("空调制冷，温度为："+(curState[1]& 0xFF));
                                 ToastUtil("空调制冷，温度为："+(curState[1]& 0xFF));
+                                Log.i("djl","空调制冷，温度为："+(curState[1]& 0xFF));
                                 break;
                             case AirCtrlParser.airSpeed :
                                 switch (curState[1]& 0xFF){
                                     case AirCtrlParser.airSpeedAuto:
                                         airBtn.setText("空调风速，风速模式为：airSpeedAuto自动风速");
                                         ToastUtil("空调风速，风速模式为：airSpeedAuto自动风速");
+                                        Log.i("djl","空调风速，风速模式为：airSpeedAuto自动风速");
                                         break;
                                     case AirCtrlParser.airSpeedHigh:
                                         airBtn.setText("空调风速，风速模式为：airSpeedHigh风速高");
                                         ToastUtil("空调风速，风速模式为：airSpeedHigh风速高");
+                                        Log.i("djl","空调风速，风速模式为：airSpeedHigh风速高");
                                         break;
                                     case AirCtrlParser.airSpeedMid:
                                         airBtn.setText("空调风速，风速模式为：airSpeedMid风速中");
                                         ToastUtil("空调风速，风速模式为：airSpeedMid风速中");
+                                        Log.i("djl","空调风速，风速模式为：airSpeedMid风速中");
                                         break;
                                     case AirCtrlParser.airSpeedLow:
                                         airBtn.setText("空调风速，风速模式为：airSpeedLow风速低");
                                         ToastUtil("空调风速，风速模式为：airSpeedLow风速低");
+                                        Log.i("djl","空调风速，风速模式为：airSpeedLow风速低");
                                         break;
                                     default:
                                         break;
@@ -489,54 +524,62 @@ public class CtrlActivity extends AppCompatActivity {
                                     case AirCtrlParser.airModeRefTem:
                                         airBtn.setText("空调模式，模式为：制冷");
                                         ToastUtil("空调模式，模式为：制冷");
+                                        Log.i("djl","空调模式，模式为：制冷");
                                         break;
                                     case AirCtrlParser.airModeHeatTem:
                                         airBtn.setText("空调模式，模式为：制热");
                                         ToastUtil("空调模式，模式为：制热");
+                                        Log.i("djl","空调模式，模式为：制热");
                                         break;
                                     case AirCtrlParser.airModeVen:
                                         airBtn.setText("空调模式，模式为：通风");
                                         ToastUtil("空调模式，模式为：通风");
+                                        Log.i("djl","空调模式，模式为：通风");
                                         break;
                                     case AirCtrlParser.airModeAuto:
                                         airBtn.setText("空调模式，模式为：自动");
                                         ToastUtil("空调模式，模式为：自动");
+                                        Log.i("djl","空调模式，模式为：自动");
                                         break;
                                     case AirCtrlParser.airModeDehum:
                                         airBtn.setText("空调模式，模式为：抽湿");
                                         ToastUtil("空调模式，模式为：抽湿");
+                                        Log.i("djl","空调模式，模式为：抽湿");
                                         break;
                                     default:
                                         break;
                                 }
                                 break;
-                            case AirCtrlParser.dehumTem:
-                                airBtn.setText("空调抽湿，抽湿温度为"+(curState[1]& 0xFF));
-                                ToastUtil("空调抽湿，抽湿温度为"+(curState[1]& 0xFF));
-                                break;
                             case AirCtrlParser.heatTem:
                                 airBtn.setText("空调制热，制热温度为"+(curState[1]& 0xFF));
                                 ToastUtil("空调制热，制热温度为"+(curState[1]& 0xFF));
+                                Log.i("djl","空调制热，制热温度为"+(curState[1]& 0xFF));
                                 break;
                             case AirCtrlParser.autoTem:
                                 airBtn.setText("空调自动，自动温度为"+(curState[1]& 0xFF));
                                 ToastUtil("空调自动，自动温度为"+(curState[1]& 0xFF));
+                                Log.i("djl","空调自动，自动温度为"+(curState[1]& 0xFF));
+                                break;
+                            case AirCtrlParser.dehumTem:
+                                airBtn.setText("空调抽湿，抽湿温度为"+(curState[1]& 0xFF));
+                                ToastUtil("空调抽湿，抽湿温度为"+(curState[1]& 0xFF));
+                                Log.i("djl","空调抽湿，抽湿温度为"+(curState[1]& 0xFF));
                                 break;
                             case AirCtrlParser.upTem:
                                 airBtn.setText("空调调温，上升温度："+(curState[1]& 0xFF));
                                 ToastUtil("空调调温，上升温度："+(curState[1]& 0xFF));
+                                Log.i("djl","空调调温，上升温度："+(curState[1]& 0xFF));
                                 break;
                             case AirCtrlParser.downTem:
                                 airBtn.setText("空调调温，下降温度："+(curState[1]& 0xFF));
                                 ToastUtil("空调调温，下降温度："+(curState[1]& 0xFF));
+                                Log.i("djl","空调调温，下降温度："+(curState[1]& 0xFF));
                                 break;
                         }
                     }
                     break;
             }
         }
-
-
     }
 
 

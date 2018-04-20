@@ -38,7 +38,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="需要调试RCU酒店模块才使用以下功能，否则直接点击以上两个按钮测试功能即可"
-            android:visibility="gone"
             />
         <EditText
             android:id="@+id/sdkEdt"
