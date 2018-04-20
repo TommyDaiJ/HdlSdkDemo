@@ -123,7 +123,7 @@ HDLDeviceManager.init(Context context);
 
 ### 3：搜索设备
 
-3.1 HDL SDK提供搜索设备的api，等待5秒后返回设备信息。
+3.1 HDL SDK提供搜索设备的api，稍等数秒返回设备信息。
 
 3.2 调用`HDLCommand.HDLdevicesSearch();`获取HDL设备数据
 
@@ -175,8 +175,7 @@ HDLDeviceManager.init(Context context);
 ### 4：获取设备信息
 在搜索中获取到信息为设备信息，在demo中的ApplianceActivity显示设备信息。设备信息列表显示的是此设备所有回路设备。 如果需要确定哪个设备哪个回路，则可通过子网id和设备id，大类，小类，回路号，共同确定唯一性，若有此需求请联系开发人员。
 
-4.1 ApplianceActivity中必须初始化EventBus（具体请查看demo），调用
-`HDLCommand.getAppliancesRemarks(AppliancesActivity.this, appliancesInfos);`获取到的每个回路的备注。
+4.1 ApplianceActivity中必须初始化EventBus（具体请查看demo）
 
 4.2 接收备注回调，调用EventBus的返回
 
