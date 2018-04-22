@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hdl.libr.hdl_lib.HDLAppliances.Config.HDLApConfig;
 import com.hdl.libr.hdl_lib.HDLAppliances.HDLAirCondition.Parser.AirCtrlParser;
 import com.hdl.libr.hdl_lib.HDLAppliances.HDLCurtain.Parser.CurtainCtrlParser;
 import com.hdl.libr.hdl_lib.HDLCommand;
@@ -65,18 +66,18 @@ public class CtrlActivity extends AppCompatActivity {
         // 9：通用空调面板(空调) 10：背景音乐模块（音乐） 11：第三方背景音乐模块（音乐）
         // 12：逻辑模块（场景） 13：全局逻辑模块（场景）
 
-        //1、2、3、4 为灯
-        //5、6、7 为窗帘
-        //8、9 为空调
-        //10、11 为音乐
-        //12、13 为场景
+        //1、2、3、4 为灯 TYPE_LIGHT_DIMMER、TYPE_LIGHT_RELAY、TYPE_LIGHT_MIX_DIMMER、TYPE_LIGHT_MIX_RELAY
+        //5、6、7 为窗帘 TYPE_CURTAIN_GLYSTRO、TYPE_CURTAIN_ROLLER、TYPE_CURTAIN_MODULE
+        //8、9 为空调 TYPE_AC_HVAC、TYPE_AC_PANEL
+        //10、11 为音乐 TYPE_MUSIC_MODULE、TYPE_MUSIC_THIRD_PARTY_MODULE
+        //12、13 为场景 TYPE_LOGIC_MODULE、TYPE_GLOBAL_LOGIC_MODULE
 
 
         switch (appliancesInfo.getDeviceType()){
-            case 1:
-            case 2:
-            case 3:
-            case 4:
+            case HDLApConfig.TYPE_LIGHT_DIMMER:
+            case HDLApConfig.TYPE_LIGHT_RELAY:
+            case HDLApConfig.TYPE_LIGHT_MIX_DIMMER:
+            case HDLApConfig.TYPE_LIGHT_MIX_RELAY:
                 curtainBtn.setVisibility(View.GONE);
                 curtainBtn2.setVisibility(View.GONE);
                 curtainBtn3.setVisibility(View.GONE);
@@ -90,9 +91,9 @@ public class CtrlActivity extends AppCompatActivity {
                 airText.setVisibility(View.GONE);
                 logicText.setVisibility(View.GONE);
                 break;
-            case 5:
-            case 6:
-            case 7:
+            case HDLApConfig.TYPE_CURTAIN_GLYSTRO:
+            case HDLApConfig.TYPE_CURTAIN_ROLLER:
+            case HDLApConfig.TYPE_CURTAIN_MODULE:
                 lightBtn.setVisibility(View.GONE);
                 logicBtn.setVisibility(View.GONE);
                 airBtn.setVisibility(View.GONE);
@@ -113,8 +114,8 @@ public class CtrlActivity extends AppCompatActivity {
                     curtainBtn.setVisibility(View.GONE);
                 }
                 break;
-            case 8:
-            case 9:
+            case HDLApConfig.TYPE_AC_HVAC:
+            case HDLApConfig.TYPE_AC_PANEL:
                 lightBtn.setVisibility(View.GONE);
                 curtainBtn.setVisibility(View.GONE);
                 curtainBtn2.setVisibility(View.GONE);
@@ -128,8 +129,8 @@ public class CtrlActivity extends AppCompatActivity {
                 lightText.setVisibility(View.GONE);
                 logicText.setVisibility(View.GONE);
                 break;
-            case 12:
-            case 13:
+            case HDLApConfig.TYPE_LOGIC_MODULE:
+            case HDLApConfig.TYPE_GLOBAL_LOGIC_MODULE:
                 lightBtn.setVisibility(View.GONE);
                 curtainBtn.setVisibility(View.GONE);
                 curtainBtn2.setVisibility(View.GONE);
@@ -266,7 +267,7 @@ public class CtrlActivity extends AppCompatActivity {
     public void onCurtainFeedBackInfoEventMain(CurtainFeedBackEvent event){
         if(event.getCurtainCtrlBackInfo().getAppliancesInfo().getDeviceSubnetID() == appliancesInfo.getDeviceSubnetID()
                 && event.getCurtainCtrlBackInfo().getAppliancesInfo().getDeviceDeviceID() == appliancesInfo.getDeviceDeviceID()
-//                && event.getCurtainCtrlBackInfo().getNum() == appliancesInfo.getChannelNum()
+                && event.getCurtainCtrlBackInfo().getNum() == appliancesInfo.getChannelNum()
                 ){
 
             int curState = event.getCurtainCtrlBackInfo().getState();
@@ -279,18 +280,18 @@ public class CtrlActivity extends AppCompatActivity {
             int num = event.getCurtainCtrlBackInfo().getNum();
 //            ToastUtil(parentRemarks+" 的 "+remarks+" 回路号："+num+" 返回"+" 状态为："+curState);
             Log.i("djl",parentRemarks+" 的 "+remarks+" 回路号："+num+" 返回"+" 状态为："+curState);
-            if(event.getCurtainCtrlBackInfo().getAppliancesInfo().getDeviceType() == 7){
+            if(event.getCurtainCtrlBackInfo().getAppliancesInfo().getDeviceType() == HDLApConfig.TYPE_CURTAIN_MODULE){
                 //判断是否为窗帘模块
                 switch (curState){
-                    case 2:
+                    case CurtainCtrlParser.TYPE_STATE_CLOSE:
                         curtainBtn.setText("窗帘关");
                         Log.i("djl","窗帘控制 ：窗帘关"+"  回路号："+num);
                         break;
-                    case 1:
+                    case CurtainCtrlParser.TYPE_STATE_OPEN:
                         curtainBtn.setText("窗帘开");
                         Log.i("djl","窗帘控制 ：窗帘开"+"  回路号："+num);
                         break;
-                    case 0:
+                    case CurtainCtrlParser.TYPE_STATE_PAUSE:
                         curtainBtn.setText("窗帘暂停");
                         Log.i("djl","窗帘控制 ：窗帘暂停"+"  回路号："+num);
                         break;
@@ -429,24 +430,24 @@ public class CtrlActivity extends AppCompatActivity {
                 ){
             //这个返回的信息是当前状态的
             switch (event.getAppliancesInfo().getDeviceType()){
-                case 1:
-                case 2:
-                case 3:
-                case 4:
+                case HDLApConfig.TYPE_LIGHT_DIMMER:
+                case HDLApConfig.TYPE_LIGHT_RELAY:
+                case HDLApConfig.TYPE_LIGHT_MIX_DIMMER:
+                case HDLApConfig.TYPE_LIGHT_MIX_RELAY:
                     if(appliancesInfo.getChannelNum()==event.getAppliancesInfo().getChannelNum()){
                         lightBtn.setText("亮度 = "+event.getAppliancesInfo().getCurState());
                     }
                     break;
-                case 5:
-                case 6:
-                case 7:
+                case HDLApConfig.TYPE_CURTAIN_GLYSTRO:
+                case HDLApConfig.TYPE_CURTAIN_ROLLER:
+                case HDLApConfig.TYPE_CURTAIN_MODULE:
                     if(appliancesInfo.getChannelNum()==event.getAppliancesInfo().getChannelNum()){
 
                         //窗帘模块：curState:0=停止,1=打开,2=关闭。
                         //开合帘电机，卷帘电机：curState:1-100开合度。
                         int curState = (int)event.getAppliancesInfo().getCurState();
 
-                        if(event.getAppliancesInfo().getDeviceType()==7){//判断是否为窗帘模块,否则为开合帘或卷帘电机
+                        if(event.getAppliancesInfo().getDeviceType()== HDLApConfig.TYPE_CURTAIN_MODULE){//判断是否为窗帘模块,否则为开合帘或卷帘电机
                             switch (curState){
                                 case CurtainCtrlParser.curtainOff:
                                     curtainBtn.setText("窗帘关");
@@ -466,8 +467,8 @@ public class CtrlActivity extends AppCompatActivity {
                         }
                     }
                     break;
-                case 8:
-                case 9:
+                case HDLApConfig.TYPE_AC_HVAC:
+                case HDLApConfig.TYPE_AC_PANEL:
                     if(appliancesInfo.getChannelNum()==event.getAppliancesInfo().getChannelNum()){
                         byte[] curState = event.getAppliancesInfo().getArrCurState();
                         switch (curState[0]& 0xFF){
