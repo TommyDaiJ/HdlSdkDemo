@@ -61,8 +61,10 @@ public class MainActivity extends AppCompatActivity {
         sdkEdt = (EditText) findViewById(R.id.sdkEdt);
         rcuEdt = (EditText) findViewById(R.id.rcuEdt);
 
-//        getDevices.setVisibility(View.GONE);
-//        getScenes.setVisibility(View.GONE);
+        sdkEdt.setVisibility(View.GONE);//编辑框为RCU酒店模块所用，家居使用无效。此处隐藏
+        rcuEdt.setVisibility(View.GONE);//编辑框为RCU酒店模块所用，家居使用无效。此处隐藏
+        testRCU.setVisibility(View.GONE);//编辑框为RCU酒店模块所用，家居使用无效。此处隐藏
+
 
         adapter=new ArrayAdapter<String>(MainActivity.this,android.R.layout.simple_list_item_1,listString);
         ListView listView=(ListView)findViewById(R.id.listView1);

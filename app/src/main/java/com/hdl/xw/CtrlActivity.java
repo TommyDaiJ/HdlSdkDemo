@@ -17,6 +17,7 @@ import com.hdl.libr.hdl_lib.HDLDeviceManager.EventBusEvent.AirFeedBackEvent;
 import com.hdl.libr.hdl_lib.HDLDeviceManager.EventBusEvent.CurtainFeedBackEvent;
 import com.hdl.libr.hdl_lib.HDLDeviceManager.EventBusEvent.DeviceStateEvent;
 import com.hdl.libr.hdl_lib.HDLDeviceManager.EventBusEvent.LightFeedBackEvent;
+import com.hdl.libr.hdl_lib.HDLDeviceManager.EventBusEvent.LogicFeedBackEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -62,8 +63,9 @@ public class CtrlActivity extends AppCompatActivity {
 
         //此处判断什么设备，并将其他设备控件隐藏
         //1：调光回路（灯） 2：开关回路（灯） 3：混合调光类 （灯） 4：混合开关类（灯）
-        // 5：开合帘电机（窗帘）6：卷帘电机（窗帘） 7：窗帘模块 （窗帘）8：HVAC 模块(空调)
-        // 9：通用空调面板(空调) 10：背景音乐模块（音乐） 11：第三方背景音乐模块（音乐）
+        // 5：开合帘电机（窗帘）6：卷帘电机（窗帘） 7：窗帘模块 （窗帘）
+        // 8：HVAC 模块(空调) 9：通用空调面板(空调)
+        // 10：背景音乐模块（音乐） 11：第三方背景音乐模块（音乐）
         // 12：逻辑模块（场景） 13：全局逻辑模块（场景）
 
         //1、2、3、4 为灯 TYPE_LIGHT_DIMMER、TYPE_LIGHT_RELAY、TYPE_LIGHT_MIX_DIMMER、TYPE_LIGHT_MIX_RELAY
@@ -251,6 +253,13 @@ public class CtrlActivity extends AppCompatActivity {
                 && event.getLightCtrlBackInfo().getAppliancesInfo().getDeviceSubnetID() == appliancesInfo.getDeviceSubnetID()
                 && event.getLightCtrlBackInfo().getChannelNum() == appliancesInfo.getChannelNum()
                 ){
+            //        先判断是否超时
+            if(!event.isSuccess()){
+                ToastUtil("灯光控制超时，请重新再试");
+                lightBtn.setText("灯光控制超时，请重新再试");
+                return;
+            }
+
             int brightness = event.getLightCtrlBackInfo().getBrightness();
             lightState = brightness==100? 0:100;//如果返回100重置状态为0，反之重置状态100
             lightBtn.setText("当前亮度 = "+brightness);
@@ -265,10 +274,16 @@ public class CtrlActivity extends AppCompatActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onCurtainFeedBackInfoEventMain(CurtainFeedBackEvent event){
+//        先判断是否超时
+
         if(event.getCurtainCtrlBackInfo().getAppliancesInfo().getDeviceSubnetID() == appliancesInfo.getDeviceSubnetID()
                 && event.getCurtainCtrlBackInfo().getAppliancesInfo().getDeviceDeviceID() == appliancesInfo.getDeviceDeviceID()
                 && event.getCurtainCtrlBackInfo().getNum() == appliancesInfo.getChannelNum()
                 ){
+            if(!event.isSuccess()){
+                ToastUtil("窗帘控制超时，请重新再试");
+                return;
+            }
 
             int curState = event.getCurtainCtrlBackInfo().getState();
             //窗帘模块：curState:0=停止,1=打开,2=关闭。
@@ -307,10 +322,17 @@ public class CtrlActivity extends AppCompatActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onAirFeedBackInfoEventMain(AirFeedBackEvent event){
+
         if(event.getAirCtrlBackInfo().getAppliancesInfo().getDeviceDeviceID() == appliancesInfo.getDeviceDeviceID()
                 && event.getAirCtrlBackInfo().getAppliancesInfo().getDeviceSubnetID() == appliancesInfo.getDeviceSubnetID()
                 && event.getAirCtrlBackInfo().getAppliancesInfo().getChannelNum() == appliancesInfo.getChannelNum()
                 ){
+            //        先判断是否超时
+            if(!event.isSuccess()){
+                ToastUtil("空调控制超时，请重新再试");
+                return;
+            }
+
             byte[] curState = event.getAirCtrlBackInfo().getCurState();
             switch (curState[0]& 0xFF){
                 case AirCtrlParser.airSwich:
@@ -419,8 +441,22 @@ public class CtrlActivity extends AppCompatActivity {
                     break;
             }
         }
+    }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onLogicFeedBackInfoEventMain(LogicFeedBackEvent event){
+//        先判断是否超时
 
+        if(event.getLogicCtrlBackInfo().getAppliancesInfo().getDeviceDeviceID() == appliancesInfo.getDeviceDeviceID()
+                && event.getLogicCtrlBackInfo().getAppliancesInfo().getDeviceSubnetID() == appliancesInfo.getDeviceSubnetID()
+                && event.getLogicCtrlBackInfo().getAppliancesInfo().getChannelNum() == appliancesInfo.getChannelNum()
+                ){
+            if(!event.isSuccess()){
+                ToastUtil("场景控制超时，请重新再试");
+                return;
+            }
+            ToastUtil("场景控制成功");
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -435,6 +471,10 @@ public class CtrlActivity extends AppCompatActivity {
                 case HDLApConfig.TYPE_LIGHT_MIX_DIMMER:
                 case HDLApConfig.TYPE_LIGHT_MIX_RELAY:
                     if(appliancesInfo.getChannelNum()==event.getAppliancesInfo().getChannelNum()){
+                        if(!event.isSuccess()){
+                            ToastUtil("获取灯光状态失败，请重新再试");
+                            return;
+                        }
                         lightBtn.setText("亮度 = "+event.getAppliancesInfo().getCurState());
                     }
                     break;
@@ -442,7 +482,10 @@ public class CtrlActivity extends AppCompatActivity {
                 case HDLApConfig.TYPE_CURTAIN_ROLLER:
                 case HDLApConfig.TYPE_CURTAIN_MODULE:
                     if(appliancesInfo.getChannelNum()==event.getAppliancesInfo().getChannelNum()){
-
+                        if(!event.isSuccess()){
+                            ToastUtil("获取窗帘状态失败，请重新再试");
+                            return;
+                        }
                         //窗帘模块：curState:0=停止,1=打开,2=关闭。
                         //开合帘电机，卷帘电机：curState:1-100开合度。
                         int curState = (int)event.getAppliancesInfo().getCurState();
@@ -470,6 +513,11 @@ public class CtrlActivity extends AppCompatActivity {
                 case HDLApConfig.TYPE_AC_HVAC:
                 case HDLApConfig.TYPE_AC_PANEL:
                     if(appliancesInfo.getChannelNum()==event.getAppliancesInfo().getChannelNum()){
+                        if(!event.isSuccess()){
+                            ToastUtil("获取空调状态失败，请重新再试");
+                            return;
+                        }
+
                         byte[] curState = event.getAppliancesInfo().getArrCurState();
                         switch (curState[0]& 0xFF){
                             case AirCtrlParser.airSwich:
