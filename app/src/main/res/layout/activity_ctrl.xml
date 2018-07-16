@@ -5,69 +5,70 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.hdl.xw.CtrlActivity">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
+
         <TextView
             android:id="@+id/lightText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="这个按钮做灯光的演示"
-            />
+            android:text="这个按钮做灯光的演示" />
+
         <Button
             android:id="@+id/ctrlbtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="关灯"
-            />
+            android:text="关灯" />
+
         <TextView
             android:id="@+id/curtainText1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="这个按钮做窗帘模块的演示"
-            />
+            android:text="这个按钮做窗帘模块的演示" />
+
         <Button
             android:id="@+id/curtainbtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="窗帘已关"
-            />
+            android:text="窗帘已关" />
+
         <TextView
             android:id="@+id/curtainText2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="这个按钮做窗帘电机的演示。开合帘电机，卷帘电机类似"
-            />
+            android:text="这个按钮做窗帘电机的演示。开合帘电机，卷帘电机类似" />
+
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
             <Button
                 android:id="@+id/curtainbtn2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="窗帘开"
-                />
+                android:text="窗帘开" />
+
             <Button
                 android:id="@+id/curtainbtn3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="窗帘关"
-                />
+                android:text="窗帘关" />
+
             <Button
                 android:id="@+id/curtainbtn4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="窗帘停"
-                />
+                android:text="窗帘停" />
+
             <Button
                 android:id="@+id/curtainbtn5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="窗帘开到50%"
-                />
+                android:text="窗帘开到50%" />
 
         </LinearLayout>
 
@@ -75,27 +76,25 @@
             android:id="@+id/airText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="这个按钮做空调面板的演示"
-            />
+            android:text="这个按钮做空调面板的演示" />
+
         <Button
             android:id="@+id/airbtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="空调面板"
-            />
+            android:text="空调面板" />
+
         <TextView
             android:id="@+id/logicText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="这个按钮做逻辑模块的演示"
-            />
+            android:text="这个按钮做逻辑模块的演示" />
+
         <Button
             android:id="@+id/logicbtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="逻辑模块"
-            />
+            android:text="逻辑模块" />
     </LinearLayout>
-
 </RelativeLayout>
 
