@@ -21,7 +21,7 @@
 ```
 
 dependencies {
-    compile 'com.hdl.lib:hdllib:1.5.2.2'
+    compile(name:'hdl_lib_v1.5.4', ext:'aar')
 }
 
 ```
@@ -75,9 +75,9 @@ HDLDeviceManager.init(Context context);
 
 3.1 HDL SDK提供搜索设备的api，稍等数秒返回设备信息。
 
-3.2 调用`HDLCommand.HDLdevicesSearch();`获取HDL设备数据
+3.2 调用`HDLCommand.getHomeDevices();`获取HDL家居设备数据
 
-3.3 调用`HDLCommand.HDLscenesSearch();`获取HDL场景数据
+3.3 调用`HDLCommand.getRcuDevices();`获取HDL酒店设备数据
 
 3.3 必须在此activity中实现EventBus的方法，（具体请查看demo）搜索返回：
 
@@ -164,9 +164,9 @@ appliancesInfo.getDeviceType()
 
 ```
 
-### 5 获取相关设备状态
+### 5 获取单一回路设备状态
 
-5.1调用`HDLCommand.HDLgetDeviceState(appliancesInfo);`参数为固定参数。即可获取相关设备对应回路的状态，必须要调用EventBus接收返回信息，具体请查看demo
+5.1调用`HDLCommand.HDLgetDeviceState(appliancesInfo);`参数为固定参数。即可获取相关设备对应回路的状态，必须要调用EventBus接收返回信息，具体请查看demo。一般情况下都不需要用到。在搜索回来的信息中，已可通过获取当前信息的方法获取每一回路的状态，具体请见Demo
 
 ### 6 控制设备
 
