@@ -5,63 +5,7 @@
    此SDK仅针对安卓平台进行集成，旨在集成HDL SDK后，可调用相关API，实现HDL设备的搜索、控制、获取当前状态等。在文档最后会提供demo示例，详情请查看demo。以下详细列出HDL SDK集成的相关信息：
    
    
-# 版本更新
-#### v1.5.3.1
-1:增加搜索、控制设备的超时判断，具体请查看demo,CtrlActivity使用。
 
-#### v1.5.2.17_beta
-1:修复窗帘返回百分比不准确bug
-
-#### v1.5.2.2
-1:修复多次控制灯光出现的崩溃。提供方法判断设备类型。详情查看demo CtrlActivity。
-
-#### v1.5.1
-1:SDK 集成了HDL RCU协议，第三无需改动目前的接口即可控制、接收RCU相关命令。
-
-#### v1.4.6
-1:增加背景音乐获取列表api。
-
-#### v1.4.5
-1:增加判断背景音乐回复数据是否为当前所需数据，修复因此导致当前列表歌曲数获取有误Bug
-
-#### v1.4.4
-1:修复由于音乐备注没有返回，导致SDK不回复数据
-
-#### v1.4.3
-1:舍弃HDLCommand.getAppliancesRemarks(AppliancesInfo appliancesInfos)获取备注api。设备备注SDK自行获取，第三方只需读取即可。v1.4.1版本Demo已不再使用此api,此版本将去除此api。
-
-2：优化搜索机制，修复在设备模块多的情况下可能搜不完全的Bug。
-
-#### v1.4.2
-1:舍弃所有api都需要Context参数，仅保留HDLDeviceManager.init(Context context);具体可查看Demo
-
-2：音乐协议相关api名称修改：舍弃音乐协议多api并存，修改为统一使用HDLaudioCtrl(AppliancesInfo info,int type)、HDLaudioCtrl(AppliancesInfo info,int type,int value)、HDLaudioCtrl(AppliancesInfo info,int type,int value1,int value2)。增加获取下一列表、上一列表api。具体使用查看第8点或查看Demo。
-
-3：基础设备协议api名称修改：HDLCommand.lightCtrl、HDLCommand.curtainCtrl、HDLCommand.airCtrl、HDLCommand.logicCtrl 修改为：HDLCommand.HDLlightCtrl、HDLCommand.HDLcurtainCtrl、HDLCommand.HDLairCtrl、 HDLCommand.HDLlogicCtrl；
-
-#### v1.4.1
-1:更新api相关名称：CommandData更改为HDLCommand，DeviceManager更改为HDLDeviceManager。由于包名的更改，将会导致已集成旧版的项目导包报错，建议直接复制demo导包内容，以及相应修改CommandData、DeviceManager为HDLCommand、HDLDeviceManager。
-
-2:增加音乐协议。功能包括：搜索音乐列表、点播、上一首、下一首、播放/暂停、播放/停止、音量设置、播放模式切换。
-
-
-#### v1.3.1
-1:修复调用搜索api后，立刻调用获取备注api某些情况获取失败Bug
-
-#### v1.3.0
-1: 增加HDL报警设备收发。可用EventBus或Broadcast接收。
-
-2: 搜索api修改为：调用搜索获取HDL设备数据、HDL场景数据api，5秒后回调EventBus数据。
-
-3: 去除备注乱码字符。
-
-4：修复灯光设备备注某些网络获取不到的bug
-
-
-#### v1.2.14
-1：SDK的初始化不再包含EventBus的初始化，厂家根据自身情况在需要接收的界面初始化
-
-2：废弃`HDLCommand.devicesSearch(Conetext context);`搜索api，增加区分HDL设备和HDL场景api。`HDLCommand.HDLdevicesSearch(Context context);`和`HDLCommand.HDLscenesSearch(Context context);`
 
 #  How do I use it?
 
@@ -77,7 +21,7 @@
 ```
 
 dependencies {
-    compile 'com.hdl.lib:hdllib:1.5.2.2'
+    compile(name:'hdl_lib_v1.5.4', ext:'aar')
 }
 
 ```
@@ -131,9 +75,9 @@ HDLDeviceManager.init(Context context);
 
 3.1 HDL SDK提供搜索设备的api，稍等数秒返回设备信息。
 
-3.2 调用`HDLCommand.HDLdevicesSearch();`获取HDL设备数据
+3.2 调用`HDLCommand.getHomeDevices();`获取HDL家居设备数据
 
-3.3 调用`HDLCommand.HDLscenesSearch();`获取HDL场景数据
+3.3 调用`HDLCommand.getRcuDevices();`获取HDL酒店设备数据
 
 3.3 必须在此activity中实现EventBus的方法，（具体请查看demo）搜索返回：
 
@@ -220,9 +164,9 @@ appliancesInfo.getDeviceType()
 
 ```
 
-### 5 获取相关设备状态
+### 5 获取单一回路设备状态
 
-5.1调用`HDLCommand.HDLgetDeviceState(appliancesInfo);`参数为固定参数。即可获取相关设备对应回路的状态，必须要调用EventBus接收返回信息，具体请查看demo
+5.1调用`HDLCommand.HDLgetDeviceState(appliancesInfo);`参数为固定参数。即可获取相关设备对应回路的状态，必须要调用EventBus接收返回信息，具体请查看demo。一般情况下都不需要用到。在搜索回来的信息中，已可通过获取当前信息的方法获取每一回路的状态，具体请见Demo
 
 ### 6 控制设备
 
@@ -655,7 +599,66 @@ OnManager.getOnDevicesData("Your Ip Address");
         }
    	 }
 
+# 版本更新
+#### v1.5.4
+1:更新 v1.5.4 修复备注不回复,SDK会重复获取的bug。
+2:调整控制失败逻辑
 
+#### v1.5.3.1
+1:增加搜索、控制设备的超时判断，具体请查看demo,CtrlActivity使用。
+
+#### v1.5.2.17_beta
+1:修复窗帘返回百分比不准确bug
+
+#### v1.5.2.2
+1:修复多次控制灯光出现的崩溃。提供方法判断设备类型。详情查看demo CtrlActivity。
+
+#### v1.5.1
+1:SDK 集成了HDL RCU协议，第三无需改动目前的接口即可控制、接收RCU相关命令。
+
+#### v1.4.6
+1:增加背景音乐获取列表api。
+
+#### v1.4.5
+1:增加判断背景音乐回复数据是否为当前所需数据，修复因此导致当前列表歌曲数获取有误Bug
+
+#### v1.4.4
+1:修复由于音乐备注没有返回，导致SDK不回复数据
+
+#### v1.4.3
+1:舍弃HDLCommand.getAppliancesRemarks(AppliancesInfo appliancesInfos)获取备注api。设备备注SDK自行获取，第三方只需读取即可。v1.4.1版本Demo已不再使用此api,此版本将去除此api。
+
+2：优化搜索机制，修复在设备模块多的情况下可能搜不完全的Bug。
+
+#### v1.4.2
+1:舍弃所有api都需要Context参数，仅保留HDLDeviceManager.init(Context context);具体可查看Demo
+
+2：音乐协议相关api名称修改：舍弃音乐协议多api并存，修改为统一使用HDLaudioCtrl(AppliancesInfo info,int type)、HDLaudioCtrl(AppliancesInfo info,int type,int value)、HDLaudioCtrl(AppliancesInfo info,int type,int value1,int value2)。增加获取下一列表、上一列表api。具体使用查看第8点或查看Demo。
+
+
+#### v1.4.1
+1:更新api相关名称：CommandData更改为HDLCommand，DeviceManager更改为HDLDeviceManager。由于包名的更改，将会导致已集成旧版的项目导包报错，建议直接复制demo导包内容，以及相应修改CommandData、DeviceManager为HDLCommand、HDLDeviceManager。
+
+2:增加音乐协议。功能包括：搜索音乐列表、点播、上一首、下一首、播放/暂停、播放/停止、音量设置、播放模式切换。
+
+
+#### v1.3.1
+1:修复调用搜索api后，立刻调用获取备注api某些情况获取失败Bug
+
+#### v1.3.0
+1: 增加HDL报警设备收发。可用EventBus或Broadcast接收。
+
+2: 搜索api修改为：调用搜索获取HDL设备数据、HDL场景数据api，5秒后回调EventBus数据。
+
+3: 去除备注乱码字符。
+
+4：修复灯光设备备注某些网络获取不到的bug
+
+
+#### v1.2.14
+1：SDK的初始化不再包含EventBus的初始化，厂家根据自身情况在需要接收的界面初始化
+
+2：废弃`HDLCommand.devicesSearch(Conetext context);`搜索api，增加区分HDL设备和HDL场景api。`HDLCommand.HDLdevicesSearch(Context context);`和`HDLCommand.HDLscenesSearch(Context context);`
 
 
     
