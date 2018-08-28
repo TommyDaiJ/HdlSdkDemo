@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (isIP(editText.getText().toString().trim())) {
-                    HDLCommand.getRcuDevices(editText.getText().toString().trim());
+                    HDLCommand.getRcuDevices(MainActivity.this,editText.getText().toString().trim());
                     proDia.show();
                 } else {
                     Toast.makeText(MainActivity.this, "请输入正确格式Ip地址", Toast.LENGTH_SHORT).show();
