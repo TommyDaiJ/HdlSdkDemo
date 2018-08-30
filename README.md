@@ -21,7 +21,7 @@
 ```
 
 dependencies {
-    compile(name:'hdl_lib_v1.5.6', ext:'aar')
+    compile(name:'hdl_lib_v1.5.7', ext:'aar')
 }
 
 ```
@@ -75,7 +75,7 @@ HDLDeviceManager.init(Context context);
 
 3.1 HDL SDK提供搜索设备的api，稍等数秒返回设备信息。
 
-3.2 调用`HDLCommand.getHomeDevices();`获取HDL家居设备数据
+3.2 调用`HDLCommand.getHomeDevices(Context context);`获取HDL家居设备数据
 
 3.3 调用`HDLCommand.getRcuDevices(Context context,String rcuIp);`获取HDL酒店设备数据
 
@@ -600,6 +600,10 @@ OnManager.getOnDevicesData("Your Ip Address");
    	 }
 
 # 版本更新
+#### v1.5.7
+1:解决获取备注有可能引起Crash。
+2:整理家居、酒店转换ip地址的问题。
+
 #### v1.5.4
 1:更新 v1.5.4 修复备注不回复,SDK会重复获取的bug。
 2:调整控制失败逻辑
