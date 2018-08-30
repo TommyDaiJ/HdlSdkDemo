@@ -21,7 +21,7 @@
 ```
 
 dependencies {
-    compile(name:'hdl_lib_v1.5.5', ext:'aar')
+    compile(name:'hdl_lib_v1.5.6', ext:'aar')
 }
 
 ```
@@ -77,7 +77,7 @@ HDLDeviceManager.init(Context context);
 
 3.2 调用`HDLCommand.getHomeDevices();`获取HDL家居设备数据
 
-3.3 调用`HDLCommand.getRcuDevices();`获取HDL酒店设备数据
+3.3 调用`HDLCommand.getRcuDevices(Context context,String rcuIp);`获取HDL酒店设备数据
 
 3.3 必须在此activity中实现EventBus的方法，（具体请查看demo）搜索返回：
 
