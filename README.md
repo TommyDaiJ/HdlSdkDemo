@@ -19,7 +19,7 @@
 1.2 支持Android Studio IDE集成。
 
 ```
-
+ 
 dependencies {
     compile(name:'hdl_lib_v1.5.8.20180905_beta', ext:'aar')
 }
