@@ -21,7 +21,7 @@
 ```
 
 dependencies {
-    compile(name:'hdl_lib_v1.5.6', ext:'aar')
+    compile(name:'hdl_lib_v1.5.8.20180905_beta', ext:'aar')
 }
 
 ```
@@ -600,6 +600,12 @@ OnManager.getOnDevicesData("Your Ip Address");
    	 }
 
 # 版本更新
+#### v1.5.8.20180905_beta
+beta版本非稳定版本
+1：修复酒店空调无法控制
+2：修复SDK切换家居、酒店导致备注获取失败的bug
+3：修复酒店窗帘控制不稳定。
+
 #### v1.5.4
 1:更新 v1.5.4 修复备注不回复,SDK会重复获取的bug。
 2:调整控制失败逻辑

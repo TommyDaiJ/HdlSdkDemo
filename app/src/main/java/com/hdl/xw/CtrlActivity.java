@@ -101,10 +101,10 @@ public class CtrlActivity extends AppCompatActivity {
         airBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HDLCommand.airCtrl(appliancesInfo, AirCtrlParser.airSwich, airState);//空调面板开
+//                HDLCommand.airCtrl(appliancesInfo, AirCtrlParser.airSwich, airState);//空调面板开
 //                HDLCommand.airCtrl(appliancesInfo,AirCtrlParser.airSwich,AirCtrlParser.airOff);//空调面板关
 //                HDLCommand.airCtrl(appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedAuto);//风速自动
-//                HDLCommand.airCtrl(appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedHigh);//风速高风
+                HDLCommand.airCtrl(appliancesInfo, AirCtrlParser.airSpeed, AirCtrlParser.airSpeedHigh);//风速高风
 //                HDLCommand.airCtrl(appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedMid);//风速中风
 //                HDLCommand.airCtrl(appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedLow);//风速低风
 //                HDLCommand.airCtrl(appliancesInfo,AirCtrlParser.airMode,AirCtrlParser.airModeRefTem);//空调模式制冷
@@ -119,6 +119,8 @@ public class CtrlActivity extends AppCompatActivity {
 //                HDLCommand.airCtrl(appliancesInfo,AirCtrlParser.upTem,1);//上升温度 范围0-5
 //                HDLCommand.airCtrl(appliancesInfo,AirCtrlParser.downTem,1);//下降温度 范围0-5
 
+
+//                这里仅作为演示，将开关反重置
                 if (airState == AirCtrlParser.airOn) {
                     airState = AirCtrlParser.airOff;
                 } else {
@@ -182,14 +184,16 @@ public class CtrlActivity extends AppCompatActivity {
                 airText.setVisibility(View.GONE);
                 logicText.setVisibility(View.GONE);
 
-                //必须判断非空，且要考虑两种情况的显示
-                if (appliancesInfo.getCurState() != null) {
-                    lightText.setText("当前灯光亮度：" + appliancesInfo.getCurState());
+                //这里Demo示例获取单一回路的状态。
+                int curLightState = HDLCommand.getLightState(appliancesInfo);
+
+                lightText.setText("当前灯光亮度：" + curLightState);
+                lightBtn.setText("当前灯光亮度：" + curLightState);
+                if (curLightState == 100) {
+                    lightState = 0;
                 } else {
-                    lightText.setText("获取当前灯光亮度失败");
+                    lightState = 100;
                 }
-
-
                 break;
             case HDLApConfig.TYPE_CURTAIN_GLYSTRO:
             case HDLApConfig.TYPE_CURTAIN_ROLLER:
@@ -208,34 +212,37 @@ public class CtrlActivity extends AppCompatActivity {
                     curtainBtn3.setVisibility(View.GONE);
                     curtainBtn4.setVisibility(View.GONE);
                     curtainBtn5.setVisibility(View.GONE);
-                    String curtainState = "";
-                    //必须判断非空，且要考虑两种情况的显示
-                    if (appliancesInfo.getCurState() != null) {
-                        switch ((int) appliancesInfo.getCurState()) {
-                            case 0:
-                                curtainState += "窗帘模块停止状态";
-                                break;
-                            case 1:
-                                curtainState += "窗帘模块开状态";
-                                break;
-                            case 2:
-                                curtainState += "窗帘模块关状态";
-                                break;
-                            default:
-                                break;
-                        }
-                        curText1.setText(curtainState);
-                    } else {
-                        curText1.setText("窗帘状态获取失败");
-                        curtainBtn.setText("窗帘状态获取失败");
+                    String stringCurtainState = "";
+                    int curCurtainState = HDLCommand.getCurtainState(appliancesInfo);
+                    Log.i("djl", "curCurtainState = " + curCurtainState);
+                    switch (curCurtainState) {
+                        case 0:
+                            stringCurtainState += "窗帘模块停止状态";
+                            curtainState = CurtainCtrlParser.curtainOn;//初始化窗帘控制状态
+                            break;
+                        case 1:
+                            stringCurtainState += "窗帘模块开状态";
+                            curtainState = CurtainCtrlParser.curtainOff;//初始化窗帘控制状态
+                            break;
+                        case 2:
+                            stringCurtainState += "窗帘模块关状态";
+                            curtainState = CurtainCtrlParser.curtainOn;//初始化窗帘控制状态
+                            break;
+                        default:
+                            stringCurtainState = "未获取到窗帘模块状态";
+                            curtainState = CurtainCtrlParser.curtainOff;//初始化窗帘控制状态
+                            break;
                     }
-
+                    curText1.setText(stringCurtainState);
+                    curtainBtn.setText(stringCurtainState);
                 } else {
                     //开合帘、卷帘
                     curText1.setVisibility(View.GONE);
                     curtainBtn.setVisibility(View.GONE);
 
-                    curText2.setText("当前窗帘状态：" + appliancesInfo.getCurState());
+                    curText2.setText("当前窗帘状态：" + HDLCommand.getCurtainState(appliancesInfo));
+
+
                 }
                 break;
             case HDLApConfig.TYPE_AC_HVAC:
@@ -253,115 +260,111 @@ public class CtrlActivity extends AppCompatActivity {
                 lightText.setVisibility(View.GONE);
                 logicText.setVisibility(View.GONE);
 
-                String acState = "";
-                //必须判断非空，且要考虑两种情况的显示
-                if (appliancesInfo.getArrCurState() != null) {
-                    for (int index = 0; index < appliancesInfo.getArrCurState().length; index++) {
-                        if (index == 0 && appliancesInfo.getArrCurState()[index] == 0) {
-                            acState += "空调已关闭";
-                            //如果空调关闭状态，则无需再遍历
-                            break;
-                        }
-                        if (index == 0 && appliancesInfo.getArrCurState()[index] == 1) {
-                            acState += "空调正在运行";
-                        }
-
-                        switch (index) {
-
-                            case 1:
-                                switch (appliancesInfo.getArrCurState()[index]) {
-                                    case 0:
-                                        acState += " 空调模式:制冷";
-                                        break;
-                                    case 1:
-                                        acState += " 空调模式:制热";
-                                        break;
-                                    case 2:
-                                        acState += " 空调模式:通风";
-                                        break;
-                                    case 3:
-                                        acState += " 空调模式:自动";
-                                        break;
-                                    case 4:
-                                        acState += " 空调模式:抽湿";
-                                        break;
-                                    default:
-                                        acState += " 未知空调模式";
-                                        break;
-                                }
-                                break;
-                            case 2:
-                                switch (appliancesInfo.getArrCurState()[1]) {
-                                    case 0:
-                                        acState += " 制冷温度：" + appliancesInfo.getArrCurState()[index];
-                                        break;
-                                    case 1:
-                                        acState += " 制热温度：" + appliancesInfo.getArrCurState()[index];
-                                        break;
-                                    case 2:
-                                        acState += " 通风模式下，无温度显示";
-                                        break;
-                                    case 3:
-                                        acState += " 自动温度：" + appliancesInfo.getArrCurState()[index];
-                                        break;
-                                    case 4:
-                                        acState += " 抽湿温度：" + appliancesInfo.getArrCurState()[index];
-                                        break;
-                                    default:
-                                        acState += " 未知温度";
-                                        break;
-                                }
-                                break;
-                            case 3:
-                                String curSpeed;
-                                switch (appliancesInfo.getArrCurState()[index]) {
-                                    case 0:
-                                        curSpeed = " 风速自动";
-                                        break;
-                                    case 1:
-                                        curSpeed = " 风速高";
-                                        break;
-                                    case 2:
-                                        curSpeed = " 风速中";
-                                        break;
-                                    case 3:
-                                        curSpeed = " 风速低";
-                                        break;
-                                    default:
-                                        curSpeed = " 未知风速";
-                                        break;
-                                }
-                                switch (appliancesInfo.getArrCurState()[1]) {
-                                    case 0:
-                                        acState += curSpeed;
-                                        break;
-                                    case 1:
-                                        acState += curSpeed;
-                                        break;
-                                    case 2:
-                                        acState += curSpeed;
-                                        break;
-                                    case 3:
-                                        acState += curSpeed;
-                                        break;
-                                    case 4:
-                                        acState += " 抽湿无风速";
-                                        break;
-                                    default:
-                                        acState += " 未知空调模式";
-                                        break;
-                                }
-                                break;
-
-                            default:
-                                break;
-                        }
+                String stringACState = "";
+                byte[] acCurState = HDLCommand.getACState(appliancesInfo);
+                for (int index = 0; index < acCurState.length; index++) {
+                    if (index == 0 && acCurState[index] == 0) {
+                        stringACState += "空调已关闭";
+                        //如果空调关闭状态，则无需再遍历
+                        break;
+                    }
+                    if (index == 0 && acCurState[index] == 1) {
+                        stringACState += "空调正在运行";
                     }
 
-                    airText.setText(acState);
-                } else {
-                    airText.setText("空调状态获取失败");
+                    switch (index) {
+
+                        case 1:
+                            switch (acCurState[index]) {
+                                case 0:
+                                    stringACState += " 空调模式:制冷";
+                                    break;
+                                case 1:
+                                    stringACState += " 空调模式:制热";
+                                    break;
+                                case 2:
+                                    stringACState += " 空调模式:通风";
+                                    break;
+                                case 3:
+                                    stringACState += " 空调模式:自动";
+                                    break;
+                                case 4:
+                                    stringACState += " 空调模式:抽湿";
+                                    break;
+                                default:
+                                    stringACState += " 未知空调模式";
+                                    break;
+                            }
+                            break;
+                        case 2:
+                            switch (acCurState[1]) {
+                                case 0:
+                                    stringACState += " 制冷温度：" + acCurState[index];
+                                    break;
+                                case 1:
+                                    stringACState += " 制热温度：" + acCurState[index];
+                                    break;
+                                case 2:
+                                    stringACState += " 通风模式下，无温度显示";
+                                    break;
+                                case 3:
+                                    stringACState += " 自动温度：" + acCurState[index];
+                                    break;
+                                case 4:
+                                    stringACState += " 抽湿温度：" + acCurState[index];
+                                    break;
+                                default:
+                                    stringACState += " 未知温度";
+                                    break;
+                            }
+                            break;
+                        case 3:
+                            String curSpeed;
+                            switch (appliancesInfo.getArrCurState()[index]) {
+                                case 0:
+                                    curSpeed = " 风速自动";
+                                    break;
+                                case 1:
+                                    curSpeed = " 风速高";
+                                    break;
+                                case 2:
+                                    curSpeed = " 风速中";
+                                    break;
+                                case 3:
+                                    curSpeed = " 风速低";
+                                    break;
+                                default:
+                                    curSpeed = " 未知风速";
+                                    break;
+                            }
+                            switch (appliancesInfo.getArrCurState()[1]) {
+                                case 0:
+                                    stringACState += curSpeed;
+                                    break;
+                                case 1:
+                                    stringACState += curSpeed;
+                                    break;
+                                case 2:
+                                    stringACState += curSpeed;
+                                    break;
+                                case 3:
+                                    stringACState += curSpeed;
+                                    break;
+                                case 4:
+                                    stringACState += " 抽湿无风速";
+                                    break;
+                                default:
+                                    stringACState += " 未知空调模式";
+                                    break;
+                            }
+                            break;
+
+                        default:
+                            break;
+                    }
                 }
+
+                airText.setText(stringACState);
 
 
                 break;
@@ -384,7 +387,7 @@ public class CtrlActivity extends AppCompatActivity {
     }
 
     private void initcurState() {
-        lightState = 100;//初始化灯光亮度100
+//        lightState = 100;//初始化灯光亮度100
         curtainState = CurtainCtrlParser.curtainOff;
         airState = AirCtrlParser.airOn;//初始化空调开
 
@@ -414,6 +417,7 @@ public class CtrlActivity extends AppCompatActivity {
             int brightness = event.getLightCtrlBackInfo().getBrightness();
             lightState = brightness == 100 ? 0 : 100;//如果返回100重置状态为0，反之重置状态100
             lightBtn.setText("当前亮度 = " + brightness);
+            lightText.setText("当前亮度 = " + brightness);
         /*以下为灯光推送示例代码，可以识别哪个继电器，哪个调光灯，哪个回路，也可用作控制回馈。
         按需求调用*/
             String remarks = event.getLightCtrlBackInfo().getRemarks();//获取返回的灯光备注。如果每个灯光回路备注都唯一，可以直接通过备注判断
@@ -426,7 +430,7 @@ public class CtrlActivity extends AppCompatActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onCurtainFeedBackInfoEventMain(CurtainFeedBackEvent event) {
 //        先判断是否超时
-
+        Log.i("djl", "onCurtainFeedBackInfoEventMain in");
         if (event.getCurtainCtrlBackInfo().getAppliancesInfo().getDeviceSubnetID() == appliancesInfo.getDeviceSubnetID()
                 && event.getCurtainCtrlBackInfo().getAppliancesInfo().getDeviceDeviceID() == appliancesInfo.getDeviceDeviceID()
                 && event.getCurtainCtrlBackInfo().getNum() == appliancesInfo.getChannelNum()
@@ -451,20 +455,24 @@ public class CtrlActivity extends AppCompatActivity {
                 switch (curState) {
                     case CurtainCtrlParser.TYPE_STATE_CLOSE:
                         curtainBtn.setText("窗帘关");
+                        curText1.setText("窗帘关");
                         Log.i("djl", "窗帘控制 ：窗帘关" + "  回路号：" + num);
                         break;
                     case CurtainCtrlParser.TYPE_STATE_OPEN:
                         curtainBtn.setText("窗帘开");
+                        curText1.setText("窗帘开");
                         Log.i("djl", "窗帘控制 ：窗帘开" + "  回路号：" + num);
                         break;
                     case CurtainCtrlParser.TYPE_STATE_PAUSE:
                         curtainBtn.setText("窗帘暂停");
+                        curText1.setText("窗帘暂停");
                         Log.i("djl", "窗帘控制 ：窗帘暂停" + "  回路号：" + num);
                         break;
                 }
             } else {
                 //开合帘或卷帘 显示百分比
                 curtainBtn5.setText("窗帘开到" + curState + "%");
+                curText2.setText("窗帘开到" + curState + "%");
             }
 
         }
@@ -489,11 +497,13 @@ public class CtrlActivity extends AppCompatActivity {
                     switch (curState[1] & 0xFF) {
                         case AirCtrlParser.airOff:
                             airBtn.setText("空调关");
+                            airText.setText("空调关");
                             ToastUtil("空调关");
                             Log.i("djl", "空调关");
                             break;
                         case AirCtrlParser.airOn:
                             airBtn.setText("空调开");
+                            airText.setText("空调开");
                             ToastUtil("空调开");
                             Log.i("djl", "空调开");
                             break;
@@ -504,6 +514,7 @@ public class CtrlActivity extends AppCompatActivity {
                     break;
                 case AirCtrlParser.refTem:
                     airBtn.setText("空调制冷，温度为：" + (curState[1] & 0xFF));
+                    airText.setText("空调制冷，温度为：" + (curState[1] & 0xFF));
                     ToastUtil("空调制冷，温度为：" + (curState[1] & 0xFF));
                     Log.i("djl", "空调制冷，温度为：" + (curState[1] & 0xFF));
                     break;
@@ -511,21 +522,25 @@ public class CtrlActivity extends AppCompatActivity {
                     switch (curState[1] & 0xFF) {
                         case AirCtrlParser.airSpeedAuto:
                             airBtn.setText("空调风速，风速模式为：airSpeedAuto自动风速");
+                            airText.setText("空调风速，风速模式为：airSpeedAuto自动风速");
                             ToastUtil("空调风速，风速模式为：airSpeedAuto自动风速");
                             Log.i("djl", "空调风速，风速模式为：airSpeedAuto自动风速");
                             break;
                         case AirCtrlParser.airSpeedHigh:
                             airBtn.setText("空调风速，风速模式为：airSpeedHigh风速高");
+                            airText.setText("空调风速，风速模式为：airSpeedHigh风速高");
                             ToastUtil("空调风速，风速模式为：airSpeedHigh风速高");
                             Log.i("djl", "空调风速，风速模式为：airSpeedHigh风速高");
                             break;
                         case AirCtrlParser.airSpeedMid:
                             airBtn.setText("空调风速，风速模式为：airSpeedMid风速中");
+                            airText.setText("空调风速，风速模式为：airSpeedMid风速中");
                             ToastUtil("空调风速，风速模式为：airSpeedMid风速中");
                             Log.i("djl", "空调风速，风速模式为：airSpeedMid风速中");
                             break;
                         case AirCtrlParser.airSpeedLow:
                             airBtn.setText("空调风速，风速模式为：airSpeedLow风速低");
+                            airText.setText("空调风速，风速模式为：airSpeedLow风速低");
                             ToastUtil("空调风速，风速模式为：airSpeedLow风速低");
                             Log.i("djl", "空调风速，风速模式为：airSpeedLow风速低");
                             break;
@@ -537,26 +552,31 @@ public class CtrlActivity extends AppCompatActivity {
                     switch (curState[1] & 0xFF) {
                         case AirCtrlParser.airModeRefTem:
                             airBtn.setText("空调模式，模式为：制冷");
+                            airText.setText("空调模式，模式为：制冷");
                             ToastUtil("空调模式，模式为：制冷");
                             Log.i("djl", "空调模式，模式为：制冷");
                             break;
                         case AirCtrlParser.airModeHeatTem:
                             airBtn.setText("空调模式，模式为：制热");
+                            airText.setText("空调模式，模式为：制热");
                             ToastUtil("空调模式，模式为：制热");
                             Log.i("djl", "空调模式，模式为：制热");
                             break;
                         case AirCtrlParser.airModeVen:
                             airBtn.setText("空调模式，模式为：通风");
+                            airText.setText("空调模式，模式为：通风");
                             ToastUtil("空调模式，模式为：通风");
                             Log.i("djl", "空调模式，模式为：通风");
                             break;
                         case AirCtrlParser.airModeAuto:
                             airBtn.setText("空调模式，模式为：自动");
+                            airText.setText("空调模式，模式为：自动");
                             ToastUtil("空调模式，模式为：自动");
                             Log.i("djl", "空调模式，模式为：自动");
                             break;
                         case AirCtrlParser.airModeDehum:
                             airBtn.setText("空调模式，模式为：抽湿");
+                            airText.setText("空调模式，模式为：抽湿");
                             ToastUtil("空调模式，模式为：抽湿");
                             Log.i("djl", "空调模式，模式为：抽湿");
                             break;
@@ -566,26 +586,31 @@ public class CtrlActivity extends AppCompatActivity {
                     break;
                 case AirCtrlParser.heatTem:
                     airBtn.setText("空调制热，制热温度为" + (curState[1] & 0xFF));
+                    airText.setText("空调制热，制热温度为" + (curState[1] & 0xFF));
                     ToastUtil("空调制热，制热温度为" + (curState[1] & 0xFF));
                     Log.i("djl", "空调制热，制热温度为" + (curState[1] & 0xFF));
                     break;
                 case AirCtrlParser.autoTem:
                     airBtn.setText("空调自动，自动温度为" + (curState[1] & 0xFF));
+                    airText.setText("空调自动，自动温度为" + (curState[1] & 0xFF));
                     ToastUtil("空调自动，自动温度为" + (curState[1] & 0xFF));
                     Log.i("djl", "空调自动，自动温度为" + (curState[1] & 0xFF));
                     break;
                 case AirCtrlParser.dehumTem:
                     airBtn.setText("空调抽湿，抽湿温度为" + (curState[1] & 0xFF));
+                    airText.setText("空调抽湿，抽湿温度为" + (curState[1] & 0xFF));
                     ToastUtil("空调抽湿，抽湿温度为" + (curState[1] & 0xFF));
                     Log.i("djl", "空调抽湿，抽湿温度为" + (curState[1] & 0xFF));
                     break;
                 case AirCtrlParser.upTem:
                     airBtn.setText("空调调温，上升温度：" + (curState[1] & 0xFF));
+                    airText.setText("空调调温，上升温度：" + (curState[1] & 0xFF));
                     ToastUtil("空调调温，上升温度：" + (curState[1] & 0xFF));
                     Log.i("djl", "空调调温，上升温度：" + (curState[1] & 0xFF));
                     break;
                 case AirCtrlParser.downTem:
                     airBtn.setText("空调调温，下降温度：" + (curState[1] & 0xFF));
+                    airText.setText("空调调温，下降温度：" + (curState[1] & 0xFF));
                     ToastUtil("空调调温，下降温度：" + (curState[1] & 0xFF));
                     Log.i("djl", "空调调温，下降温度：" + (curState[1] & 0xFF));
                     break;
@@ -611,10 +636,15 @@ public class CtrlActivity extends AppCompatActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDeviceStateEventMain(DeviceStateEvent event) {
+//        Log.i("djl","onDeviceStateEventMain in Local subid ="+appliancesInfo.getDeviceSubnetID()
+//                +" Local devid = "+appliancesInfo.getDeviceDeviceID()
+//                +" Rev subId = "+event.getAppliancesInfo().getDeviceSubnetID()
+//                +" Rev devId ="+event.getAppliancesInfo().getDeviceDeviceID());
         if (event.getAppliancesInfo().getDeviceSubnetID() == appliancesInfo.getDeviceSubnetID()
                 && event.getAppliancesInfo().getDeviceDeviceID() == appliancesInfo.getDeviceDeviceID()
                 ) {
             //这个返回的信息是当前状态的
+            Log.i("djl", "event.getAppliancesInfo().getDeviceType() = " + event.getAppliancesInfo().getDeviceType());
             switch (event.getAppliancesInfo().getDeviceType()) {
                 case HDLApConfig.TYPE_LIGHT_DIMMER:
                 case HDLApConfig.TYPE_LIGHT_RELAY:
@@ -631,6 +661,7 @@ public class CtrlActivity extends AppCompatActivity {
                 case HDLApConfig.TYPE_CURTAIN_GLYSTRO:
                 case HDLApConfig.TYPE_CURTAIN_ROLLER:
                 case HDLApConfig.TYPE_CURTAIN_MODULE:
+                    Log.i("djl", "Local 窗帘回路号：" + appliancesInfo.getChannelNum() + " 接收到的回路号" + event.getAppliancesInfo().getChannelNum());
                     if (appliancesInfo.getChannelNum() == event.getAppliancesInfo().getChannelNum()) {
                         if (!event.isSuccess()) {
                             ToastUtil("获取窗帘状态失败，请重新再试");
@@ -639,19 +670,22 @@ public class CtrlActivity extends AppCompatActivity {
                         //窗帘模块：curState:0=停止,1=打开,2=关闭。
                         //开合帘电机，卷帘电机：curState:1-100开合度。
                         int curState = (int) event.getAppliancesInfo().getCurState();
-
+                        Log.i("djl", "窗帘State = " + curState);
                         if (event.getAppliancesInfo().getDeviceType() == HDLApConfig.TYPE_CURTAIN_MODULE) {//判断是否为窗帘模块,否则为开合帘或卷帘电机
                             switch (curState) {
                                 case CurtainCtrlParser.curtainOff:
                                     curtainBtn.setText("窗帘关");
+                                    curText1.setText("窗帘关");
                                     Log.i("djl", "窗帘状态 ：窗帘关" + "  回路号：" + event.getAppliancesInfo().getChannelNum());
                                     break;
                                 case CurtainCtrlParser.curtainOn:
                                     curtainBtn.setText("窗帘开");
+                                    curText1.setText("窗帘开");
                                     Log.i("djl", "窗帘状态 ：窗帘开" + "  回路号：" + event.getAppliancesInfo().getChannelNum());
                                     break;
                                 case CurtainCtrlParser.curtainPause:
                                     curtainBtn.setText("窗帘暂停");
+                                    curText1.setText("窗帘暂停");
                                     Log.i("djl", "窗帘状态 ：窗帘暂停" + "  回路号：" + event.getAppliancesInfo().getChannelNum());
                                     break;
                             }
@@ -662,6 +696,10 @@ public class CtrlActivity extends AppCompatActivity {
                     break;
                 case HDLApConfig.TYPE_AC_HVAC:
                 case HDLApConfig.TYPE_AC_PANEL:
+                    Log.i("djl", "AC Local channemNum = " + appliancesInfo.getChannelNum()
+                            + " Rev num = " + event.getAppliancesInfo().getChannelNum()
+
+                    );
                     if (appliancesInfo.getChannelNum() == event.getAppliancesInfo().getChannelNum()) {
                         if (!event.isSuccess()) {
                             ToastUtil("获取空调状态失败，请重新再试");
@@ -669,6 +707,10 @@ public class CtrlActivity extends AppCompatActivity {
                         }
 
                         byte[] curState = event.getAppliancesInfo().getArrCurState();
+                        Log.i("djl", "curState[0] " + (curState[0] & 0xFF)
+                                + " curState[1] = " + (curState[1] & 0xff)
+
+                        );
                         switch (curState[0] & 0xFF) {
                             case AirCtrlParser.airSwich:
                                 switch (curState[1] & 0xFF) {
