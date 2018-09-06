@@ -45,14 +45,14 @@ public class CtrlActivity extends AppCompatActivity {
 
 
 //        此方法为主动获取单一设备状态，逻辑模块、背景音乐模块没有这个api，仅支持灯光，窗帘，空调。
-//        HDLCommand.HDLgetDeviceState(appliancesInfo);
+//        HDLCommand.getDeviceState(appliancesInfo);
 
 
         lightBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 HDLCommand.lightCtrl(appliancesInfo, lightState);
-//                HDLCommand.HDLlightCtrl(appliancesInfo,50);
+//                HDLCommand.lightCtrl(appliancesInfo,50);
             }
         });
 
@@ -185,7 +185,7 @@ public class CtrlActivity extends AppCompatActivity {
                 logicText.setVisibility(View.GONE);
 
                 //这里Demo示例获取单一回路的状态。
-                int curLightState = HDLCommand.getLightState(appliancesInfo);
+                int curLightState = (int) appliancesInfo.getCurState();
 
                 lightText.setText("当前灯光亮度：" + curLightState);
                 lightBtn.setText("当前灯光亮度：" + curLightState);
@@ -213,7 +213,7 @@ public class CtrlActivity extends AppCompatActivity {
                     curtainBtn4.setVisibility(View.GONE);
                     curtainBtn5.setVisibility(View.GONE);
                     String stringCurtainState = "";
-                    int curCurtainState = HDLCommand.getCurtainState(appliancesInfo);
+                    int curCurtainState = (int) appliancesInfo.getCurState();
                     Log.i("djl", "curCurtainState = " + curCurtainState);
                     switch (curCurtainState) {
                         case 0:
@@ -240,7 +240,7 @@ public class CtrlActivity extends AppCompatActivity {
                     curText1.setVisibility(View.GONE);
                     curtainBtn.setVisibility(View.GONE);
 
-                    curText2.setText("当前窗帘状态：" + HDLCommand.getCurtainState(appliancesInfo));
+                    curText2.setText("当前窗帘状态：" + appliancesInfo.getCurState());
 
 
                 }
@@ -261,7 +261,7 @@ public class CtrlActivity extends AppCompatActivity {
                 logicText.setVisibility(View.GONE);
 
                 String stringACState = "";
-                byte[] acCurState = HDLCommand.getACState(appliancesInfo);
+                byte[] acCurState = appliancesInfo.getArrCurState();
                 for (int index = 0; index < acCurState.length; index++) {
                     if (index == 0 && acCurState[index] == 0) {
                         stringACState += "空调已关闭";

@@ -21,7 +21,7 @@
 ```
  
 dependencies {
-    compile(name:'hdl_lib_v1.5.8.20180905_beta', ext:'aar')
+    compile(name:'hdl_lib_v1.5.8.20180906_beta', ext:'aar')
 }
 
 ```
@@ -600,6 +600,11 @@ OnManager.getOnDevicesData("Your Ip Address");
    	 }
 
 # 版本更新
+#### v1.5.8.20180906_beta
+beta版本非稳定版本
+1：修复SDK逻辑模块获取备注问题
+
+
 #### v1.5.8.20180905_beta
 beta版本非稳定版本
 1：修复酒店空调无法控制
