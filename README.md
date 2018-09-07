@@ -600,6 +600,10 @@ OnManager.getOnDevicesData("Your Ip Address");
    	 }
 
 # 版本更新
+#### v1.5.8.20180907_beta
+beta版本非稳定版本
+1：修复SDK搜索机制、获取备注机制。提供第三方背景音乐获取接口
+
 #### v1.5.8.20180906_beta
 beta版本非稳定版本
 1：修复SDK逻辑模块获取备注问题
