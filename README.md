@@ -21,7 +21,7 @@
 ```
  
 dependencies {
-    compile(name:'hdl_lib_v1.5.8.20180918_beta', ext:'aar')
+    compile(name:'hdl_lib_v1.5.8.20180919_beta', ext:'aar')
 }
 
 ```
@@ -566,7 +566,28 @@ public class HDLBroacastRv extends BroadcastReceiver {
 ```
 
 
-## 10 HDL On软件设备数据获取
+
+## 10 接收HDL 音乐数据转发与发送相关命令
+10.1：使用此方法接收音乐数据
+```
+@Subscribe(threadMode = ThreadMode.MAIN)
+    public void onBgmEventMain(ThirdPartyBgmInfoEvent event) {
+        byte[] bgmBytes = event.getBytes();
+    }
+```
+
+
+10.2：使用此方法发送自定义命令
+```
+HDLCommand.cusSendCommand(int command, int subnetID, int deviceID, byte[] addBytes, int port, String ipAddress)
+```
+参数解析：  command：操作码、subnetID：子网号、deviceID：设备号、addBytes：附加数据、port：端口号、ipAddress：ip地址
+
+
+
+
+
+## 11 HDL On软件设备数据获取
 
 ```
 OnManager.getOnDevicesData("Your Ip Address");
@@ -597,6 +618,10 @@ OnManager.getOnDevicesData("Your Ip Address");
    	 }
 
 # 版本更新
+#### v1.5.8.20180919_beta
+beta版本非稳定版本
+1：将音乐转发数据限定为只转发音乐协议数据
+
 #### v1.5.8.20180918_beta
 beta版本非稳定版本
 1：修复在未控制设备的状态下，无法收到相关命令的bug
