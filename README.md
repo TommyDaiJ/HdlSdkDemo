@@ -21,7 +21,7 @@
 ```
  
 dependencies {
-    compile(name:'hdl_lib_v1.5.8.20180919_beta', ext:'aar')
+    compile(name:'hdl_lib_v1.5.8.20180929_beta', ext:'aar')
 }
 
 ```
@@ -618,6 +618,10 @@ OnManager.getOnDevicesData("Your Ip Address");
    	 }
 
 # 版本更新
+#### v1.5.8.20180929_beta
+beta版本非稳定版本
+1：修复获取备注可能产生的空指针问题。
+
 #### v1.5.8.20180919_beta
 beta版本非稳定版本
 1：将音乐转发数据限定为只转发音乐协议数据
