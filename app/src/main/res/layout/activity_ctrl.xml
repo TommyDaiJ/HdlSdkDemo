@@ -4,7 +4,7 @@
     android:id="@+id/activity_ctrl"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.hdl.xw.CtrlActivity">
+    tools:context="com.hdl.sdk.hdl_sdk.CtrlActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -72,17 +72,60 @@
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/airText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="这个按钮做空调面板的演示" />
 
-        <Button
-            android:id="@+id/airbtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="空调面板" />
+
+        <!--<Button-->
+        <!--android:id="@+id/airbtn"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="空调面板" />-->
+
+        <LinearLayout
+            android:id="@+id/air"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/airText"
+                android:textSize="25sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="这个按钮做空调面板的演示" />
+            <Button
+                android:id="@+id/airbtn_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="空调开关" />
+            <Button
+                android:id="@+id/airbtn_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="空调模式" />
+            <Button
+                android:id="@+id/airbtn_speed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="空调风速" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <Button
+                    android:id="@+id/airbtn_tempBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="点击设置空调温度:" />
+                <EditText
+                    android:id="@+id/airet_tempet"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+
+
+
+
+        </LinearLayout>
+
 
         <TextView
             android:id="@+id/logicText"
@@ -97,4 +140,3 @@
             android:text="逻辑模块" />
     </LinearLayout>
 </RelativeLayout>
-
