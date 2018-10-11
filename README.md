@@ -21,7 +21,7 @@
 ```
  
 dependencies {
-    compile(name:'hdl_lib_v1.5.8.20181011_beta', ext:'aar')
+    compile(name:'hdl_lib_v1.5.8.20181011_2_beta', ext:'aar')
 }
 
 ```
@@ -618,6 +618,9 @@ OnManager.getOnDevicesData("Your Ip Address");
    	 }
 
 # 版本更新
+#### v1.5.8.20181011_2_beta
+beta版本非稳定版本
+1：修复HVAC空调控制,命令错误导致广播数据错误bug。
 #### v1.5.8.20181011_beta
 beta版本非稳定版本
 1：修复HVAC空调控制bug
