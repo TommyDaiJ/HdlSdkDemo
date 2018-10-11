@@ -159,19 +159,19 @@ public class CtrlActivity extends AppCompatActivity {
                 switch (airSpeedState) {
                     case 0:
                         //若当前空调风速为自动，则点击按钮设置为高风
-                        HDLCommand.airCtrl(appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedHigh);//风速高风
+                        HDLCommand.airCtrl(appliancesInfo, AirCtrlParser.airSpeed, AirCtrlParser.airSpeedHigh);//风速高风
                         break;
                     case 1:
                         //若当前空调风速为高风，则点击按钮设置为中风
-                        HDLCommand.airCtrl(appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedMid);//风速中风
+                        HDLCommand.airCtrl(appliancesInfo, AirCtrlParser.airSpeed, AirCtrlParser.airSpeedMid);//风速中风
                         break;
                     case 2:
                         //若当前空调风速为中风，则点击按钮设置为低风
-                        HDLCommand.airCtrl(appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedLow);//风速低风
+                        HDLCommand.airCtrl(appliancesInfo, AirCtrlParser.airSpeed, AirCtrlParser.airSpeedLow);//风速低风
                         break;
                     case 3:
                         //若当前空调风速为低风，则点击按钮设置为自动
-                        HDLCommand.airCtrl(appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedAuto);//风速自动
+                        HDLCommand.airCtrl(appliancesInfo, AirCtrlParser.airSpeed, AirCtrlParser.airSpeedAuto);//风速自动
                         break;
 
 
@@ -184,24 +184,24 @@ public class CtrlActivity extends AppCompatActivity {
             public void onClick(View view) {
                 switch (airModeState) {
                     case 0:
-                        //当前空调模式为制冷
+                        //当前空调模式为制冷,设置制冷温度
                         HDLCommand.airCtrl(appliancesInfo, AirCtrlParser.refTem, Integer.parseInt(airTempEd.getText().toString()));//制冷温度
                         break;
                     case 1:
-                        //当前空调模式为制热
-                        HDLCommand.airCtrl(appliancesInfo,AirCtrlParser.heatTem,Integer.parseInt(airTempEd.getText().toString()));//制热温度
+                        //当前空调模式为制热，设置制热温度
+                        HDLCommand.airCtrl(appliancesInfo, AirCtrlParser.heatTem, Integer.parseInt(airTempEd.getText().toString()));//制热温度
                         break;
                     case 2:
-                        //当前空调模式为通风
+                        //当前空调模式为通风，不能设置温度
                         ToastUtil("通风模式不能控制温度");
                         break;
                     case 3:
-                        //当前空调模式为自动
-                        HDLCommand.airCtrl(appliancesInfo,AirCtrlParser.autoTem,Integer.parseInt(airTempEd.getText().toString()));//自动温度 范围0-84
+                        //当前空调模式为自动，设置自动温度
+                        HDLCommand.airCtrl(appliancesInfo, AirCtrlParser.autoTem, Integer.parseInt(airTempEd.getText().toString()));//自动温度 范围0-84
                         break;
                     case 4:
-                        //当前空调模式为抽湿
-                        HDLCommand.airCtrl(appliancesInfo,AirCtrlParser.dehumTem,Integer.parseInt(airTempEd.getText().toString()));//抽湿温度 范围0-84
+                        //当前空调模式为抽湿，设置抽湿温度
+                        HDLCommand.airCtrl(appliancesInfo, AirCtrlParser.dehumTem, Integer.parseInt(airTempEd.getText().toString()));//抽湿温度 范围0-84
                         break;
                     default:
                         break;
