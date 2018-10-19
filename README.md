@@ -72,7 +72,7 @@ HDLDeviceManager.init(Context context);
 
 3.1 HDL SDK提供搜索设备的api，稍等数秒返回设备信息。
 
-3.2 调用`HDLCommand.getHomeDevices();`获取HDL家居设备数据
+3.2 调用`HDLCommand.getHomeDevices(Context context);`获取HDL家居设备数据
 
 3.3 调用`HDLCommand.getRcuDevices(Context context,String rcuIp);`获取HDL酒店设备数据
 
@@ -163,13 +163,13 @@ appliancesInfo.getDeviceType()
 
 ### 5 获取单一回路设备状态
 
-5.1调用`HDLCommand.HDLgetDeviceState(appliancesInfo);`参数为固定参数。即可获取相关设备对应回路的状态，必须要调用EventBus接收返回信息，具体请查看demo。一般情况下都不需要用到。在搜索回来的信息中，已可通过获取当前信息的方法获取每一回路的状态，具体请见Demo
+5.1调用`HDLCommand.getDeviceState(appliancesInfo);`参数为固定参数。即可获取相关设备对应回路的状态，必须要调用EventBus接收返回信息，具体请查看demo。一般情况下都不需要用到。在搜索回来的信息中，已可通过获取当前信息的方法获取每一回路的状态，具体请见Demo
 
 ### 6 控制设备
 
 #### 6.1灯光控制
 
-6.1.1 调用`HDLCommand.HDLlightCtrl(appliancesInfo,state);`第三个参数为灯光亮度，0代表关，范围在0-100.超过100不做处理。
+6.1.1 调用`HDLCommand.lightCtrl(appliancesInfo,state);`第三个参数为灯光亮度，0代表关，范围在0-100.超过100不做处理。
 
 6.1.2需要接收EventBus的控制返回结果，具体请查看demo。
 
@@ -177,7 +177,7 @@ appliancesInfo.getDeviceType()
 
 窗帘种类有：窗帘模块，卷帘电机，开合帘电机。
 
-6.2.1 调`HDLCommand.HDLcurtainCtrl( AppliancesInfo info, int state)`前两个参数为固定参数，跟6.1.1雷同。第三个参数为：`CurtainCtrlParser.HDLcurtainPause`（窗帘停）或`CurtainCtrlParser.HDLcurtainOn`（窗帘开）或`CurtainCtrlParser.HDLcurtainOff`（窗帘关） 中的一个。
+6.2.1 调`HDLCommand.curtainCtrl( AppliancesInfo info, int state)`前两个参数为固定参数，跟6.1.1雷同。第三个参数为：`CurtainCtrlParser.HDLcurtainPause`（窗帘停）或`CurtainCtrlParser.HDLcurtainOn`（窗帘开）或`CurtainCtrlParser.HDLcurtainOff`（窗帘关） 中的一个。
 窗帘模块只能调用这3个参数，卷帘电机和开合帘电机第二个参数可以填0-100数字，代表百分比。
 
 
@@ -190,29 +190,29 @@ appliancesInfo.getDeviceType()
 
 
 ```
-                  HDLCommand.HDLairCtrl(appliancesInfo, AirCtrlParser.airSwich,AirCtrlParser.airOn);//空调面板开
-//                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.airSwich,AirCtrlParser.airOff);//空调面板关
-//                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.refTem,20);//制冷温度 范围0-84
-//                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedAuto);//风速自动
-//                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedHigh);//风速高风
-//                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedMid);//风速中风
-//                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedLow);//风速低风
-//                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.airMode,AirCtrlParser.airModeRefTem);//空调模式制冷
-//                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.airMode,AirCtrlParser.airModeHeatTem);//空调模式制热
-//                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.airMode,AirCtrlParser.airModeVen);//空调模式通风
-//                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.airMode,AirCtrlParser.airModeAuto);//空调模式自动
-//                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.airMode,AirCtrlParser.airModeDehum);//空调模式抽湿
-//                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.heatTem,28);//制热温度 范围0-84
-//                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.autoTem,25);//自动温度 范围0-84
-//                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.upTem,1);//上升温度 范围0-5
-//                HDLCommand.HDLairCtrl(appliancesInfo,AirCtrlParser.downTem,1);//下降温度 范围0-5
+                  HDLCommand.airCtrl(appliancesInfo, AirCtrlParser.airSwich,AirCtrlParser.airOn);//空调面板开
+//                HDLCommand.airCtrl(appliancesInfo,AirCtrlParser.airSwich,AirCtrlParser.airOff);//空调面板关
+//                HDLCommand.airCtrl(appliancesInfo,AirCtrlParser.refTem,20);//制冷温度 范围0-84
+//                HDLCommand.airCtrl(appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedAuto);//风速自动
+//                HDLCommand.airCtrl(appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedHigh);//风速高风
+//                HDLCommand.airCtrl(appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedMid);//风速中风
+//                HDLCommand.airCtrl(appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedLow);//风速低风
+//                HDLCommand.airCtrl(appliancesInfo,AirCtrlParser.airMode,AirCtrlParser.airModeRefTem);//空调模式制冷
+//                HDLCommand.airCtrl(appliancesInfo,AirCtrlParser.airMode,AirCtrlParser.airModeHeatTem);//空调模式制热
+//                HDLCommand.airCtrl(appliancesInfo,AirCtrlParser.airMode,AirCtrlParser.airModeVen);//空调模式通风
+//                HDLCommand.airCtrl(appliancesInfo,AirCtrlParser.airMode,AirCtrlParser.airModeAuto);//空调模式自动
+//                HDLCommand.airCtrl(appliancesInfo,AirCtrlParser.airMode,AirCtrlParser.airModeDehum);//空调模式抽湿
+//                HDLCommand.airCtrl(appliancesInfo,AirCtrlParser.heatTem,28);//制热温度 范围0-84
+//                HDLCommand.airCtrl(appliancesInfo,AirCtrlParser.autoTem,25);//自动温度 范围0-84
+//                HDLCommand.airCtrl(appliancesInfo,AirCtrlParser.upTem,1);//上升温度 范围0-5
+//                HDLCommand.airCtrl(appliancesInfo,AirCtrlParser.downTem,1);//下降温度 范围0-5
 
 ```
 
 
 #### 6.4 逻辑模块控制
 
-6.4.1调用HDLCommand.HDLlogicCtrl(appliancesInfo);具体查看demo
+6.4.1调用HDLCommand.logicCtrl(appliancesInfo);具体查看demo
 
 ## 7 接收设备状态改变推送
 
@@ -366,47 +366,47 @@ sdk可接收设备状态改变的推送，目前支持灯光，窗帘，空调�
 相关的调用api:(具体查看demo)
 
 ```
-        HDLCommand.HDLaudioCtrl(appliancesInfo,HDLAudio.GET_AUDIO_CURRRENT_INFO);//获取当前音乐信息。返回当前歌曲、列表等所有信息。获取音乐信息当前音乐会停止播放
-        HDLCommand.HDLaudioCtrl(appliancesInfo,HDLAudio.GET_AUDIO_MODE);//获取当前音乐播放模式。仅返回单曲播放等播放模式。
+        HDLCommand.audioCtrl(appliancesInfo,HDLAudio.GET_AUDIO_CURRRENT_INFO);//获取当前音乐信息。返回当前歌曲、列表等所有信息。获取音乐信息当前音乐会停止播放
+        HDLCommand.audioCtrl(appliancesInfo,HDLAudio.GET_AUDIO_MODE);//获取当前音乐播放模式。仅返回单曲播放等播放模式。
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                HDLCommand.HDLaudioCtrl(appliancesInfo,HDLAudio.SET_CHOOSE_PLAY_SONG,curListNum,position);
+                HDLCommand.audioCtrl(appliancesInfo,HDLAudio.SET_CHOOSE_PLAY_SONG,curListNum,position);
             }
         });
 
         playPauseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HDLCommand.HDLaudioCtrl(appliancesInfo,HDLAudio.SET_AUDIO_PLAYPAUSE);
+                HDLCommand.audioCtrl(appliancesInfo,HDLAudio.SET_AUDIO_PLAYPAUSE);
             }
         });
 
         playStopBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HDLCommand.HDLaudioCtrl(appliancesInfo,HDLAudio.SET_AUDIO_PLAYSTOP);
+                HDLCommand.audioCtrl(appliancesInfo,HDLAudio.SET_AUDIO_PLAYSTOP);
             }
         });
 
         preSongBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HDLCommand.HDLaudioCtrl(appliancesInfo,HDLAudio.SET_PRE_SONG);
+                HDLCommand.audioCtrl(appliancesInfo,HDLAudio.SET_PRE_SONG);
             }
         });
 
         nextSongBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HDLCommand.HDLaudioCtrl(appliancesInfo,HDLAudio.SET_NEXT_SONG);
+                HDLCommand.audioCtrl(appliancesInfo,HDLAudio.SET_NEXT_SONG);
             }
         });
 
         modeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HDLCommand.HDLaudioCtrl(appliancesInfo,HDLAudio.SET_AUDIO_MODE_UP);//播放模式+
+                HDLCommand.audioCtrl(appliancesInfo,HDLAudio.SET_AUDIO_MODE_UP);//播放模式+
 //                HDLCommand.HDLaudioCtrl(AudioActivity.this,appliancesInfo,HDLAudio.SET_AUDIO_MODE_DOWN);//播放模式-
             }
         });
@@ -414,35 +414,35 @@ sdk可接收设备状态改变的推送，目前支持灯光，窗帘，空调�
         volMinBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HDLCommand.HDLaudioCtrl(appliancesInfo,HDLAudio.SET_AUDIO_VOL,0);//音量最小：0。小于0，SDK不处理
+                HDLCommand.audioCtrl(appliancesInfo,HDLAudio.SET_AUDIO_VOL,0);//音量最小：0。小于0，SDK不处理
             }
         });
 
         volMidBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HDLCommand.HDLaudioCtrl(appliancesInfo,HDLAudio.SET_AUDIO_VOL,40);
+                HDLCommand.audioCtrl(appliancesInfo,HDLAudio.SET_AUDIO_VOL,40);
             }
         });
 
         volMaxBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HDLCommand.HDLaudioCtrl(appliancesInfo,HDLAudio.SET_AUDIO_VOL,79);//音量最大：79。超过79，SDK不处理
+                HDLCommand.audioCtrl(appliancesInfo,HDLAudio.SET_AUDIO_VOL,79);//音量最大：79。超过79，SDK不处理
             }
         });
 
         nextListBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HDLCommand.HDLaudioCtrl(appliancesInfo,HDLAudio.SET_NEXT_LIST);//获取下一列表，当前音乐会停止播放
+                HDLCommand.audioCtrl(appliancesInfo,HDLAudio.SET_NEXT_LIST);//获取下一列表，当前音乐会停止播放
             }
         });
 
         preListBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HDLCommand.HDLaudioCtrl(appliancesInfo,HDLAudio.SET_PRE_LIST);//获取上一列表，当前音乐会停止播放
+                HDLCommand.audioCtrl(appliancesInfo,HDLAudio.SET_PRE_LIST);//获取上一列表，当前音乐会停止播放
             }
         });
 ```
