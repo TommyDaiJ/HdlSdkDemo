@@ -21,7 +21,7 @@
 ```
  
 dependencies {
-    compile(name:'hdl_lib_v1.5.8.20181011_2_beta', ext:'aar')
+    compile(name:'hdl_lib_v1.5.8.20181024_beta', ext:'aar')
 }
 
 ```
@@ -618,6 +618,9 @@ OnManager.getOnDevicesData("Your Ip Address");
    	 }
 
 # 版本更新
+#### v1.5.8.20181024_beta
+beta版本非稳定版本
+1：修复窗帘模块只能控制第一回路的bug。
 #### v1.5.8.20181011_2_beta
 beta版本非稳定版本
 1：修复HVAC空调控制,命令错误导致广播数据错误bug。
