@@ -21,14 +21,14 @@
 ```
  
 dependencies {
-    compile(name:'hdl_lib_v1.5.8.20181024_beta', ext:'aar')
+    compile(name:'hdl_lib_v1.5.8.20181031_beta', ext:'aar')
 }
 
 ```
 
 
 
-1.3 调试SDK建议使用真机调试，模拟器可能会导致一些不知名的问题。
+1.3 调试SDK建议使用真机调试，模拟器的ip地址问题会发生错误。
 
 ## Step 2：SDK初始化
 
@@ -618,6 +618,9 @@ OnManager.getOnDevicesData("Your Ip Address");
    	 }
 
 # 版本更新
+#### v1.5.8.20181031_beta
+beta版本非稳定版本
+1：增加相关日志，方便排查对接问题。
 #### v1.5.8.20181024_beta
 beta版本非稳定版本
 1：修复窗帘模块只能控制第一回路的bug。
