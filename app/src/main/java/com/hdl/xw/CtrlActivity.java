@@ -159,19 +159,19 @@ public class CtrlActivity extends AppCompatActivity {
                 switch (airSpeedState) {
                     case 0:
                         //若当前空调风速为自动，则点击按钮设置为高风
-                        HDLCommand.airCtrl(appliancesInfo, AirCtrlParser.airSpeed, AirCtrlParser.airSpeedHigh);//风速高风
+                        HDLCommand.airCtrl(appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedHigh);//风速高风
                         break;
                     case 1:
                         //若当前空调风速为高风，则点击按钮设置为中风
-                        HDLCommand.airCtrl(appliancesInfo, AirCtrlParser.airSpeed, AirCtrlParser.airSpeedMid);//风速中风
+                        HDLCommand.airCtrl(appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedMid);//风速中风
                         break;
                     case 2:
                         //若当前空调风速为中风，则点击按钮设置为低风
-                        HDLCommand.airCtrl(appliancesInfo, AirCtrlParser.airSpeed, AirCtrlParser.airSpeedLow);//风速低风
+                        HDLCommand.airCtrl(appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedLow);//风速低风
                         break;
                     case 3:
                         //若当前空调风速为低风，则点击按钮设置为自动
-                        HDLCommand.airCtrl(appliancesInfo, AirCtrlParser.airSpeed, AirCtrlParser.airSpeedAuto);//风速自动
+                        HDLCommand.airCtrl(appliancesInfo,AirCtrlParser.airSpeed,AirCtrlParser.airSpeedAuto);//风速自动
                         break;
 
 
@@ -184,24 +184,24 @@ public class CtrlActivity extends AppCompatActivity {
             public void onClick(View view) {
                 switch (airModeState) {
                     case 0:
-                        //当前空调模式为制冷,设置制冷温度
+                        //当前空调模式为制冷
                         HDLCommand.airCtrl(appliancesInfo, AirCtrlParser.refTem, Integer.parseInt(airTempEd.getText().toString()));//制冷温度
                         break;
                     case 1:
-                        //当前空调模式为制热，设置制热温度
-                        HDLCommand.airCtrl(appliancesInfo, AirCtrlParser.heatTem, Integer.parseInt(airTempEd.getText().toString()));//制热温度
+                        //当前空调模式为制热
+                        HDLCommand.airCtrl(appliancesInfo,AirCtrlParser.heatTem,Integer.parseInt(airTempEd.getText().toString()));//制热温度
                         break;
                     case 2:
-                        //当前空调模式为通风，不能设置温度
+                        //当前空调模式为通风
                         ToastUtil("通风模式不能控制温度");
                         break;
                     case 3:
-                        //当前空调模式为自动，设置自动温度
-                        HDLCommand.airCtrl(appliancesInfo, AirCtrlParser.autoTem, Integer.parseInt(airTempEd.getText().toString()));//自动温度 范围0-84
+                        //当前空调模式为自动
+                        HDLCommand.airCtrl(appliancesInfo,AirCtrlParser.autoTem,Integer.parseInt(airTempEd.getText().toString()));//自动温度 范围0-84
                         break;
                     case 4:
-                        //当前空调模式为抽湿，设置抽湿温度
-                        HDLCommand.airCtrl(appliancesInfo, AirCtrlParser.dehumTem, Integer.parseInt(airTempEd.getText().toString()));//抽湿温度 范围0-84
+                        //当前空调模式为抽湿
+                        HDLCommand.airCtrl(appliancesInfo,AirCtrlParser.dehumTem,Integer.parseInt(airTempEd.getText().toString()));//抽湿温度 范围0-84
                         break;
                     default:
                         break;
@@ -223,28 +223,26 @@ public class CtrlActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        lightText = (TextView) findViewById(R.id.lightText);
         lightBtn = (Button) findViewById(R.id.ctrlbtn);
+        curtainBtn = (Button) findViewById(R.id.curtainbtn);
+        curtainBtn2 = (Button) findViewById(R.id.curtainbtn2);
+        curtainBtn3 = (Button) findViewById(R.id.curtainbtn3);
+        curtainBtn4 = (Button) findViewById(R.id.curtainbtn4);
+        curtainBtn5 = (Button) findViewById(R.id.curtainbtn5);
+        logicBtn = (Button) findViewById(R.id.logicbtn);
 
         airDisplay = (LinearLayout) findViewById(R.id.air);
-        airText = (TextView) findViewById(R.id.airText);
         airBtnSwitch = (Button) findViewById(R.id.airbtn_switch);
         airBtnMode = (Button) findViewById(R.id.airbtn_mode);
         airBtnSpeed = (Button) findViewById(R.id.airbtn_speed);
         airBtnTemp = (Button) findViewById(R.id.airbtn_tempBtn);
         airTempEd = (EditText) findViewById(R.id.airet_tempet);
 
-
+        lightText = (TextView) findViewById(R.id.lightText);
         curText1 = (TextView) findViewById(R.id.curtainText1);
         curText2 = (TextView) findViewById(R.id.curtainText2);
-        curtainBtn = (Button) findViewById(R.id.curtainbtn);
-        curtainBtn2 = (Button) findViewById(R.id.curtainbtn2);
-        curtainBtn3 = (Button) findViewById(R.id.curtainbtn3);
-        curtainBtn4 = (Button) findViewById(R.id.curtainbtn4);
-        curtainBtn5 = (Button) findViewById(R.id.curtainbtn5);
-
+        airText = (TextView) findViewById(R.id.airText);
         logicText = (TextView) findViewById(R.id.logicText);
-        logicBtn = (Button) findViewById(R.id.logicbtn);
         //此处判断什么设备，并将其他设备控件隐藏
         //1：调光回路（灯） 2：开关回路（灯） 3：混合调光类 （灯） 4：混合开关类（灯）
         // 5：开合帘电机（窗帘）6：卷帘电机（窗帘） 7：窗帘模块 （窗帘）
@@ -412,6 +410,7 @@ public class CtrlActivity extends AppCompatActivity {
                                         stringACState += " 空调模式:抽湿";
                                         break;
                                     default:
+                                        airModeState = -1;
                                         stringACState += " 未知空调模式";
                                         break;
                                 }
@@ -710,6 +709,7 @@ public class CtrlActivity extends AppCompatActivity {
                             Log.i("djl", "空调模式，模式为：抽湿");
                             break;
                         default:
+                            airModeState = -1;
                             break;
                     }
                     break;
