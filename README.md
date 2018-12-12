@@ -618,9 +618,9 @@ OnManager.getOnDevicesData("Your Ip Address");
    	 }
 
 # 版本更新
-#### v1.5.8.20181107_beta
+#### v1.5.8.20181212_beta
 beta版本非稳定版本
-1：优化搜索
+1：修复搜索过程中有可能导致崩溃的bug
 
 #### v1.5.8.20181101_beta
 beta版本非稳定版本
