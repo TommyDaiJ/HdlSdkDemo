@@ -21,7 +21,7 @@
 ```
  
 dependencies {
-    compile(name:'hdl_lib_v1.5.8.20181212_beta', ext:'aar')
+    compile(name:'hdl_lib_v1.5.8.20181217_beta', ext:'aar')
 }
 
 ```
@@ -621,6 +621,7 @@ OnManager.getOnDevicesData("Your Ip Address");
 #### v1.5.8.20181212_beta
 beta版本非稳定版本
 1：修复搜索过程中有可能导致崩溃的bug
+
 
 #### v1.5.8.20181101_beta
 beta版本非稳定版本
