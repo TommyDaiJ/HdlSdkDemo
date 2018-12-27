@@ -21,7 +21,7 @@
 ```
  
 dependencies {
-    compile(name:'hdl_lib_v1.5.8.20181218_beta', ext:'aar')
+    compile(name:'hdl_lib_v1.5.8.20181227_beta', ext:'aar')
 }
 
 ```

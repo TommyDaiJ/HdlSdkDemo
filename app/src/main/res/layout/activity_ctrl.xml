@@ -138,5 +138,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="逻辑模块" />
+        <TextView
+            android:id="@+id/sensorText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="这个按钮做传感器演示" />
+
+        <Button
+            android:id="@+id/sensorbtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="获取传感器状态" />
     </LinearLayout>
 </RelativeLayout>
