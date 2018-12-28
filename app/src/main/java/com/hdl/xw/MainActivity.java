@@ -40,10 +40,6 @@ public class MainActivity extends AppCompatActivity {
     private ProgressDialog proDia;
 
 
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (isIP(editText.getText().toString().trim())) {
-                    HDLCommand.getRcuDevices(MainActivity.this,editText.getText().toString().trim());
+                    HDLCommand.getRcuDevices(MainActivity.this, editText.getText().toString().trim());
                     proDia.show();
                 } else {
                     Toast.makeText(MainActivity.this, "请输入正确格式Ip地址", Toast.LENGTH_SHORT).show();
@@ -123,7 +119,12 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         devicesDatas = event.getDesDataList();
-        tv.setText("总共模块数  = " + event.getDesDataList().size());
+
+        int allChannel = 0;
+        for (DevicesData devicesData : devicesDatas) {
+            allChannel += devicesData.getAppliancesInfoList().size();
+        }
+        tv.setText("总共模块数：" + devicesDatas.size() + " 总共回路数：" +allChannel);
         for (int i = 0; i < devicesDatas.size(); i++) {
             if (TextUtils.isEmpty(devicesDatas.get(i).getRemark())) {
                 listString.add("暂无备注");

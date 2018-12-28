@@ -46,6 +46,7 @@ public class CtrlActivity extends AppCompatActivity {
     private int airTempState;
     private int airSpeedState;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
